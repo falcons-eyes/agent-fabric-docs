@@ -1,0 +1,39 @@
+name: deploy
+
+# Build the Starlight site and deploy it to Firebase Hosting (live channel) on
+# every push to main — so a docs-publish sync from the private repo flows straight
+# to https://agent-fabric-docs.web.app (→ docs.falconoon.com).
+#
+# Auth: a GCP service-account JSON in the repo secret FIREBASE_SERVICE_ACCOUNT
+# (Firebase Hosting Admin). Until that secret is set, the build still runs as a
+# CI check and the deploy step is skipped (no red builds before it's configured).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: deploy to Firebase Hosting (live)
+        if: ${{ env.SA != '' }}
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: falconeyes-478614
+          channelId: live
