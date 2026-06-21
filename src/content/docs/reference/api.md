@@ -23,3 +23,6 @@ Routes served by `control` (`internal/api`). Auth: `none` (public), `org` (Cogni
 | `POST` | `/api/capabilities` | org | issue a macaroon-style capability token |
 | `POST` | `/api/gateway/resolve` | org | resolve a service via a capability; 402 if suspended |
 | `GET` | `/api/usage` | org | metering readout (totals + events) |
+| `POST` | `/api/checkout` | org | start a Stripe Checkout to subscribe a network → hosted checkout URL |
+| `POST` | `/api/billing/toss/subscribe` | org | subscribe a network via Toss recurring billing (issue billing key + charge → active) |
+| `POST` | `/svc/toss/webhook` | toss-requery | Toss payment webhook → entitlement (re-queries the payment to confirm) |

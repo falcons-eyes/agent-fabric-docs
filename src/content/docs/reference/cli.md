@@ -43,6 +43,20 @@ falcon agent attach [name] [flags]
 | `--register` | `false` | register the attached llm service on the current mesh node |
 | `--url` | `—` | OpenAI-compatible localhost base URL, e.g. http://127.0.0.1:18000/v1 |
 
+### `falcon agent discover`
+
+Discover reachable localhost OpenAI-compatible model endpoints
+
+```
+falcon agent discover [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--all` | `false` | include unreachable probe targets |
+| `--json` | `false` | print JSON |
+| `--timeout` | `5s` | discovery timeout |
+
 ### `falcon agent doctor`
 
 Run local runtime preflight checks
@@ -63,9 +77,110 @@ falcon agent logs [name] [flags]
 |---|---|---|
 | `--tail` | `120` | number of log lines |
 
+### `falcon agent loop`
+
+Run or resume a local long-running agent loop
+
+```
+falcon agent loop [runtime] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--compact-every` | `5` | compact every N completed steps |
+| `--json` | `false` | print JSON |
+| `--keep-last-events` | `20` | events to keep visible during compaction |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+| `--max-retries` | `2` | retries per step |
+| `--prompt` | `—` | loop goal prompt |
+| `--redact` | `false` | redact compacted local event/checkpoint payloads |
+| `--retry-backoff` | `750ms` | base retry backoff |
+| `--session` | `—` | existing local session id to resume |
+| `--steps` | `5` | number of loop steps to run |
+| `--timeout` | `10m0s` | overall loop timeout |
+| `--title` | `—` | new session title |
+
+### `falcon agent session`
+
+Inspect and control local agent sessions
+
+```
+falcon agent session
+```
+
+### `falcon agent session cancel`
+
+Cancel a local agent session
+
+```
+falcon agent session cancel [session-id] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | print JSON |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+
+### `falcon agent session compact`
+
+Compact local session context
+
+```
+falcon agent session compact [session-id] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | print JSON |
+| `--keep-last-events` | `20` | events to keep visible |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+| `--reason` | `manual compaction` | redaction reason |
+| `--redact-checkpoints` | `false` | redact checkpoint states |
+| `--redact-events` | `false` | redact compacted event contents |
+| `--summary` | `Manual local compaction` | summary stored in the compaction checkpoint |
+
+### `falcon agent session follow`
+
+Follow live local session updates
+
+```
+falcon agent session follow [session-id] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+
+### `falcon agent session list`
+
+List local agent sessions
+
+```
+falcon agent session list [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | print JSON |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+
+### `falcon agent session show`
+
+Show a local agent session
+
+```
+falcon agent session show [session-id] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | print JSON |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+| `--tail` | `10` | events/checkpoints to show |
+
 ### `falcon agent smoke`
 
-Run streaming, multi-turn, memory, and loop smoke checks
+Run workload smoke and optional model-server capability checks
 
 ```
 falcon agent smoke [name] [flags]
@@ -91,7 +206,7 @@ falcon agent start [flags]
 | `--port` | `0` | localhost port (default depends on runtime) |
 | `--pull` | `true` | pull the model when the runtime supports it |
 | `--register` | `false` | register the resulting llm service on the current mesh node |
-| `--runtime` | `vllm-docker` | runtime profile: vllm-docker|ollama-docker |
+| `--runtime` | `vllm-docker` | runtime profile: vllm-docker|ollama-docker (Linux/NVIDIA Docker) |
 | `--served-model` | `—` | OpenAI-compatible served model name (vLLM) |
 | `--wait` | `4m0s` | readiness timeout |
 

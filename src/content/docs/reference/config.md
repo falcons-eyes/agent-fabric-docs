@@ -23,5 +23,14 @@ Environment variables read by `control` (`internal/platform/config`).
 | `AF_RELAY_SECRET` | `—` | shared HMAC secret with the relay (ticket signing + usage-report auth) |
 | `AF_BILLING_SECRET` | `—` | shared secret authenticating POST /svc/entitlement (billing webhook) |
 | `AF_STRIPE_WEBHOOK_SECRET` | `—` | Stripe webhook signing secret (whsec_…) for POST /svc/stripe/webhook → entitlement |
+| `AF_STRIPE_API_KEY` | `—` | Stripe secret API key (sk_…) for creating Checkout sessions (POST /api/checkout) |
+| `AF_STRIPE_PRICES` | `—` | plan→Stripe price-id map for checkout, e.g. pro=price_123,team=price_456 |
+| `AF_TOSS_SECRET_KEY` | `—` | Toss Payments secret key (test_sk_…/live_sk_…) for recurring billing (POST /api/billing/toss/subscribe) |
+| `AF_TOSS_PRICES` | `—` | plan→monthly KRW amount map for Toss, e.g. pro=29000,team=99000 |
+| `AF_TOSS_WEBHOOK_SECRET` | `—` | Toss webhook security key (보안키) for POST /svc/toss/webhook |
+| `AF_APP_BASE_URL` | `https://app.falconoon.com` | public app base URL for Checkout success/cancel redirects |
+| `AF_CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173,https://app.falconoon.com` | comma-separated browser origins allowed to call /api (the app dashboard); * = any |
+| `AF_FREE_MAX_NODES` | `3` | free-tier node cap per network (enroll → 402 once exceeded; 0 = unlimited); a paid plan lifts it |
+| `AF_FREE_MAX_NETWORKS` | `0` | free-tier network cap per org (createNetwork → 402 once exceeded; 0 = unlimited) |
 | `AF_TLS_CERT` | `—` | path to TLS cert (enables HTTPS for self-host) |
 | `AF_TLS_KEY` | `—` | path to TLS key |
