@@ -29,6 +29,11 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
     Every `falcon` command and flag — [generated from the code](/reference/cli/),
     never hand-written.
   </Card>
+  <Card title="Local Agent Stack" icon="laptop">
+    Discover or start local model runtimes, smoke-test capabilities and run
+    [session-backed agent loops](/guides/local-agent-stack/) without sending AI
+    payloads to the cloud.
+  </Card>
   <Card title="HTTP API" icon="puzzle">
     Control-plane [routes, auth tiers and entitlement gates](/reference/api/),
     reconciled against the live router.
@@ -39,7 +44,8 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
 </CardGrid>
 
 :::note[Generated docs]
-The pages under **Reference** are generated from the source code in the private
-`agent-fabric` repo and synced here automatically — so they can't drift from what
-the software actually does.
+The pages under **Reference** are generated from source code in the private
+`agent-fabric` repo. Pages under **Guides** are source-owned public docs from
+that same repo. Both are synced here automatically, so user-facing docs travel
+with the code that changes behavior.
 :::
