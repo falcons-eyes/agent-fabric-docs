@@ -9,6 +9,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public), `org` (Cogni
 | `GET` | `/healthz` | none | liveness probe |
 | `POST` | `/svc/relay/usage` | relay-secret | relay egress report (idempotent on relay_id+session_id+sequence) |
 | `POST` | `/svc/entitlement` | billing-secret | set a network's plan/entitlement (billing webhook) |
+| `POST` | `/svc/stripe/webhook` | stripe-signature | Stripe subscription webhook → entitlement (cancel→suspend, reactivate→active) |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `POST` | `/api/enroll` | org | enroll a node (device proof-of-possession optional); 402 if suspended |

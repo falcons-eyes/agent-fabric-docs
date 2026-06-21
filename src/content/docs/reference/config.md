@@ -22,5 +22,6 @@ Environment variables read by `control` (`internal/platform/config`).
 | `AF_RELAY_URL` | `—` | relay endpoint advertised to nodes (host:port); enables relay coordination |
 | `AF_RELAY_SECRET` | `—` | shared HMAC secret with the relay (ticket signing + usage-report auth) |
 | `AF_BILLING_SECRET` | `—` | shared secret authenticating POST /svc/entitlement (billing webhook) |
+| `AF_STRIPE_WEBHOOK_SECRET` | `—` | Stripe webhook signing secret (whsec_…) for POST /svc/stripe/webhook → entitlement |
 | `AF_TLS_CERT` | `—` | path to TLS cert (enables HTTPS for self-host) |
 | `AF_TLS_KEY` | `—` | path to TLS key |
