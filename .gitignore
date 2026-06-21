@@ -16,3 +16,6 @@ pnpm-debug.log*
 .DS_Store
 # editor/IDE
 .idea/
+# firebase
+.firebase/
+firebase-debug.log*
