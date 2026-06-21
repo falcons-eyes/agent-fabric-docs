@@ -1,0 +1,18 @@
+{
+  "name": "agent-fabric-docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Public documentation for agent-fabric (docs.falconoon.com). Reference pages under src/content/docs/reference/ are generated in the private repo and synced here — do not hand-edit them.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.40.0",
+    "astro": "^6.4.8",
+    "sharp": "^0.35.2"
+  }
+}

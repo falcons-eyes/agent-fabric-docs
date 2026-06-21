@@ -1,0 +1,45 @@
+---
+title: agent-fabric
+description: Managed trust and connectivity for customer-owned AI.
+template: splash
+hero:
+  tagline: A WireGuard mesh with a zero-trust control plane that brokers keys, identity and policy — but never sees your traffic.
+  actions:
+    - text: CLI reference
+      link: /reference/cli/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/falcons-eyes/agent-fabric
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is agent-fabric?
+
+**Managed trust and connectivity for customer-owned AI.** Your agents, models and
+services run on your own machines; agent-fabric gives them a private encrypted
+mesh and a control plane that brokers keys, device identity and policy. The
+control plane never sees your traffic — connectivity is end-to-end encrypted
+(WireGuard), with relay fallback only for reachability.
+
+<CardGrid>
+  <Card title="CLI reference" icon="laptop">
+    Every `falcon` command and flag — [generated from the code](/reference/cli/),
+    never hand-written.
+  </Card>
+  <Card title="HTTP API" icon="puzzle">
+    Control-plane [routes, auth tiers and entitlement gates](/reference/api/),
+    reconciled against the live router.
+  </Card>
+  <Card title="Configuration" icon="setting">
+    Every control-plane [environment variable](/reference/config/) and its default.
+  </Card>
+</CardGrid>
+
+:::note[Generated docs]
+The pages under **Reference** are generated from the source code in the private
+`agent-fabric` repo and synced here automatically — so they can't drift from what
+the software actually does.
+:::
