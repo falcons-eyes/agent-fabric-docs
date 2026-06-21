@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "agent-fabric-docs",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
