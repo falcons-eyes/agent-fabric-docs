@@ -12,6 +12,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public), `org` (Cogni
 | `POST` | `/svc/stripe/webhook` | stripe-signature | Stripe subscription webhook → entitlement (cancel→suspend, reactivate→active) |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
+| `GET` | `/api/networks/{id}/billing` | org | network subscription status (plan, entitlement, renews_at) — no payment credential |
 | `POST` | `/api/enroll` | org | enroll a node (device proof-of-possession optional); 402 if suspended |
 | `GET` | `/api/nodes` | org | list nodes (?network_id=) |
 | `DELETE` | `/api/nodes/{id}` | org | delete a node (revoke membership) |

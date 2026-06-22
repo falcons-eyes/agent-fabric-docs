@@ -155,3 +155,6 @@ The CLI above calls the same localhost API that the Local Console UI will use:
 The cloud control plane should receive only identity, version, desired state and
 health metadata. Prompts, outputs, tool payloads and session details remain
 local.
+
+For every `falcon agent ...` command, including all flags and copy-ready examples,
+see the generated [falcon CLI reference](/reference/cli/).
