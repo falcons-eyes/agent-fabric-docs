@@ -510,6 +510,23 @@ falcon agent stop dev-vllm
 falcon agent stop mac-ollama
 ```
 
+### `falcon bugreport`
+
+Generate a privacy-safe support bundle (no prompts, outputs, tokens, or keys)
+
+Collect just enough metadata to debug join/runtime/connectivity issues —
+version, OS/arch, control host, org/network/node ids, and the signed netmap
+generation/entitlement/peer+service counts. It NEVER includes tokens, keys,
+prompts, model outputs, or session content.
+
+```
+falcon bugreport [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--output` | `—` | write the bundle to a file instead of stdout |
+
 ### `falcon doctor`
 
 Diagnose local setup: config, identity, keystore, control plane, node
@@ -821,6 +838,26 @@ falcon wait [flags]
 |---|---|---|
 | `--for` | `[ip,netmap]` | signals to wait for: ip,netmap,control |
 | `--timeout` | `30s` | maximum time to wait |
+
+### `falcon web`
+
+Open the Local Console for this machine
+
+Open the localhost Local Console served by aflocal.
+
+Start aflocal first if it is not already running. The Local Console is
+loopback-only and manages this node's AI runtimes, sessions, hardware,
+diagnostics, and private names.
+
+```
+falcon web [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--addr` | `127.0.0.1:3210` | Local Console listen address |
+| `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
+| `--no-open` | `false` | check and print the URL without opening a browser |
 
 ### `falcon whois`
 
