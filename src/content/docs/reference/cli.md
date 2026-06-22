@@ -579,6 +579,18 @@ falcon gateway deploy [flags]
 |---|---|---|
 | `--aws` | `false` | deploy into AWS (EC2/VPC) using local aws credentials |
 
+### `falcon gateway proxy`
+
+Run the local gateway: forward authorized MCP/A2A calls over the mesh
+
+```
+falcon gateway proxy [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--listen` | `127.0.0.1:7777` | local listen address (loopback by default) |
+
 ### `falcon grant`
 
 Mint a capability token for a private resource (e.g. mcp://local-files)
