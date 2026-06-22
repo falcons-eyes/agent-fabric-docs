@@ -27,3 +27,10 @@ Routes served by `control` (`internal/api`). Auth: `none` (public), `org` (Cogni
 | `POST` | `/api/checkout` | org | start a Stripe Checkout to subscribe a network → hosted checkout URL |
 | `POST` | `/api/billing/toss/subscribe` | org | subscribe a network via Toss recurring billing (issue billing key + charge → active) |
 | `POST` | `/svc/toss/webhook` | toss-requery | Toss payment webhook → entitlement (re-queries the payment to confirm) |
+| `POST` | `/device/code` | none | device-flow: request a device + user code (RFC 8628) |
+| `POST` | `/device/token` | none | device-flow: poll for tokens (grant_type=device_code|refresh_token) |
+| `POST` | `/api/device/approve` | org | approve a device-flow user code (binds it to the caller) |
+| `POST` | `/api/device/deny` | org | deny a device-flow user code |
+| `GET` | `/api/device/pending` | org | device-flow grant awaiting approval (client name + request IP) |
+| `GET` | `/api/device/sessions` | org | list the caller's active CLI/device sessions |
+| `DELETE` | `/api/device/sessions/{id}` | org | revoke a device session |

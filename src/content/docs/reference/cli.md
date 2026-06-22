@@ -518,6 +518,14 @@ Diagnose local setup: config, identity, keystore, control plane, node
 falcon doctor
 ```
 
+### `falcon down`
+
+Disconnect this machine from the fabric (keeps your login + identity)
+
+```
+falcon down
+```
+
 ### `falcon endpoint`
 
 OpenAI-compatible endpoint recipes
@@ -567,6 +575,19 @@ falcon grant [resource] [flags]
 | `--action` | `read` | granted action |
 | `--ttl` | `10m0s` | token lifetime |
 
+### `falcon ip`
+
+Print this node's overlay IP (or another node's with --name)
+
+```
+falcon ip [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
+| `--name` | `—` | print a specific node's overlay IP |
+
 ### `falcon join`
 
 Join this machine to a network as a node
@@ -582,6 +603,7 @@ falcon join [flags]
 | flag | default | description |
 |---|---|---|
 | `--name` | `—` | node name (default: hostname) |
+| `--network` | `—` | network id to join (default: current network) |
 
 ### `falcon llm`
 
@@ -605,7 +627,11 @@ Authenticate to FalconEyes (org/human identity)
 
 Authenticate to FalconEyes.
 
---token <jwt>       store a real Cognito ID token (AWS mode).
+With no flags, runs the browser device flow (RFC 8628): the CLI shows a
+code you approve at the control plane's app — works on servers/containers
+with no local browser.
+
+--token <jwt>       store a real Cognito ID token (AWS mode), no device flow.
 --org <id>          dev mode: store a 'dev:<org>' token, no AWS needed.
 --control-url <url> set & persist the control plane URL.
 
@@ -629,6 +655,18 @@ Clear the local FalconEyes session
 ```
 falcon logout
 ```
+
+### `falcon names`
+
+List private node/service names from the signed netmap
+
+```
+falcon names [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
 
 ### `falcon network`
 
@@ -691,6 +729,31 @@ Model router recipes
 falcon router init [name]
 ```
 
+### `falcon serve`
+
+Publish a local service to your private network
+
+Publish a locally-running service — an LLM/MCP/A2A endpoint or a TCP port —
+into your private mesh as an addressable service. The control plane brokers
+reachability and capabilities; your traffic stays peer-to-peer (it never sees
+prompts or outputs).
+
+Friendly framing of `falcon service add`. Kinds: llm, mcp, a2a, router,
+endpoint, tcp.
+
+Example:
+  falcon serve http://127.0.0.1:11434 --name mac-ollama --kind llm
+
+```
+falcon serve <local-addr> [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--kind` | `llm` | service kind: llm|mcp|a2a|router|endpoint|tcp |
+| `--name` | `—` | service name (required), e.g. mac-ollama |
+| `--scope` | `—` | capability scope required to reach it |
+
 ### `falcon service`
 
 Register private services on the mesh
@@ -714,4 +777,60 @@ Show this node's mesh status
 ```
 falcon status
 ```
+
+### `falcon up`
+
+Connect this machine to your private network (login + join + readiness)
+
+The first-run command. Ensures you're signed in (device flow), joins this
+machine to a network, and reports readiness. `up` ≠ `login` (just auth).
+Bring up the WireGuard tunnel with the node agent (afd), which `up` guides.
+
+```
+falcon up [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--create-network` | `false` | create the network if it doesn't exist |
+| `--json` | `false` | also print a JSON result line |
+| `--name` | `—` | node name (default: hostname) |
+| `--network` | `—` | network name or id to join |
+
+### `falcon version`
+
+Print the falcon CLI version
+
+```
+falcon version
+```
+
+### `falcon wait`
+
+Wait until this node is ready (ip, netmap, control)
+
+Exit 0 once the requested readiness signals hold, else fail at --timeout.
+Signals: ip (overlay IP assigned), netmap (signed map accepted), control
+(control plane reachable). Default: ip,netmap.
+
+```
+falcon wait [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--for` | `[ip,netmap]` | signals to wait for: ip,netmap,control |
+| `--timeout` | `30s` | maximum time to wait |
+
+### `falcon whois`
+
+Resolve an overlay IP or private name to its node/service
+
+```
+falcon whois <ip|private-name> [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
 
