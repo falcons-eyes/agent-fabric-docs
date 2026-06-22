@@ -32,5 +32,6 @@ Environment variables read by `control` (`internal/platform/config`).
 | `AF_CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173,https://app.falconoon.com` | comma-separated browser origins allowed to call /api (the app dashboard); * = any |
 | `AF_FREE_MAX_NODES` | `3` | free-tier node cap per network (enroll → 402 once exceeded; 0 = unlimited); a paid plan lifts it |
 | `AF_FREE_MAX_NETWORKS` | `0` | free-tier network cap per org (createNetwork → 402 once exceeded; 0 = unlimited) |
+| `AF_TRUSTED_PROXY_DEPTH` | `0` | trusted proxy hops in front of the control plane (e.g. CloudFront [+ App Runner]); >0 reads the source IP the outermost proxy recorded instead of the spoofable left-most X-Forwarded-For (anti-reflection for candidate validation); 0 = legacy left-most |
 | `AF_TLS_CERT` | `—` | path to TLS cert (enables HTTPS for self-host) |
 | `AF_TLS_KEY` | `—` | path to TLS key |
