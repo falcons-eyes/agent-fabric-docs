@@ -8,11 +8,11 @@ Environment variables read by `control` (`internal/platform/config`).
 |---|---|---|
 | `AF_PORT` | `8080` | HTTP API listen port |
 | `AWS_REGION` | `us-east-1` | AWS region (Cognito / DynamoDB / KMS) |
-| `AF_DEV_MODE` | `true` | in-memory store + dev resolver; set false for AWS/prod (fail-closed identity) |
+| `AF_DEV_MODE` | `false` | safe default; set true for local dev in-memory store + dev resolver |
 | `AF_COGNITO_USER_POOL` | `—` | Cognito user pool id (required when AF_DEV_MODE=false) |
 | `AF_COGNITO_CLIENT_ID` | `—` | Cognito app client id (token audience) |
 | `AF_DYNAMO_TABLE` | `agent-fabric` | DynamoDB single-table name (AWS mode) |
-| `AF_OVERLAY_CIDR` | `100.64.0.0/10` | overlay IP allocation range (IPAM) |
+| `AF_OVERLAY_CIDR` | `—` | overlay IP allocation range; empty → a random IPv6 ULA /48 generated per network (avoids colliding with Tailscale/other VPNs on 100.64.0.0/10) |
 | `AF_DERP_REGIONS` | `us-east-1,us-west-2` | comma-separated relay regions for fallback |
 | `AF_KMS_KEY_ID` | `—` | control CMK (alias/agent-fabric-control) used to seal keys |
 | `AF_CAP_KEY` | `—` | capability HMAC key, plaintext (dev; empty → random per start) |

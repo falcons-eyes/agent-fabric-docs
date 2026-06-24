@@ -527,6 +527,58 @@ falcon bugreport [flags]
 |---|---|---|
 | `--output` | `—` | write the bundle to a file instead of stdout |
 
+### `falcon console`
+
+Open a remote node's Local Console; manage console access (ACL)
+
+```
+falcon console
+```
+
+### `falcon console grant`
+
+Grant a subject access to a node's Local Console (zero-trust ACL)
+
+Author an ACL grant: <subject> (the grantee's identity) may open <node>'s
+console. Use the node name or id, or "*" for every node in the network.
+Without a grant, remote console access is denied (default-deny).
+
+```
+falcon console grant [subject] [node] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--ttl` | `0s` | grant expiry (e.g. 24h; 0 = no expiry) |
+
+### `falcon console grants`
+
+List console access grants (the ACL) for the current network
+
+```
+falcon console grants
+```
+
+### `falcon console open`
+
+Open a remote node's Local Console over the private network
+
+```
+falcon console open [node] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--no-open` | `false` | print the URL without opening a browser |
+
+### `falcon console revoke`
+
+Revoke a subject's console access to a node
+
+```
+falcon console revoke [subject] [node]
+```
+
 ### `falcon doctor`
 
 Diagnose local setup: config, identity, keystore, control plane, node
@@ -713,12 +765,74 @@ Create a new private network
 falcon network create [name]
 ```
 
+### `falcon network delete`
+
+Delete an empty network (by name or id)
+
+Delete a network you own. The network must be empty — remove its nodes
+first. This cannot be undone.
+
+```
+falcon network delete [network] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--yes` | `false` | skip the confirmation prompt |
+
 ### `falcon network list`
 
 List your networks
 
 ```
 falcon network list
+```
+
+### `falcon network rename`
+
+Rename a network (by name or id)
+
+```
+falcon network rename [network] [new-name]
+```
+
+### `falcon node`
+
+Manage nodes on the current network
+
+```
+falcon node
+```
+
+### `falcon node list`
+
+List nodes on the current network
+
+```
+falcon node list
+```
+
+### `falcon node remove`
+
+Remove a node from the network (revokes its access)
+
+Revoke a node's membership. It loses access immediately; reconnect it later
+with `falcon up`. Removing this machine's own node disconnects it.
+
+```
+falcon node remove [name] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--yes` | `false` | skip the confirmation prompt |
+
+### `falcon node show`
+
+Show details for a node
+
+```
+falcon node show [name]
 ```
 
 ### `falcon nodes`
@@ -785,7 +899,7 @@ falcon serve <local-addr> [flags]
 
 ### `falcon service`
 
-Register private services on the mesh
+Manage private services on the mesh
 
 ```
 falcon service
@@ -798,6 +912,42 @@ Register a private service (mcp://… or a2a://…)
 ```
 falcon service add [uri]
 ```
+
+### `falcon service inspect`
+
+Show details for a private service (by name or private name)
+
+```
+falcon service inspect [name]
+```
+
+### `falcon service list`
+
+List private services on the current network
+
+```
+falcon service list
+```
+
+### `falcon service remove`
+
+Remove a service published from this node
+
+```
+falcon service remove [name]
+```
+
+### `falcon service test`
+
+Test reachability of a private service
+
+```
+falcon service test [name] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--timeout` | `3s` | dial timeout |
 
 ### `falcon status`
 
@@ -825,6 +975,24 @@ falcon up [flags]
 | `--json` | `false` | also print a JSON result line |
 | `--name` | `—` | node name (default: hostname) |
 | `--network` | `—` | network name or id to join |
+
+### `falcon update`
+
+Update falcon (and the node agents) to the latest release
+
+Download, verify (sha256) and replace the falcon CLI and its background
+agents in place. Use --check to see what's available without installing.
+
+```
+falcon update [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--channel` | `stable` | release channel: stable, beta, or nightly |
+| `--check` | `false` | only report whether an update is available |
+| `--force` | `false` | reinstall even if already up to date |
+| `--version` | `—` | install a specific version (e.g. v0.2.0) instead of the channel latest |
 
 ### `falcon version`
 
@@ -873,13 +1041,72 @@ falcon web [flags]
 
 ### `falcon whois`
 
-Resolve an overlay IP or private name to its node/service
+Resolve an overlay IP or private name to its node/service (defaults to this node)
 
 ```
-falcon whois <ip|private-name> [flags]
+falcon whois [ip|private-name] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | JSON output |
+
+### `falcon workspace`
+
+Manage your workspace: name, members, invitations
+
+```
+falcon workspace
+```
+
+### `falcon workspace invite`
+
+Invite a teammate by email
+
+Invite a teammate to the workspace. They appear as a pending member until
+an accept flow lands. Role is member (default) or admin.
+
+```
+falcon workspace invite [email] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--role` | `member` | member or admin |
+
+### `falcon workspace members`
+
+List workspace members and pending invitations
+
+```
+falcon workspace members
+```
+
+### `falcon workspace rename`
+
+Rename the workspace
+
+```
+falcon workspace rename [name]
+```
+
+### `falcon workspace revoke`
+
+Revoke a pending invitation
+
+```
+falcon workspace revoke [invitation-id] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--yes` | `false` | skip the confirmation prompt |
+
+### `falcon workspace show`
+
+Show the current workspace (name, plan, owner)
+
+```
+falcon workspace show
+```
 
