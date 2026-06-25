@@ -809,18 +809,24 @@ falcon node
 
 ### `falcon node list`
 
-List nodes on the current network
+List nodes on a network (default: current; --network for any you own)
 
 ```
-falcon node list
+falcon node list [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--network` | `—` | network name or id (default: the joined one) |
 
 ### `falcon node remove`
 
-Remove a node from the network (revokes its access)
+Remove a node from a network (revokes its access)
 
 Revoke a node's membership. It loses access immediately; reconnect it later
-with `falcon up`. Removing this machine's own node disconnects it.
+with `falcon up`. Removing this machine's own node disconnects it. Use
+--network to remove a node from a network you own without being joined to it
+(e.g. clearing a stale registration after a local reset).
 
 ```
 falcon node remove [name] [flags]
@@ -828,6 +834,7 @@ falcon node remove [name] [flags]
 
 | flag | default | description |
 |---|---|---|
+| `--network` | `—` | network name or id (default: the joined one) |
 | `--yes` | `false` | skip the confirmation prompt |
 
 ### `falcon node show`
