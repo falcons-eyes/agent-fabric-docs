@@ -716,8 +716,11 @@ with no local browser.
 --org <id>          dev mode: store a 'dev:<org>' token, no AWS needed.
 --control-url <url> set & persist the control plane URL.
 
-Note: the AF_CONTROL_URL env var, if set, overrides the saved URL for
-the current shell — unset it to fall back to the saved value.
+To switch control planes, log in with --control-url (it persists). The
+AF_CONTROL_URL env var is a narrow override (e.g. the control plane moved
+ports); it wins over the saved URL for the current shell, so a stale value
+can point you at the wrong place — prefer --control-url and unset it when done.
+Your session is bound to its control plane: it is never used against another.
 
 ```
 falcon login [flags]
