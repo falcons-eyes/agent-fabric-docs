@@ -130,6 +130,26 @@ falcon agent doctor
 falcon agent discover
 ```
 
+### `falcon agent introspect`
+
+Run an A2A agent that answers this node's mesh status/doctor/connectivity to peers
+
+Expose this node's deterministic mesh diagnostics to peer AGENTS over A2A. A peer
+agent sends a message ("status" | "doctor" | "connectivity") and receives the same
+JSON digest the CLI renders — no shell access to this node required.
+
+Publish it on the mesh — in another terminal:
+  falcon serve <addr> --kind a2a --name mesh-introspect
+then a peer reaches it (capability-scoped) through the gateway.
+
+```
+falcon agent introspect [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--addr` | `127.0.0.1:7777` | loopback address to bind the A2A introspection agent |
+
 ### `falcon agent logs`
 
 Show logs for a Falcon-managed Docker runtime
@@ -515,9 +535,10 @@ falcon agent stop mac-ollama
 Generate a privacy-safe support bundle (no prompts, outputs, tokens, or keys)
 
 Collect just enough metadata to debug join/runtime/connectivity issues —
-version, OS/arch, control host, org/network/node ids, and the signed netmap
-generation/entitlement/peer+service counts. It NEVER includes tokens, keys,
-prompts, model outputs, or session content.
+version, OS/arch, control host, org/network/node ids, the signed netmap
+generation/entitlement/peer+service counts, and the observe-engine diagnostics
+(doctor/status/connectivity verdicts). It NEVER includes tokens, keys, prompts,
+model outputs, or session content.
 
 ```
 falcon bugreport [flags]
@@ -609,11 +630,15 @@ falcon control-key show
 
 ### `falcon doctor`
 
-Diagnose local setup: config, identity, keystore, control plane, node
+Diagnose local setup: config, identity, keystore, control plane, node (--json for agents)
 
 ```
-falcon doctor
+falcon doctor [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | emit the report as a structured JSON digest (for agents/automation) |
 
 ### `falcon down`
 
@@ -768,6 +793,22 @@ Clear the local FalconEyes session
 falcon logout
 ```
 
+### `falcon mcp`
+
+Run a local MCP server exposing the mesh digests (status, connectivity) as tools
+
+Expose falcon's deterministic mesh diagnostics to an LLM agent over MCP (stdio).
+
+Tools:
+  mesh_status        host+mesh health snapshot (node, control, entitlement, tunnel, relay, peers)
+  mesh_connectivity  path diagnosis (control → netmap → relay → NAT → per-peer) with fix hints
+
+Add to an MCP client (e.g. Claude Code): {"command":"falcon","args":["mcp"]}
+
+```
+falcon mcp
+```
+
 ### `falcon names`
 
 List private node/service names from the signed netmap
@@ -782,11 +823,15 @@ falcon names [flags]
 
 ### `falcon netcheck`
 
-Diagnose mesh connectivity: control, netmap, relay, NAT, and per-peer path
+Diagnose mesh connectivity: control, netmap, relay, NAT, and per-peer path (--json for agents)
 
 ```
-falcon netcheck
+falcon netcheck [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | emit the diagnosis as a structured JSON digest (for agents/automation) |
 
 ### `falcon network`
 
@@ -1039,11 +1084,15 @@ falcon service test [name] [flags]
 
 ### `falcon status`
 
-Show this node's mesh status
+Show this node's mesh status (host+mesh health snapshot; --json for agents)
 
 ```
-falcon status
+falcon status [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | emit the snapshot as a structured JSON digest (for agents/automation) |
 
 ### `falcon up`
 
