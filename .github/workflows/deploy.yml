@@ -34,13 +34,23 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
         run: |
-          # Deploy directly instead of FirebaseExtended/action-hosting-deploy@v0: that
-          # action mis-parses firebase-tools 15.x --json output (the release version
-          # came through as "[object Object]" → 400 FAILED_PRECONDITION; broke 2026-06-25
-          # when latest rolled to 15.x), while pinning to 14.x fails to auth on the
-          # current runner Node. Letting firebase-tools authenticate via the service
-          # account (ADC) and build its own release sidesteps both.
+          # Deploy directly with the service account (ADC) — not the old
+          # action-hosting-deploy@v0, which only obscured the real error below.
+          #
+          # Real root cause of the 2026-06-25 breakage: firebase-tools 15.x (latest)
+          # returns a hard 400 — "supplied version … is the current active version" —
+          # when the freshly built site is byte-identical to what's already live, i.e.
+          # a no-op deploy. For docs that's success, not failure (nothing changed →
+          # nothing to ship), so swallow exactly that case; any other error still fails.
           printf '%s' "$SA" > "$GOOGLE_APPLICATION_CREDENTIALS"
           trap 'rm -f "$GOOGLE_APPLICATION_CREDENTIALS"' EXIT
-          npx -y firebase-tools@latest deploy --only hosting \
-            --project falconeyes-478614 --non-interactive
+          set +e
+          out="$(npx -y firebase-tools@latest deploy --only hosting \
+            --project falconeyes-478614 --non-interactive 2>&1)"
+          rc=$?
+          printf '%s\n' "$out"
+          if [ $rc -ne 0 ] && printf '%s' "$out" | grep -q "is the current active version"; then
+            echo "::notice::docs unchanged — already the live version; treating as success."
+            exit 0
+          fi
+          exit $rc
