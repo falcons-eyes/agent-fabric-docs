@@ -579,6 +579,34 @@ Revoke a subject's console access to a node
 falcon console revoke [subject] [node]
 ```
 
+### `falcon control-key`
+
+Inspect or rotate the pinned control-plane verify key (trust anchor)
+
+```
+falcon control-key
+```
+
+### `falcon control-key repin`
+
+Pin the key the control plane currently serves (after a legitimate rotation)
+
+```
+falcon control-key repin [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--yes` | `false` | skip the confirmation prompt (for automation) |
+
+### `falcon control-key show`
+
+Show the pinned control key and whether it matches the server
+
+```
+falcon control-key show
+```
+
 ### `falcon doctor`
 
 Diagnose local setup: config, identity, keystore, control plane, node
@@ -752,6 +780,14 @@ falcon names [flags]
 |---|---|---|
 | `--json` | `false` | JSON output |
 
+### `falcon netcheck`
+
+Diagnose mesh connectivity: control, netmap, relay, NAT, and per-peer path
+
+```
+falcon netcheck
+```
+
 ### `falcon network`
 
 Manage private overlay networks
@@ -837,6 +873,36 @@ falcon node remove [name] [flags]
 | `--network` | `—` | network name or id (default: the joined one) |
 | `--yes` | `false` | skip the confirmation prompt |
 
+### `falcon node rename`
+
+Rename a node (keeps its overlay IP)
+
+```
+falcon node rename [current-name] [new-name] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--network` | `—` | network the node is on (name or id; default: current) |
+
+### `falcon node revoke`
+
+Permanently revoke a node's device identity (lost/stolen device)
+
+Revoke removes the node AND blacklists its device (machine) identity, so a
+lost or stolen device — whose holder still has the machine key — can NEVER
+re-enroll in this org. Use `node remove` for a normal removal the device can
+undo by reconnecting; revoke is permanent for that device key.
+
+```
+falcon node revoke [name] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--network` | `—` | network the node is on (name or id; default: current) |
+| `--yes` | `false` | skip confirmation |
+
 ### `falcon node show`
 
 Show details for a node
@@ -852,6 +918,18 @@ List nodes on the current network
 ```
 falcon nodes
 ```
+
+### `falcon ping`
+
+Ping a peer over the overlay and show the path (direct/relay)
+
+```
+falcon ping [name] [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--network` | `—` | network the peer is on (name or id; default: current) |
 
 ### `falcon resolve`
 

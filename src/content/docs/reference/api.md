@@ -8,10 +8,12 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 |---|---|---|---|
 | `GET` | `/healthz` | none | liveness probe |
 | `GET` | `/api/workspace` | org | workspace (org) profile — name, plan, owner |
+| `POST` | `/api/workspace/bootstrap` | org | first-run setup: create the org + a Default network (idempotent, no-op once bootstrapped) |
 | `PATCH` | `/api/workspace` | org | rename the workspace (label change only) |
 | `GET` | `/api/workspace/members` | org | workspace roster — owner + invitations |
 | `GET` | `/api/workspace/invitations` | org | list the caller org's invitations |
 | `POST` | `/api/workspace/invitations` | org | invite a teammate by email + role (admin|member) |
+| `POST` | `/api/workspace/invitations/{id}/accept` | org | accept an invitation addressed to your email — join the inviting org |
 | `DELETE` | `/api/workspace/invitations/{id}` | org | revoke an invitation |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
@@ -21,6 +23,8 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/enroll` | org | enroll a node (device proof-of-possession optional); 402 if suspended |
 | `GET` | `/api/nodes` | org | list nodes (?network_id=) |
 | `DELETE` | `/api/nodes/{id}` | org | delete a node (revoke membership) |
+| `PATCH` | `/api/nodes/{id}` | org | rename a node (keeps id + overlay IP) |
+| `POST` | `/api/nodes/{id}/revoke` | org | revoke a node's device identity (blocks re-enroll) + remove it |
 | `POST` | `/api/nodes/{id}/heartbeat` | org | node liveness + reachability candidates |
 | `POST` | `/api/nodes/{id}/services` | org | attach a private service (mcp/a2a/llm/…) |
 | `DELETE` | `/api/nodes/{id}/services/{name}` | org | remove a published service from a node |
