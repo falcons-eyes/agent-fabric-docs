@@ -31,14 +31,16 @@ jobs:
       - run: npm run build
       - name: deploy to Firebase Hosting (live)
         if: ${{ env.SA != '' }}
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: falconeyes-478614
-          channelId: live
-          # Pin firebase-tools: the default "latest" (15.x) is incompatible with this
-          # action's output parsing — the release version came through as "[object
-          # Object]", so the live release failed with 400 FAILED_PRECONDITION (started
-          # 2026-06-25). 14.x is the last line that works with action-hosting-deploy@v0.
-          firebaseToolsVersion: "14.27.0"
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+        run: |
+          # Deploy directly instead of FirebaseExtended/action-hosting-deploy@v0: that
+          # action mis-parses firebase-tools 15.x --json output (the release version
+          # came through as "[object Object]" → 400 FAILED_PRECONDITION; broke 2026-06-25
+          # when latest rolled to 15.x), while pinning to 14.x fails to auth on the
+          # current runner Node. Letting firebase-tools authenticate via the service
+          # account (ADC) and build its own release sidesteps both.
+          printf '%s' "$SA" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          trap 'rm -f "$GOOGLE_APPLICATION_CREDENTIALS"' EXIT
+          npx -y firebase-tools@latest deploy --only hosting \
+            --project falconeyes-478614 --non-interactive
