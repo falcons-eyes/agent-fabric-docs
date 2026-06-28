@@ -37,3 +37,8 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: falconeyes-478614
           channelId: live
+          # Pin firebase-tools: the default "latest" (15.x) is incompatible with this
+          # action's output parsing — the release version came through as "[object
+          # Object]", so the live release failed with 400 FAILED_PRECONDITION (started
+          # 2026-06-25). 14.x is the last line that works with action-hosting-deploy@v0.
+          firebaseToolsVersion: "14.27.0"
