@@ -1147,6 +1147,18 @@ falcon update [flags]
 | `--force` | `false` | reinstall even if already up to date |
 | `--version` | `—` | install a specific version (e.g. v0.2.0) instead of the channel latest |
 
+### `falcon usage`
+
+Show this workspace's metered usage (relay egress, api, node-hours)
+
+```
+falcon usage [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | emit usage as JSON |
+
 ### `falcon version`
 
 Print the falcon CLI version
@@ -1191,6 +1203,14 @@ falcon web [flags]
 | `--addr` | `127.0.0.1:3210` | Local Console listen address |
 | `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
 | `--no-open` | `false` | check and print the URL without opening a browser |
+
+### `falcon whoami`
+
+Show the current identity: workspace, plan, control plane, node
+
+```
+falcon whoami
+```
 
 ### `falcon whois`
 
