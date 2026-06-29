@@ -709,6 +709,22 @@ falcon grant [resource] [flags]
 | `--action` | `read` | granted action |
 | `--ttl` | `10m0s` | token lifetime |
 
+### `falcon host`
+
+Deterministic host snapshot: os, cpu/load, memory, disk, network (--json for agents)
+
+A deterministic host snapshot — OS/kernel, CPU + load average, memory, the root
+filesystem, and up network interfaces — gathered from machine-readable sources.
+An agent reads it in one call instead of running uname/df/ip/free across turns.
+
+```
+falcon host [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | emit the snapshot as a structured JSON digest (for agents/automation) |
+
 ### `falcon ip`
 
 Print this node's overlay IP (or another node's with --name)
