@@ -15,6 +15,15 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/workspace/invitations` | org | invite a teammate by email + role (admin|member) |
 | `POST` | `/api/workspace/invitations/{id}/accept` | org | accept an invitation addressed to your email — join the inviting org |
 | `DELETE` | `/api/workspace/invitations/{id}` | org | revoke an invitation |
+| `POST` | `/api/demo-rooms` | org | create a demo room — time-boxed customer access to a service (Idempotency-Key supported); returns a scoped connection token |
+| `GET` | `/api/demo-rooms` | org | list the caller org's demo rooms |
+| `GET` | `/api/demo-rooms/{id}` | org | demo room detail (derived status + control-page URL) |
+| `PATCH` | `/api/demo-rooms/{id}` | org | update a demo room (name, usage/rate limits) |
+| `DELETE` | `/api/demo-rooms/{id}` | org | delete a demo room |
+| `POST` | `/api/demo-rooms/{id}/revoke` | org | close a demo room (status→revoked, expiry pulled to now) |
+| `POST` | `/api/demo-rooms/{id}/extend` | org | extend/reactivate a demo room → fresh connection token |
+| `POST` | `/api/demo-rooms/{id}/token` | org | re-issue a connection token scoped to the remaining TTL (409 if not active) |
+| `GET` | `/api/demo-rooms/{id}/status` | org | live demo health: status, expiry, node online, service present |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `PATCH` | `/api/networks/{id}` | org | rename a network (label change only) |
