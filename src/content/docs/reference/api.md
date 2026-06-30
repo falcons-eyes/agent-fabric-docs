@@ -24,6 +24,14 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/demo-rooms/{id}/extend` | org | extend/reactivate a demo room → fresh connection token |
 | `POST` | `/api/demo-rooms/{id}/token` | org | re-issue a connection token scoped to the remaining TTL (409 if not active) |
 | `GET` | `/api/demo-rooms/{id}/status` | org | live demo health: status, expiry, node online, service present |
+| `POST` | `/api/gpu-workspaces` | org | register a GPU node as a team model endpoint (auto-discovers published model services) |
+| `GET` | `/api/gpu-workspaces` | org | list the caller org's GPU workspaces |
+| `GET` | `/api/gpu-workspaces/{id}` | org | GPU workspace detail |
+| `PATCH` | `/api/gpu-workspaces/{id}` | org | update a GPU workspace (name) |
+| `DELETE` | `/api/gpu-workspaces/{id}` | org | delete a GPU workspace |
+| `GET` | `/api/gpu-workspaces/{id}/detect` | org | detect the node's GPU/runtime capabilities + published model services |
+| `POST` | `/api/gpu-workspaces/{id}/register-service` | org | link an already-published model service on the node into the workspace |
+| `GET` | `/api/gpu-workspaces/{id}/client-config` | org | OpenAI-compatible base URL + scoped capability token for a model service (?service=) |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `PATCH` | `/api/networks/{id}` | org | rename a network (label change only) |
