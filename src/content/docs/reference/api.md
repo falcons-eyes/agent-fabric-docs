@@ -39,6 +39,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `DELETE` | `/api/nodes/{id}/services/{name}` | org | remove a published service from a node |
 | `POST` | `/api/nodes/{id}/jobs` | org | enqueue an allow-listed desired-state job for a node |
 | `GET` | `/api/nodes/{id}/jobs` | org | list a node's desired-state jobs (?status=pending for the node poll) |
+| `GET` | `/api/nodes/{id}/capabilities` | org | what a node can be used as (gpu/model_server/tool_server/agent_host/gateway), derived from reported state |
 | `POST` | `/api/jobs/{id}/status` | org | node reports a job's reconciled state (applied|failed|rejected) |
 | `GET` | `/api/netmap/{id}` | org | signed network map (peers + entitlement envelope) |
 | `GET` | `/api/control-key` | org | Ed25519 netmap verify key (+ key_id) |

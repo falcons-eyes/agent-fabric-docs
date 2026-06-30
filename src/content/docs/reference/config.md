@@ -9,6 +9,8 @@ Environment variables read by `control` (`internal/platform/config`).
 | `AF_PORT` | `8080` | HTTP API listen port |
 | `AWS_REGION` | `us-east-1` | AWS region (Cognito / DynamoDB / KMS) |
 | `AF_DEV_MODE` | `false` | safe default; set true for local dev in-memory store + dev resolver |
+| `AF_LOG_LEVEL` | `—` | log verbosity: trace|debug|info|warn|error|critical (default: debug in dev, info otherwise) |
+| `AF_LOG_FILE` | `—` | append logs to this file instead of stdout (dev-local; 0600). Always JSON; no cloud SDK |
 | `AF_COGNITO_USER_POOL` | `—` | Cognito user pool id (required when AF_DEV_MODE=false) |
 | `AF_COGNITO_CLIENT_ID` | `—` | Cognito app client id (token audience) |
 | `AF_DYNAMO_TABLE` | `agent-fabric` | DynamoDB single-table name (AWS mode) |

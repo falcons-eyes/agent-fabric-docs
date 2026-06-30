@@ -15,6 +15,10 @@ for customer-owned AI and edge systems. Build the AI. We make it reachable.
 falcon
 ```
 
+| flag | default | description |
+|---|---|---|
+| `--verbose` | `false` | verbose debug logging |
+
 ### `falcon agent`
 
 Agent runtime recipes and local supervisor
