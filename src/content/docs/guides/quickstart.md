@@ -1,0 +1,83 @@
+---
+title: Quickstart
+description: Install falcon, sign in, connect a machine, and publish a local service — in under five minutes.
+sidebar:
+  order: 1
+---
+
+# Quickstart
+
+**TL;DR:** install → sign in → connect → publish.
+
+```sh
+curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.sh | sh
+falcon up
+falcon serve http://127.0.0.1:11434 --name my-model --kind llm
+```
+
+That's it — a machine joined to your private mesh, with a local model server
+published as an addressable, capability-gated service. The rest of this page walks
+through each step and what it actually does.
+
+## 1. Install
+
+**macOS / Linux:**
+
+```sh
+curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.sh | sh
+```
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.ps1 | iex
+```
+
+This installs three binaries: `falcon` (the CLI you'll use), `afd` (the background
+tunnel agent), and `aflocal` (a local dashboard — see [Local Agent
+Stack](/guides/local-agent-stack/)). Verify it worked:
+
+```sh
+falcon version
+```
+
+## 2. Sign in and connect
+
+```sh
+falcon up
+```
+
+One command does three things: signs you in (opens your browser, or prints a
+device code if there's no local browser), joins this machine to your network
+(generates a WireGuard key that never leaves the machine, and fetches a signed
+network map), and brings the encrypted tunnel up. Check it worked:
+
+```sh
+falcon status
+```
+
+## 3. Publish a service
+
+Make anything running locally — a model server, an MCP tool, an internal API —
+reachable by your team over the private mesh:
+
+```sh
+falcon serve http://127.0.0.1:11434 --name my-model --kind llm
+```
+
+It becomes `my-model.<this-machine>.private`, visible under **Services** in the
+[cloud console](https://app.falconoon.com), and reachable by any teammate's
+machine through a scoped, expiring capability — never a public port. Grant and
+resolve it from another machine:
+
+```sh
+falcon grant llm://my-model
+falcon resolve my-model --cap <token>
+```
+
+## Where to go next
+
+- **[Connect a device](/guides/connect-a-device/)** — the console side of onboarding: seeing your machines, networks, and services.
+- **[Local Agent Stack](/guides/local-agent-stack/)** — running and verifying local model servers before you publish them.
+- **[CLI reference](/reference/cli/)** — every `falcon` command and flag.
+- **[How it works](/guides/how-it-works/)** — the mesh + control-plane model, for anyone evaluating whether to trust it with their infrastructure.

@@ -1,6 +1,8 @@
 ---
 title: Connect a device
 description: Sign in and join a machine to your private network in one command with falcon up, then see it in the cloud console — without sending traffic, prompts, or outputs to the cloud.
+sidebar:
+  order: 3
 ---
 
 # Connect a device

@@ -1,6 +1,8 @@
 ---
 title: Local Agent Stack
 description: Run customer-owned local model servers, verify them, and use Falcon's local session runner without sending prompts or outputs to the cloud.
+sidebar:
+  order: 4
 ---
 
 # Local Agent Stack
