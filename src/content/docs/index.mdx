@@ -5,8 +5,8 @@ template: splash
 hero:
   tagline: A WireGuard mesh with a zero-trust control plane that brokers keys, identity and policy — but never sees your traffic.
   actions:
-    - text: CLI reference
-      link: /reference/cli/
+    - text: Quickstart
+      link: /guides/quickstart/
       icon: right-arrow
     - text: View on GitHub
       link: https://github.com/falcons-eyes/agent-fabric
@@ -25,6 +25,14 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
 (WireGuard), with relay fallback only for reachability.
 
 <CardGrid>
+  <Card title="Quickstart" icon="rocket">
+    Install `falcon`, sign in, connect a machine, and publish a local service —
+    [in under five minutes](/guides/quickstart/).
+  </Card>
+  <Card title="How it works" icon="information">
+    The mesh + control-plane trust model at a glance — [what runs where, and what
+    reaches the cloud (and what never does)](/guides/how-it-works/).
+  </Card>
   <Card title="CLI reference" icon="laptop">
     Every `falcon` command and flag — [generated from the code](/reference/cli/),
     never hand-written.
@@ -34,18 +42,16 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
     [session-backed agent loops](/guides/local-agent-stack/) without sending AI
     payloads to the cloud.
   </Card>
-  <Card title="HTTP API" icon="puzzle">
+  <Card title="HTTP API & SDKs" icon="puzzle">
     Control-plane [routes, auth tiers and entitlement gates](/reference/api/),
-    reconciled against the live router.
-  </Card>
-  <Card title="Configuration" icon="setting">
-    Every control-plane [environment variable](/reference/config/) and its default.
+    reconciled against the live router — plus [Python/TypeScript/Go
+    clients](/sdk/) generated from the same spec.
   </Card>
 </CardGrid>
 
 :::note[Generated docs]
-The pages under **Reference** are generated from source code in the private
-`agent-fabric` repo. Pages under **Guides** are source-owned public docs from
-that same repo. Both are synced here automatically, so user-facing docs travel
-with the code that changes behavior.
+The pages under **Reference** and **SDKs** are generated from source code in the
+private `agent-fabric` repo. Pages under **Guides** are source-owned public docs
+from that same repo. All are synced here automatically, so user-facing docs
+travel with the code that changes behavior.
 :::
