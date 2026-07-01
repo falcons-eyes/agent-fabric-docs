@@ -11,6 +11,8 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/workspace/bootstrap` | org | first-run setup: create the org + a Default network (idempotent, no-op once bootstrapped) |
 | `PATCH` | `/api/workspace` | org | rename the workspace (label change only) |
 | `GET` | `/api/workspace/members` | org | workspace roster — owner + invitations |
+| `PATCH` | `/api/workspace/members/{subject}` | org | change a member's role (owner-only; owner|member); the last owner cannot be demoted |
+| `DELETE` | `/api/workspace/members/{subject}` | org | remove a member (owner-only); the last owner cannot be removed |
 | `GET` | `/api/workspace/invitations` | org | list the caller org's invitations |
 | `POST` | `/api/workspace/invitations` | org | invite a teammate by email + role (admin|member) |
 | `POST` | `/api/workspace/invitations/{id}/accept` | org | accept an invitation addressed to your email — join the inviting org |
