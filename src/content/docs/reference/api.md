@@ -39,6 +39,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `PATCH` | `/api/agent-workspaces/{id}` | org | update an agent workspace (name, purpose) |
 | `DELETE` | `/api/agent-workspaces/{id}` | org | delete an agent workspace |
 | `POST` | `/api/agent-workspaces/{id}/services` | org | attach a service to the workspace (routed to its leg by kind) |
+| `POST` | `/api/agent-workspaces/{id}/publish-service` | org | remotely publish a loopback service on a node in the network via an APPLY_RECIPE job (async) |
 | `DELETE` | `/api/agent-workspaces/{id}/services` | org | detach a service (by node_id + name) |
 | `POST` | `/api/agent-workspaces/{id}/smoke-test` | org | run a structural reachability smoke test + store the health summary |
 | `GET` | `/api/agent-workspaces/{id}/status` | org | current health summary + leg counts |
