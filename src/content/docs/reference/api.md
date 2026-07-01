@@ -33,6 +33,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `DELETE` | `/api/gpu-workspaces/{id}` | org | delete a GPU workspace |
 | `GET` | `/api/gpu-workspaces/{id}/detect` | org | detect the node's GPU/runtime capabilities + published model services |
 | `POST` | `/api/gpu-workspaces/{id}/register-service` | org | link an already-published model service on the node into the workspace |
+| `DELETE` | `/api/gpu-workspaces/{id}/services/{name}` | org | unlink a model service from the workspace (inverse of register-service) |
 | `POST` | `/api/gpu-workspaces/{id}/publish-service` | org | remotely publish a loopback model service on the GPU node via an APPLY_RECIPE job (async) |
 | `GET` | `/api/gpu-workspaces/{id}/client-config` | org | OpenAI-compatible base URL + scoped capability token for a model service (?service=) |
 | `POST` | `/api/agent-workspaces` | org | group agent + model + tool services into a working-agent workspace |
@@ -52,7 +53,9 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `PATCH` | `/api/customer-environments/{id}` | org | update a customer environment (name, customer, type, region) |
 | `DELETE` | `/api/customer-environments/{id}` | org | delete a customer environment |
 | `POST` | `/api/customer-environments/{id}/gateways` | org | attach a gateway node to the environment |
+| `DELETE` | `/api/customer-environments/{id}/gateways/{nodeID}` | org | detach a gateway node from the environment |
 | `POST` | `/api/customer-environments/{id}/services` | org | attach a deployed service (node + name) to the environment |
+| `DELETE` | `/api/customer-environments/{id}/services` | org | detach a service (by node_id + name) from the environment |
 | `POST` | `/api/customer-environments/{id}/preflight` | org | run the trust-boundary checklist + readiness check → health |
 | `POST` | `/api/customer-environments/{id}/trust-brief` | org | set the manual trust brief (markdown) |
 | `GET` | `/api/customer-environments/{id}/trust-brief` | org | get the manual trust brief (markdown) |
