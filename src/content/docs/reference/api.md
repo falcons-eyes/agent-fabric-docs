@@ -31,6 +31,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `DELETE` | `/api/gpu-workspaces/{id}` | org | delete a GPU workspace |
 | `GET` | `/api/gpu-workspaces/{id}/detect` | org | detect the node's GPU/runtime capabilities + published model services |
 | `POST` | `/api/gpu-workspaces/{id}/register-service` | org | link an already-published model service on the node into the workspace |
+| `POST` | `/api/gpu-workspaces/{id}/publish-service` | org | remotely publish a loopback model service on the GPU node via an APPLY_RECIPE job (async) |
 | `GET` | `/api/gpu-workspaces/{id}/client-config` | org | OpenAI-compatible base URL + scoped capability token for a model service (?service=) |
 | `POST` | `/api/agent-workspaces` | org | group agent + model + tool services into a working-agent workspace |
 | `GET` | `/api/agent-workspaces` | org | list the caller org's agent workspaces |
