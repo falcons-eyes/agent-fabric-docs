@@ -72,6 +72,7 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `GET` | `/api/usage` | org | metering readout (totals + events) |
 | `POST` | `/api/checkout` | org | start a Stripe Checkout to subscribe a network → hosted checkout URL |
 | `POST` | `/api/billing/toss/subscribe` | org | subscribe a network via Toss recurring billing (issue billing key + charge → active) |
+| `GET` | `/api/billing/pricing` | org | effective plan prices (store override or env seed) + currency |
 | `POST` | `/device/code` | none | device-flow: request a device + user code (RFC 8628) |
 | `POST` | `/device/token` | none | device-flow: poll for tokens (grant_type=device_code|refresh_token) |
 | `POST` | `/api/device/approve` | org | approve a device-flow user code (binds it to the caller) |

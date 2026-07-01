@@ -30,6 +30,7 @@ Environment variables read by `control` (`internal/platform/config`).
 | `AF_TOSS_SECRET_KEY` | `—` | Toss Payments secret key (test_sk_…/live_sk_…) for recurring billing (POST /api/billing/toss/subscribe) |
 | `AF_TOSS_PRICES` | `—` | plan→monthly KRW amount map for Toss, e.g. pro=29000,team=99000 |
 | `AF_TOSS_WEBHOOK_SECRET` | `—` | Toss webhook security key (보안키) for POST /svc/toss/webhook |
+| `AF_PLATFORM_ADMINS` | `—` | comma-separated subjects allowed to edit global pricing (PUT /api/billing/pricing); empty → pricing edits disabled |
 | `AF_APP_BASE_URL` | `https://app.falconoon.com` | public app base URL for Checkout success/cancel redirects + invite accept links |
 | `AF_EMAIL_FROM` | `—` | SES From address for transactional mail (e.g. 'FalconOON <no-reply@falconoon.com>'); empty → invite email disabled (copyable link only) |
 | `AF_CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173,https://app.falconoon.com` | comma-separated browser origins allowed to call /api (the app dashboard); * = any |
