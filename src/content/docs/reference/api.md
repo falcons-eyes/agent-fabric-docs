@@ -32,6 +32,16 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `GET` | `/api/gpu-workspaces/{id}/detect` | org | detect the node's GPU/runtime capabilities + published model services |
 | `POST` | `/api/gpu-workspaces/{id}/register-service` | org | link an already-published model service on the node into the workspace |
 | `GET` | `/api/gpu-workspaces/{id}/client-config` | org | OpenAI-compatible base URL + scoped capability token for a model service (?service=) |
+| `POST` | `/api/agent-workspaces` | org | group agent + model + tool services into a working-agent workspace |
+| `GET` | `/api/agent-workspaces` | org | list the caller org's agent workspaces |
+| `GET` | `/api/agent-workspaces/{id}` | org | agent workspace detail |
+| `PATCH` | `/api/agent-workspaces/{id}` | org | update an agent workspace (name, purpose) |
+| `DELETE` | `/api/agent-workspaces/{id}` | org | delete an agent workspace |
+| `POST` | `/api/agent-workspaces/{id}/services` | org | attach a service to the workspace (routed to its leg by kind) |
+| `DELETE` | `/api/agent-workspaces/{id}/services` | org | detach a service (by node_id + name) |
+| `POST` | `/api/agent-workspaces/{id}/smoke-test` | org | run a structural reachability smoke test + store the health summary |
+| `GET` | `/api/agent-workspaces/{id}/status` | org | current health summary + leg counts |
+| `GET` | `/api/agent-workspaces/{id}/access-graph` | org | workspace → service → node graph for the GUI |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `PATCH` | `/api/networks/{id}` | org | rename a network (label change only) |
