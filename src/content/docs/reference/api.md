@@ -7,6 +7,8 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | method | path | auth | summary |
 |---|---|---|---|
 | `GET` | `/healthz` | none | liveness probe |
+| `GET` | `/readyz` | none | readiness probe — 503 until the datastore is reachable |
+| `GET` | `/metrics` | none | Prometheus metrics (RED: rate/errors/duration); optionally gated by AF_METRICS_TOKEN |
 | `GET` | `/api/workspace` | org | workspace (org) profile — name, plan, owner |
 | `POST` | `/api/workspace/bootstrap` | org | first-run setup: create the org + a Default network (idempotent, no-op once bootstrapped) |
 | `PATCH` | `/api/workspace` | org | rename the workspace (label change only) |
