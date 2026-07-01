@@ -975,9 +975,19 @@ falcon login [flags]
 
 Clear the local FalconEyes session
 
+Clear the local session (token + refresh). By default the device identity —
+the WireGuard private key and machine-key seed — is KEPT so you can sign back
+in without re-enrolling. Use --purge to also erase the device identity from
+this machine (e.g. before handing it off); revoking the device in the console
+is still the way to invalidate it server-side.
+
 ```
-falcon logout
+falcon logout [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--purge` | `false` | also erase the local device identity (WireGuard key + machine seed) |
 
 ### `falcon mcp`
 
