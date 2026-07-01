@@ -52,6 +52,16 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/customer-environments/{id}/preflight` | org | run the trust-boundary checklist + readiness check → health |
 | `POST` | `/api/customer-environments/{id}/trust-brief` | org | set the manual trust brief (markdown) |
 | `GET` | `/api/customer-environments/{id}/trust-brief` | org | get the manual trust brief (markdown) |
+| `POST` | `/api/delivery-projects` | org | create an AI-SI delivery project (seeds the default checklist) |
+| `GET` | `/api/delivery-projects` | org | list the caller org's delivery projects |
+| `GET` | `/api/delivery-projects/{id}` | org | delivery project detail |
+| `PATCH` | `/api/delivery-projects/{id}` | org | update a delivery project (name, stage, owner, due date) |
+| `DELETE` | `/api/delivery-projects/{id}` | org | delete a delivery project |
+| `POST` | `/api/delivery-projects/{id}/resources` | org | link a resource (demo_room/agent_workspace/gpu_workspace/customer_environment) |
+| `DELETE` | `/api/delivery-projects/{id}/resources/{type}/{resourceID}` | org | unlink a resource by type + id |
+| `POST` | `/api/delivery-projects/{id}/checklist/{key}/complete` | org | mark a checklist item done (optional evidence_ref) |
+| `POST` | `/api/delivery-projects/{id}/handoff` | org | set the handoff document (markdown) |
+| `GET` | `/api/delivery-projects/{id}/handoff` | org | get the handoff document (markdown) |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `PATCH` | `/api/networks/{id}` | org | rename a network (label change only) |
