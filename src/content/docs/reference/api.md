@@ -42,6 +42,16 @@ Routes served by `control` (`internal/api`). Auth: `none` (public) or `org` (Cog
 | `POST` | `/api/agent-workspaces/{id}/smoke-test` | org | run a structural reachability smoke test + store the health summary |
 | `GET` | `/api/agent-workspaces/{id}/status` | org | current health summary + leg counts |
 | `GET` | `/api/agent-workspaces/{id}/access-graph` | org | workspace → service → node graph for the GUI |
+| `POST` | `/api/customer-environments` | org | represent a customer VPC/on-prem environment |
+| `GET` | `/api/customer-environments` | org | list the caller org's customer environments |
+| `GET` | `/api/customer-environments/{id}` | org | customer environment detail |
+| `PATCH` | `/api/customer-environments/{id}` | org | update a customer environment (name, customer, type, region) |
+| `DELETE` | `/api/customer-environments/{id}` | org | delete a customer environment |
+| `POST` | `/api/customer-environments/{id}/gateways` | org | attach a gateway node to the environment |
+| `POST` | `/api/customer-environments/{id}/services` | org | attach a deployed service (node + name) to the environment |
+| `POST` | `/api/customer-environments/{id}/preflight` | org | run the trust-boundary checklist + readiness check → health |
+| `POST` | `/api/customer-environments/{id}/trust-brief` | org | set the manual trust brief (markdown) |
+| `GET` | `/api/customer-environments/{id}/trust-brief` | org | get the manual trust brief (markdown) |
 | `POST` | `/api/networks` | org | create a private network |
 | `GET` | `/api/networks` | org | list the caller org's networks |
 | `PATCH` | `/api/networks/{id}` | org | rename a network (label change only) |
