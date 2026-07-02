@@ -5,8 +5,8 @@ title: SDKs
 
 Call the FalconEyes control-plane API from your own code — list networks and devices,
 publish and reach private services, read usage — in Python, TypeScript, or Go. Every
-SDK is **generated from the [OpenAPI spec](/openapi.yaml)**, which is kept in lockstep
-with the live API by a router test, so an SDK can never silently drift from the server.
+SDK is **generated from the [OpenAPI spec](/openapi.yaml)** and stays in sync with the
+live API, so the client never silently drifts from the server.
 
 ## CLI or SDK?
 
