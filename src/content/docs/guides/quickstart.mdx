@@ -19,6 +19,16 @@ That's it — a machine joined to your private mesh, with a local model server
 published as an addressable, capability-gated service. The rest of this page walks
 through each step and what it actually does.
 
+import DemoTerminals from '../../../components/DemoTerminals.astro';
+
+<DemoTerminals demos={[
+  { label: 'Onboarding', src: '/onboarding.cast',
+    caption: 'The flow this page walks through, as a real recording — sign in, join the mesh, discover a local model, publish it.' },
+  { label: 'Verify it', src: '/diagnostics.cast',
+    caption: 'Afterwards: status, doctor, and netcheck — deterministic verdicts on your setup.' },
+]} />
+
+
 ## 1. Install
 
 **macOS / Linux:**
