@@ -1,0 +1,55 @@
+/* FalconEyes brand + terminal-UI accents, layered on Starlight's tokens.
+   Keep this light-touch: we tune accent + code surfaces, not the whole theme. */
+
+:root {
+  /* Brand blue (#0066ff) as the accent ramp. */
+  --sl-color-accent-low: #0a2a5e;
+  --sl-color-accent: #0066ff;
+  --sl-color-accent-high: #bcd4ff;
+
+  --fe-navy: #17334a;
+  --fe-blue: #0066ff;
+}
+
+/* Light mode: a slightly deeper accent for contrast on white. */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #cfe0ff;
+  --sl-color-accent: #0057db;
+  --sl-color-accent-high: #06284f;
+}
+
+/* Inline code + code blocks read as "terminal": monospaced, tinted surface. */
+.sl-markdown-content code:not(:where(.expressive-code *)) {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+/* Splash hero: give the tagline a touch more presence and rein in its width so
+   the recorded terminal below is the visual anchor. */
+.hero .tagline {
+  max-width: 46ch;
+  margin-inline: auto;
+}
+
+/* A subtle brand gradient behind the splash hero title. */
+.hero h1 {
+  background: linear-gradient(92deg, var(--fe-navy), var(--fe-blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+:root[data-theme='dark'] .hero h1 {
+  background: linear-gradient(92deg, #bcd4ff, #0066ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Feature cards: lift on hover so the "what's here" grid feels interactive. */
+.card {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--sl-color-accent);
+}

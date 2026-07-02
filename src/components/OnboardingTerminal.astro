@@ -1,0 +1,108 @@
+---
+// A real, replayable terminal on the landing page: the actual `falcon` onboarding
+// recorded with asciinema and played back with asciinema-player (selectable text,
+// pause/seek, tiny file). The recording lives at /onboarding.cast — shipped from the
+// private agent-fabric repo's docs bundle, so it stays in lockstep with the CLI.
+const { caption } = Astro.props;
+---
+
+<figure class="fe-term">
+  <div class="fe-term__frame">
+    <div class="fe-term__chrome">
+      <span class="fe-term__dot fe-term__dot--r"></span>
+      <span class="fe-term__dot fe-term__dot--y"></span>
+      <span class="fe-term__dot fe-term__dot--g"></span>
+      <span class="fe-term__titlebar">falcon — onboarding</span>
+    </div>
+    <div id="fe-onboarding" class="fe-term__screen" aria-label="falcon CLI onboarding recording"></div>
+  </div>
+  {caption && <figcaption class="fe-term__caption">{caption}</figcaption>}
+</figure>
+
+<script>
+  import 'asciinema-player/dist/bundle/asciinema-player.css';
+  import * as AsciinemaPlayer from 'asciinema-player';
+
+  const mount = () => {
+    const el = document.getElementById('fe-onboarding');
+    if (!el || el.dataset.mounted) return;
+    el.dataset.mounted = '1';
+    AsciinemaPlayer.create('/onboarding.cast', el, {
+      autoPlay: true,
+      loop: true,
+      preload: true,
+      controls: true,
+      idleTimeLimit: 2,
+      terminalFontSize: '14px',
+      terminalFontFamily:
+        "'JetBrains Mono','SFMono-Regular',ui-monospace,SFMono,Menlo,Consolas,'Liberation Mono',monospace",
+      poster: 'npt:0:02',
+    });
+  };
+
+  // Astro ships with view transitions off by default here, but guard for both a
+  // normal load and any client-side navigation.
+  document.addEventListener('DOMContentLoaded', mount);
+  document.addEventListener('astro:page-load', mount);
+  mount();
+</script>
+
+<style>
+  .fe-term {
+    margin: 0 0 1.5rem;
+    max-width: 860px;
+    margin-inline: auto;
+  }
+  .fe-term__frame {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d1117;
+    border: 1px solid var(--sl-color-gray-5, #2a3f52);
+    /* A soft brand glow so the terminal reads as the hero object. */
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 18px 50px -20px rgba(0, 102, 255, 0.45),
+      0 10px 30px -15px rgba(0, 0, 0, 0.6);
+  }
+  .fe-term__chrome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, #17334a, #12283a);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .fe-term__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .fe-term__dot--r { background: #ff5f56; }
+  .fe-term__dot--y { background: #ffbd2e; }
+  .fe-term__dot--g { background: #27c93f; }
+  .fe-term__titlebar {
+    margin-inline: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: #9fb3c8;
+    /* keep the traffic lights hard-left by offsetting the auto-centered title */
+    transform: translateX(-24px);
+  }
+  .fe-term__screen {
+    padding: 8px 10px 4px;
+    background: #0d1117;
+  }
+  .fe-term__caption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-3, #8aa0b4);
+  }
+  /* asciinema-player fills the width; keep its own controls but drop its border. */
+  .fe-term__screen :global(.asciinema-player) {
+    border: 0;
+    background: transparent;
+  }
+</style>

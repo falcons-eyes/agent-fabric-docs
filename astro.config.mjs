@@ -9,6 +9,7 @@ export default defineConfig({
     starlight({
       title: 'agent-fabric',
       description: 'Managed trust and connectivity for customer-owned AI.',
+      customCss: ['./src/styles/brand.css'],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/falcons-eyes/agent-fabric' },
       ],
