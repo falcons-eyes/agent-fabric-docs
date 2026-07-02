@@ -1174,6 +1174,23 @@ falcon ping [name] [flags]
 |---|---|---|
 | `--network` | `—` | network the peer is on (name or id; default: current) |
 
+### `falcon quickstart`
+
+Connect this machine, publish a local AI model, and show how to call it — in one flow
+
+The whole product in one command. quickstart:
+  1. checks you're signed in,
+  2. puts this machine on your private mesh (enrolls it),
+  3. finds a local model server (Ollama, vLLM, …),
+  4. publishes it as a private, capability-gated service,
+  5. shows the two commands to call it from any other machine.
+
+No public port is opened. Re-run it any time — it's idempotent.
+
+```
+falcon quickstart
+```
+
 ### `falcon resolve`
 
 Resolve a private service through the gateway using a capability
