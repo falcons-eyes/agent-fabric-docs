@@ -10,6 +10,14 @@ export default defineConfig({
       title: 'agent-fabric',
       description: 'Managed trust and connectivity for customer-owned AI.',
       customCss: ['./src/styles/brand.css'],
+      // Brand falcon-eye mark: dark on light theme, white on dark theme. Keeps the
+      // "agent-fabric" wordmark alongside it. favicon.svg is the palette mark.
+      logo: {
+        light: './src/assets/logo_dark.svg',
+        dark: './src/assets/logo_white.svg',
+        alt: 'FalconEyes',
+      },
+      favicon: '/favicon.svg',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/falcons-eyes/agent-fabric' },
       ],
