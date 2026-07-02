@@ -12,8 +12,11 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/falcons-eyes/agent-fabric' },
       ],
-      // The reference section is generated in the private repo and synced into
-      // src/content/docs/reference/ — autogenerate keeps the sidebar in lockstep.
+      // The reference/guides/sdk sections are generated/synced from the private
+      // repo into src/content/docs/{reference,guides,sdk} — autogenerate keeps
+      // each sidebar group in lockstep with whatever's actually published.
+      // Ordering within Guides comes from each page's own `sidebar.order`
+      // frontmatter (set in the source repo), so Quickstart leads.
       sidebar: [
         {
           label: 'Start here',
@@ -26,6 +29,10 @@ export default defineConfig({
         {
           label: 'Reference',
           items: [{ autogenerate: { directory: 'reference' } }],
+        },
+        {
+          label: 'SDKs',
+          items: [{ autogenerate: { directory: 'sdk' } }],
         },
       ],
     }),
