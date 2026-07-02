@@ -55,7 +55,9 @@ const { demos } = Astro.props;
       loop: true,
       preload: true,
       controls: true,
-      idleTimeLimit: 2,
+      // No idleTimeLimit: the recordings hold their final result ~4s before
+      // looping and their reading pauses are already tuned — capping idle time
+      // would truncate both and make the last command look cut off.
       terminalFontSize: '14px',
       terminalFontFamily:
         "'JetBrains Mono','SFMono-Regular',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace",
