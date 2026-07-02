@@ -991,13 +991,15 @@ falcon logout [flags]
 
 ### `falcon mcp`
 
-Run a local MCP server exposing the mesh digests (status, connectivity) as tools
+Run a local MCP server exposing the mesh digests (status, connectivity, doctor, host) as tools
 
 Expose falcon's deterministic mesh diagnostics to an LLM agent over MCP (stdio).
 
 Tools:
   mesh_status        host+mesh health snapshot (node, control, entitlement, tunnel, relay, peers)
   mesh_connectivity  path diagnosis (control → netmap → relay → NAT → per-peer) with fix hints
+  mesh_doctor        local setup + security posture (config, keystore, control key drift, MTU/CIDR)
+  host_snapshot      deterministic host snapshot (OS, CPU/load, memory, disk, interfaces)
 
 Add to an MCP client (e.g. Claude Code): {"command":"falcon","args":["mcp"]}
 
