@@ -53,3 +53,20 @@
   transform: translateY(-2px);
   border-color: var(--sl-color-accent);
 }
+
+/* --- Responsive safety net (desktop-first, mobile-supported) --- */
+
+/* Any wide content table (API/config/flag references) scrolls inside its own
+   container instead of stretching the page on narrow screens. */
+.sl-markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Media embeds never overflow their column. */
+.sl-markdown-content video,
+.sl-markdown-content img {
+  max-width: 100%;
+  height: auto;
+}
