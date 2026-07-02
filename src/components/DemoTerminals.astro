@@ -1,0 +1,171 @@
+---
+// A tabbed terminal: several real asciinema recordings of `falcon`, one playing at
+// a time. Selectable text, pause/seek. Recordings live at /*.cast — shipped from the
+// private agent-fabric repo's docs bundle so they stay in lockstep with the CLI.
+//
+// Props: demos = [{ label, src, caption }]
+const { demos } = Astro.props;
+---
+
+<div class="fe-demos">
+  <div class="fe-demos__tabs" role="tablist" aria-label="falcon demos">
+    {
+      demos.map((d, i) => (
+        <button class="fe-demos__tab" role="tab" type="button" data-i={i} aria-selected={i === 0 ? 'true' : 'false'}>
+          {d.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <figure class="fe-term">
+    <div class="fe-term__frame">
+      <div class="fe-term__chrome">
+        <span class="fe-term__dot fe-term__dot--r"></span>
+        <span class="fe-term__dot fe-term__dot--y"></span>
+        <span class="fe-term__dot fe-term__dot--g"></span>
+        <span class="fe-term__titlebar" id="fe-demos-title">falcon — {demos[0].label}</span>
+      </div>
+      <div id="fe-demos-screen" class="fe-term__screen" aria-label="falcon CLI recording"></div>
+    </div>
+    <figcaption class="fe-term__caption" id="fe-demos-cap">{demos[0].caption}</figcaption>
+  </figure>
+
+  <script type="application/json" id="fe-demos-data" set:html={JSON.stringify(demos)} />
+</div>
+
+<script>
+  import 'asciinema-player/dist/bundle/asciinema-player.css';
+  import * as AsciinemaPlayer from 'asciinema-player';
+
+  function initDemos() {
+    const dataEl = document.getElementById('fe-demos-data');
+    const screen = document.getElementById('fe-demos-screen');
+    if (!dataEl || !screen || screen.dataset.mounted) return;
+    screen.dataset.mounted = '1';
+
+    const demos = JSON.parse(dataEl.textContent || '[]');
+    const title = document.getElementById('fe-demos-title');
+    const cap = document.getElementById('fe-demos-cap');
+    const tabs = Array.from(document.querySelectorAll('.fe-demos__tab'));
+    let player = null;
+
+    const opts = {
+      autoPlay: true,
+      loop: true,
+      preload: true,
+      controls: true,
+      idleTimeLimit: 2,
+      terminalFontSize: '14px',
+      terminalFontFamily:
+        "'JetBrains Mono','SFMono-Regular',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace",
+    };
+
+    function play(i) {
+      if (player) {
+        try { player.dispose(); } catch {}
+        player = null;
+      }
+      screen.innerHTML = '';
+      player = AsciinemaPlayer.create(demos[i].src, screen, opts);
+      if (title) title.textContent = 'falcon — ' + demos[i].label;
+      if (cap) cap.textContent = demos[i].caption;
+      tabs.forEach((t, j) => t.setAttribute('aria-selected', j === i ? 'true' : 'false'));
+    }
+
+    tabs.forEach((t, i) => t.addEventListener('click', () => play(i)));
+    play(0);
+  }
+
+  document.addEventListener('DOMContentLoaded', initDemos);
+  document.addEventListener('astro:page-load', initDemos);
+  initDemos();
+</script>
+
+<style>
+  .fe-demos {
+    max-width: 880px;
+    margin: 0 auto 1.5rem;
+  }
+  .fe-demos__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  .fe-demos__tab {
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--sl-color-gray-5, #2a3f52);
+    background: var(--sl-color-gray-6, #f3f6f9);
+    color: var(--sl-color-text, inherit);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .fe-demos__tab:hover {
+    border-color: var(--sl-color-accent);
+  }
+  .fe-demos__tab[aria-selected='true'] {
+    background: var(--sl-color-accent);
+    border-color: var(--sl-color-accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Terminal window frame (shared look for every demo). */
+  .fe-term {
+    margin: 0;
+  }
+  .fe-term__frame {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d1117;
+    border: 1px solid var(--sl-color-gray-5, #2a3f52);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 18px 50px -20px rgba(0, 102, 255, 0.45),
+      0 10px 30px -15px rgba(0, 0, 0, 0.6);
+  }
+  .fe-term__chrome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, #17334a, #12283a);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .fe-term__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .fe-term__dot--r { background: #ff5f56; }
+  .fe-term__dot--y { background: #ffbd2e; }
+  .fe-term__dot--g { background: #27c93f; }
+  .fe-term__titlebar {
+    margin-inline: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: #9fb3c8;
+    transform: translateX(-24px);
+  }
+  .fe-term__screen {
+    padding: 8px 10px 4px;
+    background: #0d1117;
+  }
+  .fe-term__caption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-3, #8aa0b4);
+  }
+  .fe-term__screen :global(.asciinema-player) {
+    border: 0;
+    background: transparent;
+  }
+</style>

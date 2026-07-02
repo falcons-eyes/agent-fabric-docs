@@ -15,9 +15,18 @@ hero:
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
-import OnboardingTerminal from '../../components/OnboardingTerminal.astro';
+import DemoTerminals from '../../components/DemoTerminals.astro';
 
-<OnboardingTerminal caption="A real recording — sign in, join a private mesh, discover a local model, and publish it, in one command. No ports, no config." />
+<DemoTerminals demos={[
+  { label: 'Onboarding', src: '/onboarding.cast',
+    caption: 'Sign in, join a private mesh, discover a local model, and publish it — in one command. No ports, no config.' },
+  { label: 'Publish a service', src: '/publish.cast',
+    caption: 'Publish a local model as a private, capability-gated service and mint a token a teammate uses to reach it.' },
+  { label: 'Diagnostics', src: '/diagnostics.cast',
+    caption: 'Mesh status, a full doctor check, and a connectivity probe — deterministic verdicts, no guesswork.' },
+  { label: 'Identity & inventory', src: '/inventory.cast',
+    caption: 'Who you are, the machines on your mesh, and your networks — at a glance.' },
+]} />
 
 ## What is agent-fabric?
 
@@ -37,8 +46,8 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
     reaches the cloud (and what never does)](/guides/how-it-works/).
   </Card>
   <Card title="CLI reference" icon="laptop">
-    Every `falcon` command and flag — [generated from the code](/reference/cli/),
-    never hand-written.
+    [Every `falcon` command and flag](/reference/cli/) — the whole surface, in one
+    place.
   </Card>
   <Card title="Local Agent Stack" icon="laptop">
     Discover or start local model runtimes, smoke-test capabilities and run
@@ -46,15 +55,7 @@ control plane never sees your traffic — connectivity is end-to-end encrypted
     payloads to the cloud.
   </Card>
   <Card title="HTTP API & SDKs" icon="puzzle">
-    Control-plane [routes, auth tiers and entitlement gates](/reference/api/),
-    reconciled against the live router — plus [Python/TypeScript/Go
-    clients](/sdk/) generated from the same spec.
+    Control-plane [routes, auth tiers and entitlement gates](/reference/api/) —
+    plus [Python/TypeScript/Go clients](/sdk/) for calling them from your own code.
   </Card>
 </CardGrid>
-
-:::note[Generated docs]
-The pages under **Reference** and **SDKs** are generated from source code in the
-private `agent-fabric` repo. Pages under **Guides** are source-owned public docs
-from that same repo. All are synced here automatically, so user-facing docs
-travel with the code that changes behavior.
-:::
