@@ -22,8 +22,8 @@ jobs:
     env:
       SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: "22" # Astro 6 requires Node >= 22.12.0
           cache: npm
@@ -45,7 +45,7 @@ jobs:
           printf '%s' "$SA" > "$GOOGLE_APPLICATION_CREDENTIALS"
           trap 'rm -f "$GOOGLE_APPLICATION_CREDENTIALS"' EXIT
           set +e
-          out="$(npx -y firebase-tools@latest deploy --only hosting \
+          out="$(npx -y firebase-tools@15.22.4 deploy --only hosting \
             --project falconeyes-478614 --non-interactive 2>&1)"
           rc=$?
           printf '%s\n' "$out"
