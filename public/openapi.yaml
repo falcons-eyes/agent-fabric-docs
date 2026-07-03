@@ -11,6 +11,19 @@ servers:
     - url: http://127.0.0.1:8080
       description: local dev control plane
 paths:
+    /api/activity:
+        get:
+            summary: recent security/operator actions for the caller org (who/what/when), newest-first (?limit=, default 20, max 100)
+            operationId: get_api_activity
+            tags:
+                - activity
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
     /api/agent-workspaces:
         get:
             summary: list the caller org's agent workspaces
@@ -1627,6 +1640,19 @@ paths:
                   required: true
                   schema:
                     type: string
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
+    /api/overview:
+        get:
+            summary: 'one-shot Home aggregate for the caller org: networks + all nodes + usage totals/events + demo rooms (avoids the dashboard N+1)'
+            operationId: get_api_overview
+            tags:
+                - overview
+            security:
+                - bearerAuth: []
             responses:
                 "200":
                     description: OK

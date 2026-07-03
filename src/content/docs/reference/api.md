@@ -179,3 +179,8 @@ Metered usage and subscription checkout.
 - `POST /api/billing/toss/subscribe` — subscribe a network via Toss recurring billing (issue billing key + charge → active)
 - `GET /api/billing/pricing` — effective plan prices (store override or env seed) + currency
 
+## Other
+
+- `GET /api/overview` — one-shot Home aggregate for the caller org: networks + all nodes + usage totals/events + demo rooms (avoids the dashboard N+1)
+- `GET /api/activity` — recent security/operator actions for the caller org (who/what/when), newest-first (?limit=, default 20, max 100)
+
