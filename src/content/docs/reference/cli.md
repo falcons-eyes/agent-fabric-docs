@@ -56,6 +56,13 @@ Show this node's mesh status (host+mesh health snapshot; --json for agents)
 falcon status [flags]
 ```
 
+Examples:
+
+```bash
+falcon status
+falcon status --json
+```
+
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit the snapshot as a structured JSON digest (for agents/automation) |
@@ -119,6 +126,7 @@ falcon grant mcp://local-files --action read --ttl 30m
 | flag | default | description |
 |---|---|---|
 | `--action` | `read` | granted action |
+| `--json` | `false` | JSON output |
 | `--ttl` | `10m0s` | token lifetime |
 
 ### `falcon ip`
@@ -197,6 +205,7 @@ falcon resolve local-files --action read --cap <token>
 |---|---|---|
 | `--action` | `read` | requested action |
 | `--cap` | `—` | capability token from `falcon grant` |
+| `--json` | `false` | JSON output |
 
 ### `falcon serve`
 
@@ -252,8 +261,12 @@ falcon service inspect [name]
 List private services on the current network
 
 ```
-falcon service list
+falcon service list [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
 
 ### `falcon service remove`
 
@@ -810,7 +823,7 @@ attached with falcon agent attach. This is the fastest way to confirm the runtim
 use with smoke, loop, logs, stop, or Local Console API calls.
 
 ```
-falcon agent status
+falcon agent status [flags]
 ```
 
 Examples:
@@ -822,6 +835,10 @@ falcon agent status
 falcon agent smoke mac-ollama --loops 3
 falcon agent loop mac-ollama --steps 3
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | print JSON |
 
 ### `falcon agent stop`
 
@@ -1004,8 +1021,12 @@ falcon network delete [network] [flags]
 List your networks
 
 ```
-falcon network list
+falcon network list [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
 
 ### `falcon network rename`
 
@@ -1033,6 +1054,7 @@ falcon node list [flags]
 
 | flag | default | description |
 |---|---|---|
+| `--json` | `false` | JSON output |
 | `--network` | `—` | network name or id (default: the joined one) |
 
 ### `falcon node remove`
@@ -1116,8 +1138,12 @@ falcon usage [flags]
 Show the current identity: workspace, plan, control plane, node
 
 ```
-falcon whoami
+falcon whoami [flags]
 ```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
 
 ### `falcon workspace`
 
@@ -1234,6 +1260,13 @@ Diagnose local setup: config, identity, keystore, control plane, node (--json fo
 falcon doctor [flags]
 ```
 
+Examples:
+
+```bash
+falcon doctor
+falcon doctor --json
+```
+
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit the report as a structured JSON digest (for agents/automation) |
@@ -1260,6 +1293,13 @@ Diagnose mesh connectivity: control, netmap, relay, NAT, and per-peer path (--js
 
 ```
 falcon netcheck [flags]
+```
+
+Examples:
+
+```bash
+falcon netcheck
+falcon netcheck --json
 ```
 
 | flag | default | description |
