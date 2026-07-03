@@ -31,7 +31,7 @@ const { demos } = Astro.props;
     <figcaption class="fe-term__caption" id="fe-demos-cap">{demos[0].caption}</figcaption>
   </figure>
 
-  <script type="application/json" id="fe-demos-data" set:html={JSON.stringify(demos)} />
+  <script type="application/json" id="fe-demos-data" set:html={JSON.stringify(demos).replace(/</g, '\\u003c')} />
 </div>
 
 <script>
