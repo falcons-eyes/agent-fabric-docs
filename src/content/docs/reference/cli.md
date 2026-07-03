@@ -11,6 +11,10 @@ FalconEyes — your agents, your devices, your cloud. One private network.
 falcon is the builder CLI for FalconEyes: managed trust and connectivity
 for customer-owned AI and edge systems. Build the AI. We make it reachable.
 
+New here? Run `falcon quickstart` — it connects this machine, publishes a local
+AI model, and shows how to call it privately, in one flow. The natural sequence:
+  login → up → serve → grant → try / resolve → status / doctor
+
 ```
 falcon
 ```
@@ -38,6 +42,12 @@ No public port is opened. Re-run it any time — it's idempotent.
 falcon quickstart
 ```
 
+Examples:
+
+```bash
+falcon quickstart
+```
+
 ### `falcon status`
 
 Show this node's mesh status (host+mesh health snapshot; --json for agents)
@@ -62,6 +72,14 @@ Bring up the WireGuard tunnel with the node agent (afd), which `up` guides.
 falcon up [flags]
 ```
 
+Examples:
+
+```bash
+falcon up
+falcon up --network home --name laptop
+sudo -E falcon up   # also brings the encrypted tunnel up
+```
+
 | flag | default | description |
 |---|---|---|
 | `--create-network` | `false` | create the network if it doesn't exist |
@@ -83,8 +101,19 @@ falcon down
 
 Mint a capability token for a private resource (e.g. mcp://local-files)
 
+Mint a short-lived, scoped capability token that lets someone reach one private
+resource through the gateway — nothing else, and only until it expires. Give the
+token to a teammate or paste it into `falcon resolve`. Revoke reach by letting it
+expire (default 10m) rather than reconfiguring the service.
+
 ```
 falcon grant [resource] [flags]
+```
+
+Examples:
+
+```bash
+falcon grant mcp://local-files --action read --ttl 30m
 ```
 
 | flag | default | description |
@@ -150,8 +179,18 @@ falcon ping [name] [flags]
 
 Resolve a private service through the gateway using a capability
 
+Exchange a capability token (from `falcon grant`) for the live coordinates of a
+private service — the node it runs on and the address to reach it over the mesh.
+The gateway enforces the capability, so a resolve without a valid token is refused.
+
 ```
 falcon resolve [service] [flags]
+```
+
+Examples:
+
+```bash
+falcon resolve local-files --action read --cap <token>
 ```
 
 | flag | default | description |
@@ -247,6 +286,13 @@ you see it answer. It's the fastest way to see (and show) what your private AI n
 
 ```
 falcon try <service> [flags]
+```
+
+Examples:
+
+```bash
+falcon try local-model
+falcon try local-files --action read
 ```
 
 | flag | default | description |
