@@ -12,6 +12,11 @@ $Repo = "falcons-eyes/agent-fabric-docs" # public distribution repo (binaries vi
 $Version = if ($env:AGENT_FABRIC_VERSION) { $env:AGENT_FABRIC_VERSION } else { "latest" }
 $InstallDir = if ($env:AGENT_FABRIC_INSTALL_DIR) { $env:AGENT_FABRIC_INSTALL_DIR } else { Join-Path $env:USERPROFILE ".falcon\bin" }
 
+# minisign public key that signs official releases (key ID C363AC965984399A). Baked in
+# so a compromised release channel cannot swap the verifying key. Checked fail-closed
+# when the `minisign` tool is present; otherwise the SHA-256 checksum stays the floor.
+$PubKey = "RWSaOYRZlqxjw1w2cOBah+T54hogN/eO/+1Pn1ptReOLjPHp4NTdS9Lt"
+
 function Say($m) { Write-Host $m }
 
 Say "Agent Fabric installer"
@@ -46,6 +51,24 @@ try {
 	$got = (Get-FileHash -Algorithm SHA256 $zip).Hash.ToLower()
 	if ($want.ToLower() -ne $got) { throw "checksum verification FAILED for $asset" }
 	Say "  checksum:  ok"
+
+	# Signature (minisign) — the authenticity check the checksum can't provide (both live
+	# in the same release). Verified fail-closed against $PubKey when the tool is present.
+	# A missing signature (pre-signing release) or a missing tool falls back to the
+	# checksum floor above, and says so — never a silent skip.
+	$sig = Join-Path $tmp "$asset.minisig"
+	$haveSig = $true
+	try { Invoke-WebRequest -Uri "$base/$asset.minisig" -OutFile $sig -UseBasicParsing } catch { $haveSig = $false }
+	if (-not $haveSig) {
+		Say "  signature: none published for this release (checksum-verified)"
+	} elseif (Get-Command minisign -ErrorAction SilentlyContinue) {
+		& minisign -Vm $zip -P $PubKey *> $null
+		if ($LASTEXITCODE -ne 0) { throw "signature verification FAILED for $asset - refusing to install a tampered artifact" }
+		Say "  signature: ok (minisign)"
+	} else {
+		Say "  signature: present, but 'minisign' is not installed - verified by checksum only"
+		Say "             install minisign and re-run to verify the release signature"
+	}
 
 	Expand-Archive -Path $zip -DestinationPath $tmp -Force
 	New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null

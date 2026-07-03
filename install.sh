@@ -14,6 +14,12 @@ BINARIES="falcon afd aflocal"
 VERSION="${AGENT_FABRIC_VERSION:-latest}"
 INSTALL_DIR="${AGENT_FABRIC_INSTALL_DIR:-$HOME/.local/bin}"
 
+# minisign public key that signs official releases (key ID C363AC965984399A). Baked in
+# so a compromised release channel cannot also swap the key that would verify its
+# tampered binary. When the `minisign` tool is present the signature is checked fail-
+# closed; otherwise the SHA-256 checksum below remains the floor.
+PUBKEY="RWSaOYRZlqxjw1w2cOBah+T54hogN/eO/+1Pn1ptReOLjPHp4NTdS9Lt"
+
 main() {
 	say "Agent Fabric installer"
 
@@ -52,6 +58,7 @@ main() {
 		|| err "no checksums.txt for ${VERSION} — refusing to install an unverified artifact"
 	verify_checksum "${TMP}" "${ASSET}" || err "checksum verification FAILED for ${ASSET}"
 	say "  checksum:  ok"
+	verify_signature "${TMP}" "${ASSET}"
 
 	tar -xzf "${TMP}/${ASSET}" -C "${TMP}"
 	mkdir -p "${INSTALL_DIR}"
@@ -90,6 +97,28 @@ download() {
 		curl -fsSL "$1" -o "$2"
 	else
 		wget -q "$1" -O "$2"
+	fi
+}
+
+verify_signature() {
+	# verify_signature <dir> <asset> — verify the detached minisign signature against
+	# the baked-in PUBKEY. Fail CLOSED on a bad signature. If no signature is published
+	# (a release cut before signing was enabled) or the `minisign` tool isn't installed,
+	# fall back to the checksum already verified above and say so — never silently skip.
+	dir="$1"; asset="$2"
+	if ! download "${BASE}/${asset}.minisig" "${dir}/${asset}.minisig" 2>/dev/null; then
+		say "  signature: none published for this release (checksum-verified)"
+		return 0
+	fi
+	if check_cmd minisign; then
+		if minisign -Vm "${dir}/${asset}" -P "$PUBKEY" >/dev/null 2>&1; then
+			say "  signature: ok (minisign)"
+		else
+			err "signature verification FAILED for ${asset} — refusing to install a tampered artifact"
+		fi
+	else
+		say "  signature: present, but 'minisign' is not installed — verified by checksum only"
+		say "             install minisign and re-run to verify the release signature"
 	fi
 }
 
