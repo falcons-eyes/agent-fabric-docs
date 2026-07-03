@@ -31,15 +31,19 @@ import ConsoleDemos from '../../components/ConsoleDemos.astro';
 
 <ConsoleDemos demos={[
   { label: 'Cloud · first look', src: '/console-cloud-onboard.mp4', url: 'app.falconoon.com',
-    caption: 'Sign in to the Cloud Console: your fleet at a glance and a guided path to the first private AI call.' },
-  { label: 'Cloud · fleet & services', src: '/console-cloud-fleet.mp4', url: 'app.falconoon.com/services',
-    caption: 'The machines on your mesh and the private services they publish — health, placement, and access in one view.' },
-  { label: 'Cloud · customer demos', src: '/console-cloud-delivery.mp4', url: 'app.falconoon.com/demo-rooms',
-    caption: 'Share a service with a customer through a time-boxed demo room, then watch usage.' },
+    caption: 'Sign in to the Cloud Console: what needs attention, the single next step, your fleet at a glance, and recent activity.' },
+  { label: 'Cloud · your fleet', src: '/console-cloud-fleet.mp4', url: 'app.falconoon.com/machines',
+    caption: 'Every machine on your mesh in one view — what each one runs, whether it is online, and its private path.' },
+  { label: 'Cloud · connect a service', src: '/console-cloud-services.mp4', url: 'app.falconoon.com/services',
+    caption: 'The private AI your team has published, then mint a short-lived, scoped capability and the one command to reach it.' },
+  { label: 'Cloud · customer demos', src: '/console-cloud-delivery.mp4', url: 'app.falconoon.com/demos',
+    caption: 'Share a service with a customer through a time-boxed demo room — no public port — then watch usage.' },
+  { label: 'Cloud · new network', src: '/console-cloud-networks.mp4', url: 'app.falconoon.com/networks',
+    caption: 'Create a private overlay network in one step, with live feedback the moment it is ready.' },
   { label: 'Local · AI workbench', src: '/console-local-workbench.mp4', url: '127.0.0.1:3210 — Local Console',
     caption: 'The Local Console on one of your machines: readiness, attached model runtimes, and published services. Prompts and outputs never leave the machine.' },
   { label: 'Local · network & health', src: '/console-local-health.mp4', url: '127.0.0.1:3210 — Local Console',
-    caption: 'Private-network state and deterministic diagnostics, from the machine itself.' },
+    caption: 'Who this machine can reach privately, the names your agents resolve, and deterministic diagnostics — from the machine itself.' },
 ]} />
 
 ## What is agent-fabric?
