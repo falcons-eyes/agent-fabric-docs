@@ -236,6 +236,24 @@ falcon service test [name] [flags]
 |---|---|---|
 | `--timeout` | `3s` | dial timeout |
 
+### `falcon try`
+
+Prove a published service works — mint access, call it, show the gate
+
+Show the result, not just the setup. `try` mints a short-lived capability for
+a service you published, has the control plane's gateway authorize it, proves the
+same request is refused without a token, and — for a model — makes one real call so
+you see it answer. It's the fastest way to see (and show) what your private AI now does.
+
+```
+falcon try <service> [flags]
+```
+
+| flag | default | description |
+|---|---|---|
+| `--action` | `—` | capability action to request (default: the kind's action) |
+| `--prompt` | `Reply in one short sentence: are you reachable over the private mesh?` | prompt to send a model service |
+
 ### `falcon wait`
 
 Wait until this node is ready (ip, netmap, control)
