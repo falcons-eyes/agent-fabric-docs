@@ -555,6 +555,32 @@ falcon agent loop mac-ollama --local-url http://127.0.0.1:13210 --steps 1 --json
 | `--timeout` | `10m0s` | overall loop timeout |
 | `--title` | `—` | new session title |
 
+### `falcon agent run`
+
+Run a composed agent on a task (uses its model, instructions and tools)
+
+Run one reason→act pass for an agent you composed in the Local Console: it uses the
+agent's model runtime and instructions, and can call the MCP tools wired to it — the
+tool calls are executed for it and fed back. Needs aflocal running. The agent is named
+or referenced by id.
+
+```
+falcon agent run [agent] [flags]
+```
+
+Examples:
+
+```bash
+falcon agent run researcher --prompt "summarize today's local notes"
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
+| `--local-url` | `—` | Local Console URL (default: http://127.0.0.1:3210) |
+| `--max-rounds` | `0` | max tool rounds (default: server default) |
+| `--prompt` | `—` | the task for the agent |
+
 ### `falcon agent session`
 
 Inspect and control local agent sessions
