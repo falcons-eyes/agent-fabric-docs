@@ -923,6 +923,34 @@ Find and size local-runnable models (Hugging Face catalog)
 falcon models
 ```
 
+### `falcon models pull`
+
+Pull the right quant for your GPU via Ollama, then publish it privately
+
+One command from a Hugging Face model id to a running, private service:
+we pick the quantization that fits your GPU (override with --quant), pull it via
+Ollama's Hugging Face passthrough, then attach + publish it on your mesh. Needs a
+running Ollama (`ollama serve`) and aflocal for the publish step.
+
+```
+falcon models pull [model-id] [flags]
+```
+
+Examples:
+
+```bash
+falcon models pull Qwen/Qwen2.5-7B-Instruct-GGUF
+falcon models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
+```
+
+| flag | default | description |
+|---|---|---|
+| `--name` | `—` | service name to publish as (default: derived from the model id) |
+| `--no-publish` | `false` | pull only; don't attach/publish on the mesh |
+| `--ollama-url` | `—` | Ollama base URL (default: http://127.0.0.1:11434 or $AF_OLLAMA_URL) |
+| `--quant` | `—` | quantization to pull (default: the best that fits your GPU) |
+| `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
+
 ### `falcon models search`
 
 Search trending models that run locally, sized to your GPU
