@@ -976,6 +976,7 @@ falcon models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
 | `--ollama-url` | `—` | Ollama base URL (default: http://127.0.0.1:11434 or $AF_OLLAMA_URL) |
 | `--quant` | `—` | quantization to pull (default: the best that fits your GPU) |
 | `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
+| `--yes` | `false` | pull even a low-trust model (skip the supply-chain gate) |
 
 ### `falcon models search`
 
