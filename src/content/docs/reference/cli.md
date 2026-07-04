@@ -915,6 +915,56 @@ Revoke a subject's console access to a node
 falcon console revoke [subject] [node]
 ```
 
+### `falcon models`
+
+Find and size local-runnable models (Hugging Face catalog)
+
+```
+falcon models
+```
+
+### `falcon models search`
+
+Search trending models that run locally, sized to your GPU
+
+```
+falcon models search [query] [flags]
+```
+
+Examples:
+
+```bash
+falcon models search qwen2.5
+falcon models search llama --sort recent --json
+```
+
+| flag | default | description |
+|---|---|---|
+| `--all` | `false` | include models without local (GGUF) weights |
+| `--json` | `false` | JSON output |
+| `--limit` | `15` | max results |
+| `--sort` | `trending` | trending | likes | recent |
+| `--vram` | `0` | GPU VRAM in GB to size against (default: auto-detect via aflocal) |
+
+### `falcon models show`
+
+Show a model's quantizations and which one we'd run on your GPU
+
+```
+falcon models show [model-id] [flags]
+```
+
+Examples:
+
+```bash
+falcon models show bartowski/Qwen2.5-7B-Instruct-GGUF
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
+| `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
+
 ### `falcon web`
 
 Open the Local Console for this machine
