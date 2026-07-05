@@ -1573,23 +1573,11 @@ falcon endpoint add [name]
 
 ### `falcon gateway`
 
-Manage customer-owned gateways
+Run the local agent-protocol gateway
 
 ```
 falcon gateway
 ```
-
-### `falcon gateway deploy`
-
-Deploy a customer-owned gateway into your own cloud
-
-```
-falcon gateway deploy [flags]
-```
-
-| flag | default | description |
-|---|---|---|
-| `--aws` | `false` | deploy into AWS (EC2/VPC) using local aws credentials |
 
 ### `falcon gateway proxy`
 
