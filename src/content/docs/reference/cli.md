@@ -555,6 +555,32 @@ falcon agent loop mac-ollama --local-url http://127.0.0.1:13210 --steps 1 --json
 | `--timeout` | `10m0s` | overall loop timeout |
 | `--title` | `—` | new session title |
 
+### `falcon agent reach`
+
+Measure the round-trip to an agent service over the mesh (MCP/A2A)
+
+Time a real agent-protocol call to a private service — MCP tools/list or the A2A
+agent card — through the authorizing gateway. Reports whether it answered, the
+round-trip latency, what it exposes, and the live tunnel path (direct/relay).
+Needs a capability (`falcon grant`) and a running local gateway (`falcon gateway proxy`).
+
+```
+falcon agent reach [service] [flags]
+```
+
+Examples:
+
+```bash
+falcon agent reach mesh-introspect --cap <token>
+```
+
+| flag | default | description |
+|---|---|---|
+| `--action` | `tools/list` | action to authorize (JSON-RPC method for MCP) |
+| `--cap` | `—` | capability token from `falcon grant` |
+| `--gateway` | `http://127.0.0.1:7777` | local gateway proxy URL |
+| `--json` | `false` | JSON output |
+
 ### `falcon agent run`
 
 Run a composed agent on a task (uses its model, instructions and tools)
@@ -973,6 +999,7 @@ falcon models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
 |---|---|---|
 | `--name` | `—` | service name to publish as (default: derived from the model id) |
 | `--no-publish` | `false` | pull only; don't attach/publish on the mesh |
+| `--no-smoke` | `false` | skip the post-pull health check (also: AF_MODEL_SMOKE=off) |
 | `--ollama-url` | `—` | Ollama base URL (default: http://127.0.0.1:11434 or $AF_OLLAMA_URL) |
 | `--quant` | `—` | quantization to pull (default: the best that fits your GPU) |
 | `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |

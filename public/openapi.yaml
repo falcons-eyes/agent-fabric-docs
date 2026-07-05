@@ -1899,6 +1899,22 @@ paths:
             responses:
                 "200":
                     description: OK
+    /r/{slug}:
+        get:
+            summary: public demo connect page — mints a scoped connection token from the share slug (unauthenticated; rate-limited)
+            operationId: get_r_slug
+            tags:
+                - r
+            security: []
+            parameters:
+                - name: slug
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
     /readyz:
         get:
             summary: readiness probe — 503 until the datastore is reachable

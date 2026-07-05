@@ -181,6 +181,7 @@ Metered usage and subscription checkout.
 
 ## Other
 
+- `GET /r/{slug}` *(public)* — public demo connect page — mints a scoped connection token from the share slug (unauthenticated; rate-limited)
 - `GET /api/overview` — one-shot Home aggregate for the caller org: networks + all nodes + usage totals/events + demo rooms (avoids the dashboard N+1)
 - `GET /api/activity` — recent security/operator actions for the caller org (who/what/when), newest-first (?limit=, default 20, max 100)
 
