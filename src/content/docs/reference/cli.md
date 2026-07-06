@@ -1160,24 +1160,6 @@ falcon network list [flags]
 |---|---|---|
 | `--json` | `false` | JSON output |
 
-### `falcon network prune`
-
-Delete empty networks (no machines) — explicit cleanup, with confirmation
-
-Find networks that have no machines and delete them, so stale networks
-left over from testing don't pile up. Networks that still have machines are
-never touched, and nothing is deleted without your confirmation (or --yes).
-This never runs automatically — it's the manual counterpart to the 'idle'
-state shown by `falcon network list`.
-
-```
-falcon network prune [flags]
-```
-
-| flag | default | description |
-|---|---|---|
-| `--yes` | `false` | skip the confirmation prompt |
-
 ### `falcon network rename`
 
 Rename a network (by name or id)
