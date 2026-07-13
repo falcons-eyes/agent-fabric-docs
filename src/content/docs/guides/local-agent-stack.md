@@ -25,7 +25,7 @@ The MVP boundary is:
 - Windows is attach-first: use native Ollama or another localhost endpoint, or
   use WSL2/Linux NVIDIA for managed GPU profiles.
 - `aflocal` is localhost-only and stores runtime/session state under
-  `~/.falcon`.
+  `~/.fabric`.
 
 ## Start The Local Management API
 
@@ -47,14 +47,14 @@ On macOS or Windows, start your local model server first. For example, launch
 Ollama, pull a local model, then attach it:
 
 ```bash
-falcon agent discover
-falcon agent attach mac-ollama \
+fabric agent discover
+fabric agent attach mac-ollama \
   --url http://127.0.0.1:11434/v1 \
   --model llama3.2:latest
-falcon agent status
+fabric agent status
 ```
 
-`falcon agent discover` probes common localhost model endpoints:
+`fabric agent discover` probes common localhost model endpoints:
 
 - Ollama: `127.0.0.1:11434`
 - vLLM/OpenAI-compatible: `127.0.0.1:18000`
@@ -65,10 +65,10 @@ falcon agent status
 On Linux/NVIDIA hosts with Docker and NVIDIA Container Toolkit:
 
 ```bash
-falcon agent doctor
-falcon agent start --runtime vllm-docker --name dev-vllm
-falcon agent start --runtime ollama-docker --name dev-ollama
-falcon agent status
+fabric agent doctor
+fabric agent start --runtime vllm-docker --name dev-vllm
+fabric agent start --runtime ollama-docker --name dev-ollama
+fabric agent status
 ```
 
 Managed runtime starts are intentionally limited to known Docker profiles in the
@@ -80,7 +80,7 @@ and desired-state deployment jobs land.
 Run smoke checks before registering a model server for real use:
 
 ```bash
-falcon agent smoke mac-ollama --loops 3
+fabric agent smoke mac-ollama --loops 3
 ```
 
 Required checks verify:
@@ -108,7 +108,7 @@ step IDs, resume from checkpoint, cancellation polling, retry/backoff,
 compaction/redaction and live session follow.
 
 ```bash
-falcon agent loop mac-ollama \
+fabric agent loop mac-ollama \
   --steps 3 \
   --prompt "Continue the local maintenance task and report concise progress." \
   --redact
@@ -117,17 +117,17 @@ falcon agent loop mac-ollama \
 Inspect, follow, cancel or resume the session:
 
 ```bash
-falcon agent session list
-falcon agent session show <session_id>
-falcon agent session follow <session_id>
-falcon agent session cancel <session_id>
-falcon agent loop mac-ollama --session <session_id> --steps 3
+fabric agent session list
+fabric agent session show <session_id>
+fabric agent session follow <session_id>
+fabric agent session cancel <session_id>
+fabric agent loop mac-ollama --session <session_id> --steps 3
 ```
 
 Compact older local context:
 
 ```bash
-falcon agent session compact <session_id> \
+fabric agent session compact <session_id> \
   --summary "Compacted completed setup work" \
   --keep-last-events 20 \
   --redact-events \
@@ -158,5 +158,5 @@ The cloud control plane should receive only identity, version, desired state and
 health metadata. Prompts, outputs, tool payloads and session details remain
 local.
 
-For every `falcon agent ...` command, including all flags and copy-ready examples,
-see the generated [falcon CLI reference](/reference/cli/).
+For every `fabric agent ...` command, including all flags and copy-ready examples,
+see the generated [fabric CLI reference](/reference/cli/).

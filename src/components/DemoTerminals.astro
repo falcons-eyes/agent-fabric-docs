@@ -1,5 +1,5 @@
 ---
-// A tabbed terminal: several real asciinema recordings of `falcon`, one playing at
+// A tabbed terminal: several real asciinema recordings of `fabric`, one playing at
 // a time. Selectable text, pause/seek. Recordings live at /*.cast — shipped from the
 // private agent-fabric repo's docs bundle so they stay in lockstep with the CLI.
 //
@@ -8,7 +8,7 @@ const { demos } = Astro.props;
 ---
 
 <div class="fe-demos">
-  <div class="fe-demos__tabs" role="tablist" aria-label="falcon demos">
+  <div class="fe-demos__tabs" role="tablist" aria-label="fabric demos">
     {
       demos.map((d, i) => (
         <button class="fe-demos__tab" role="tab" type="button" data-i={i} aria-selected={i === 0 ? 'true' : 'false'}>
@@ -24,9 +24,9 @@ const { demos } = Astro.props;
         <span class="fe-term__dot fe-term__dot--r"></span>
         <span class="fe-term__dot fe-term__dot--y"></span>
         <span class="fe-term__dot fe-term__dot--g"></span>
-        <span class="fe-term__titlebar" id="fe-demos-title">falcon — {demos[0].label}</span>
+        <span class="fe-term__titlebar" id="fe-demos-title">fabric — {demos[0].label}</span>
       </div>
-      <div id="fe-demos-screen" class="fe-term__screen" aria-label="falcon CLI recording"></div>
+      <div id="fe-demos-screen" class="fe-term__screen" aria-label="fabric CLI recording"></div>
     </div>
     <figcaption class="fe-term__caption" id="fe-demos-cap">{demos[0].caption}</figcaption>
   </figure>
@@ -70,7 +70,7 @@ const { demos } = Astro.props;
       }
       screen.innerHTML = '';
       player = AsciinemaPlayer.create(demos[i].src, screen, opts);
-      if (title) title.textContent = 'falcon — ' + demos[i].label;
+      if (title) title.textContent = 'fabric — ' + demos[i].label;
       if (cap) cap.textContent = demos[i].caption;
       tabs.forEach((t, j) => t.setAttribute('aria-selected', j === i ? 'true' : 'false'));
     }

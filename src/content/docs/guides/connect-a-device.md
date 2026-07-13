@@ -1,6 +1,6 @@
 ---
 title: Connect a device
-description: Sign in and join a machine to your private network in one command with falcon up, then see it in the cloud console — without sending traffic, prompts, or outputs to the cloud.
+description: Sign in and join a machine to your private network in one command with fabric up, then see it in the cloud console — without sending traffic, prompts, or outputs to the cloud.
 sidebar:
   order: 3
 ---
@@ -9,19 +9,19 @@ sidebar:
 
 The **cloud console** at [app.falconoon.com](https://app.falconoon.com) manages your
 *fabric and account* — networks, devices, services, usage, and billing. The
-`falcon` CLI connects a machine to that fabric. Your traffic stays end-to-end
+`fabric` CLI connects a machine to that fabric. Your traffic stays end-to-end
 encrypted (WireGuard) and peer-to-peer; the control plane brokers keys, identity,
 and network maps but never sees your data.
 
-## One command: `falcon up`
+## One command: `fabric up`
 
 On the machine you want to connect:
 
 ```sh
-falcon up --network <network-id> --name my-device
+fabric up --network <network-id> --name my-device
 ```
 
-`falcon up` does three things:
+`fabric up` does three things:
 
 1. **Signs you in** with the browser device flow (OAuth 2.0 Device Authorization
    Grant, RFC 8628). It prints a short code and a URL; you approve it from any
@@ -36,8 +36,8 @@ falcon up --network <network-id> --name my-device
 Copy the exact command (with your network id pre-filled) from the console:
 **Networks → open a network → Connect a device**.
 
-> `falcon up` ≠ `falcon login` (just authenticate) ≠ console "revoke device"
-> (remove membership). `falcon down` disconnects the machine while keeping your
+> `fabric up` ≠ `fabric login` (just authenticate) ≠ console "revoke device"
+> (remove membership). `fabric down` disconnects the machine while keeping your
 > login and identity.
 
 ## See it in the console
@@ -55,7 +55,7 @@ Make a locally-running model server or tool reachable across the mesh as a
 private, addressable service:
 
 ```sh
-falcon serve http://127.0.0.1:11434 --name mac-ollama --kind llm
+fabric serve http://127.0.0.1:11434 --name mac-ollama --kind llm
 ```
 
 It becomes `mac-ollama.<device>.private`, visible under **Services** in the
@@ -66,11 +66,11 @@ node, private name) reaches the cloud — never prompts or outputs.
 
 | Command | What it does |
 |---|---|
-| `falcon ip` | print this machine's overlay IP (bare, for scripts) |
-| `falcon wait` | block until ready (overlay IP + signed netmap) — for CI |
-| `falcon names` | list private node/service names from the signed netmap |
-| `falcon whois <ip\|name>` | resolve an overlay IP or private name to its owner |
-| `falcon status` | this node's peers, paths, and services |
-| `falcon down` | disconnect this machine (keeps your login) |
+| `fabric ip` | print this machine's overlay IP (bare, for scripts) |
+| `fabric wait` | block until ready (overlay IP + signed netmap) — for CI |
+| `fabric names` | list private node/service names from the signed netmap |
+| `fabric whois <ip\|name>` | resolve an overlay IP or private name to its owner |
+| `fabric status` | this node's peers, paths, and services |
+| `fabric down` | disconnect this machine (keeps your login) |
 
 See the full [CLI reference](/reference/cli/) for every command and flag.
