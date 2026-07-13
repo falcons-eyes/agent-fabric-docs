@@ -10,8 +10,8 @@ live API, so the client never silently drifts from the server.
 
 ## CLI or SDK?
 
-- **Just want to connect a machine and publish a local AI?** Use the [`falcon` CLI](/reference/cli/) —
-  `falcon quickstart` does the whole thing in one flow. That's the fastest path for a person.
+- **Just want to connect a machine and publish a local AI?** Use the [`fabric` CLI](/reference/cli/) —
+  `fabric quickstart` does the whole thing in one flow. That's the fastest path for a person.
 - **Automating from your own app, service, or CI?** Use an SDK below. It speaks the same
   API the CLI and console do.
 
