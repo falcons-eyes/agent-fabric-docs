@@ -2,7 +2,7 @@
 # Source of truth: internal/api EndpointDocs (kept in lockstep with the chi router).
 openapi: 3.1.0
 info:
-    title: Falcon Control Plane API
+    title: Fabric Control Plane API
     version: 0.1.0
     description: Public control-plane HTTP API served by `control` (`internal/api`), generated from api.EndpointDocs. Auth is a bearer token (Cognito OIDC in prod, `dev:<org>` in dev mode). Every route is served under BOTH `/api` (legacy) and `/v1` (versioned) — identical aliases, so clients migrate to `/v1` at will without breaking; the paths below show `/api`. Internal service-to-service and webhook routes are not part of this contract.
 servers:
