@@ -2,7 +2,7 @@
 title: TypeScript SDK
 ---
 
-The TypeScript client for the FalconEyes control-plane API — axios-based, typed models,
+The TypeScript client for the Agent-Fabric control-plane API — axios-based, typed models,
 generated from the [OpenAPI spec](/openapi.yaml) so it never drifts from the server.
 New here? Start with the [SDKs overview](/sdk/) for the auth model and base URLs.
 

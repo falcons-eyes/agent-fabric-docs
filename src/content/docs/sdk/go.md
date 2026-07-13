@@ -2,7 +2,7 @@
 title: Go SDK
 ---
 
-The Go client for the FalconEyes control-plane API — `net/http`-based, typed models,
+The Go client for the Agent-Fabric control-plane API — `net/http`-based, typed models,
 generated from the [OpenAPI spec](/openapi.yaml) so it never drifts from the server.
 New here? Start with the [SDKs overview](/sdk/) for the auth model and base URLs.
 

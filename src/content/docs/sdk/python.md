@@ -2,7 +2,7 @@
 title: Python SDK
 ---
 
-The Python client for the FalconEyes control-plane API — typed Pydantic models,
+The Python client for the Agent-Fabric control-plane API — typed Pydantic models,
 generated from the [OpenAPI spec](/openapi.yaml) so it never drifts from the server.
 New here? Start with the [SDKs overview](/sdk/) for the auth model and base URLs.
 

@@ -1,24 +1,24 @@
 ---
 title: Local Agent Stack
-description: Run customer-owned local model servers, verify them, and use Falcon's local session runner without sending prompts or outputs to the cloud.
+description: Run customer-owned local model servers, verify them, and use Agent-Fabric's local session runner without sending prompts or outputs to the cloud.
 sidebar:
   order: 4
 ---
 
 # Local Agent Stack
 
-Falcon's Agent Stack is a local management plane for customer-owned AI runtimes.
+Agent-Fabric's Agent Stack is a local management plane for customer-owned AI runtimes.
 It discovers or starts model servers, records local agent sessions, and exposes
-operator controls for long-running loops. The Falcon control plane coordinates
+operator controls for long-running loops. The Agent-Fabric control plane coordinates
 identity, desired state and service discovery; prompts, model outputs, database
 payloads and application logs remain on the customer node.
 
-## What Falcon Does And Does Not Run
+## What Agent-Fabric Does And Does Not Run
 
-Falcon does not vendor Ollama, vLLM, MLX, Python environments or model weights.
+Agent-Fabric does not vendor Ollama, vLLM, MLX, Python environments or model weights.
 The MVP boundary is:
 
-- Linux/NVIDIA GPU hosts can use Falcon-managed Docker profiles for audited
+- Linux/NVIDIA GPU hosts can use Agent-Fabric-managed Docker profiles for audited
   `vllm-docker` and `ollama-docker` runtime starts.
 - macOS Apple Silicon uses native Metal/MLX-capable local servers such as
   Ollama or vLLM-Metal, then attaches their localhost OpenAI-compatible API.
@@ -134,7 +134,7 @@ fabric agent session compact <session_id> \
   --redact-checkpoints
 ```
 
-The model may fail to repeat the requested step ID exactly. Falcon treats the
+The model may fail to repeat the requested step ID exactly. Agent-Fabric treats the
 controller-generated step ID as the source of truth and records whether the model
 acknowledged it in session metadata.
 
@@ -144,7 +144,7 @@ The CLI above calls the same localhost API that the Local Console UI will use:
 
 | Endpoint | Purpose |
 |---|---|
-| `GET /local/runtimes` | List Falcon-managed and attached runtimes |
+| `GET /local/runtimes` | List Agent-Fabric-managed and attached runtimes |
 | `GET /local/runtimes/discover` | Probe localhost model servers |
 | `POST /local/runtimes/{name}/smoke` | Run workload and capability smoke checks |
 | `POST /local/runtimes/{name}/loop` | Start or resume a long-running local loop |
