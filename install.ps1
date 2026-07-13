@@ -4,13 +4,13 @@
 #
 # Env overrides:
 #   $env:AGENT_FABRIC_VERSION       release tag (default: latest)
-#   $env:AGENT_FABRIC_INSTALL_DIR   install dir (default: %USERPROFILE%\.fabric\bin)
+#   $env:AGENT_FABRIC_INSTALL_DIR   install dir (default: %USERPROFILE%\.falcon\bin)
 
 $ErrorActionPreference = "Stop"
 
 $Repo = "falcons-eyes/agent-fabric-docs" # public distribution repo (binaries via its GitHub Releases)
 $Version = if ($env:AGENT_FABRIC_VERSION) { $env:AGENT_FABRIC_VERSION } else { "latest" }
-$InstallDir = if ($env:AGENT_FABRIC_INSTALL_DIR) { $env:AGENT_FABRIC_INSTALL_DIR } else { Join-Path $env:USERPROFILE ".fabric\bin" }
+$InstallDir = if ($env:AGENT_FABRIC_INSTALL_DIR) { $env:AGENT_FABRIC_INSTALL_DIR } else { Join-Path $env:USERPROFILE ".falcon\bin" }
 
 # minisign public key that signs official releases (key ID C363AC965984399A). Baked in
 # so a compromised release channel cannot swap the verifying key. Checked fail-closed
@@ -24,7 +24,7 @@ Say "Agent Fabric installer"
 # arch (Windows release ships amd64; arm64 can be added later)
 $arch = if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") { "arm64" } else { "amd64" }
 $target = "windows-$arch"
-$asset = "fabric-$target.zip"
+$asset = "falcon-$target.zip"
 Say "  platform: $target"
 Say "  version:  $Version"
 
@@ -72,7 +72,7 @@ try {
 
 	Expand-Archive -Path $zip -DestinationPath $tmp -Force
 	New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
-	foreach ($b in @("fabric.exe", "afd.exe", "aflocal.exe")) {
+	foreach ($b in @("falcon.exe", "afd.exe", "aflocal.exe")) {
 		$src = Join-Path $tmp $b
 		if (Test-Path $src) {
 			Copy-Item -Force $src (Join-Path $InstallDir $b)
@@ -88,7 +88,7 @@ try {
 		Say "Added $InstallDir to your user PATH. Restart your terminal."
 	}
 	Say ""
-	Say "Done. Try:  fabric --help"
+	Say "Done. Try:  falcon --help"
 }
 finally {
 	Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue

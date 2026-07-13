@@ -1,22 +1,22 @@
 ---
-title: fabric CLI reference
+title: falcon CLI reference
 ---
 
-Every command and flag, generated from the cobra command tree. Commands are grouped the same way `fabric --help` groups them.
+Every command and flag, generated from the cobra command tree. Commands are grouped the same way `falcon --help` groups them.
 
-### `fabric`
+### `falcon`
 
 FalconEyes — your agents, your devices, your cloud. One private network.
 
-fabric is the builder CLI for FalconEyes: managed trust and connectivity
+falcon is the builder CLI for FalconEyes: managed trust and connectivity
 for customer-owned AI and edge systems. Build the AI. We make it reachable.
 
-New here? Run `fabric quickstart` — it connects this machine, publishes a local
+New here? Run `falcon quickstart` — it connects this machine, publishes a local
 AI model, and shows how to call it privately, in one flow. The natural sequence:
   login → up → serve → grant → try / resolve → status / doctor
 
 ```
-fabric
+falcon
 ```
 
 | flag | default | description |
@@ -25,7 +25,7 @@ fabric
 
 ## Get started
 
-### `fabric quickstart`
+### `falcon quickstart`
 
 Connect this machine, publish a local AI model, and show how to call it — in one flow
 
@@ -39,35 +39,35 @@ The whole product in one command. quickstart:
 No public port is opened. Re-run it any time — it's idempotent.
 
 ```
-fabric quickstart
+falcon quickstart
 ```
 
 Examples:
 
 ```bash
-fabric quickstart
+falcon quickstart
 ```
 
-### `fabric status`
+### `falcon status`
 
 Show this node's mesh status (host+mesh health snapshot; --json for agents)
 
 ```
-fabric status [flags]
+falcon status [flags]
 ```
 
 Examples:
 
 ```bash
-fabric status
-fabric status --json
+falcon status
+falcon status --json
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit the snapshot as a structured JSON digest (for agents/automation) |
 
-### `fabric up`
+### `falcon up`
 
 Connect this machine to your private network (login + join + readiness)
 
@@ -76,15 +76,15 @@ machine to a network, and reports readiness. `up` ≠ `login` (just auth).
 Bring up the WireGuard tunnel with the node agent (afd), which `up` guides.
 
 ```
-fabric up [flags]
+falcon up [flags]
 ```
 
 Examples:
 
 ```bash
-fabric up
-fabric up --network home --name laptop
-sudo -E fabric up   # also brings the encrypted tunnel up
+falcon up
+falcon up --network home --name laptop
+sudo -E falcon up   # also brings the encrypted tunnel up
 ```
 
 | flag | default | description |
@@ -96,31 +96,31 @@ sudo -E fabric up   # also brings the encrypted tunnel up
 
 ## Your private network
 
-### `fabric down`
+### `falcon down`
 
 Disconnect this machine from the fabric (keeps your login + identity)
 
 ```
-fabric down
+falcon down
 ```
 
-### `fabric grant`
+### `falcon grant`
 
 Mint a capability token for a private resource (e.g. mcp://local-files)
 
 Mint a short-lived, scoped capability token that lets someone reach one private
 resource through the gateway — nothing else, and only until it expires. Give the
-token to a teammate or paste it into `fabric resolve`. Revoke reach by letting it
+token to a teammate or paste it into `falcon resolve`. Revoke reach by letting it
 expire (default 10m) rather than reconfiguring the service.
 
 ```
-fabric grant [resource] [flags]
+falcon grant [resource] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric grant mcp://local-files --action read --ttl 30m
+falcon grant mcp://local-files --action read --ttl 30m
 ```
 
 | flag | default | description |
@@ -129,12 +129,12 @@ fabric grant mcp://local-files --action read --ttl 30m
 | `--json` | `false` | JSON output |
 | `--ttl` | `10m0s` | token lifetime |
 
-### `fabric ip`
+### `falcon ip`
 
 Print this node's overlay IP (or another node's with --name)
 
 ```
-fabric ip [flags]
+falcon ip [flags]
 ```
 
 | flag | default | description |
@@ -142,7 +142,7 @@ fabric ip [flags]
 | `--json` | `false` | JSON output |
 | `--name` | `—` | print a specific node's overlay IP |
 
-### `fabric join`
+### `falcon join`
 
 Join this machine to a network as a node
 
@@ -151,7 +151,7 @@ key, receive an overlay IP, and fetch the signed peer map. The private
 key stays on this machine — the control plane never sees it.
 
 ```
-fabric join [flags]
+falcon join [flags]
 ```
 
 | flag | default | description |
@@ -159,55 +159,55 @@ fabric join [flags]
 | `--name` | `—` | node name (default: hostname) |
 | `--network` | `—` | network id to join (default: current network) |
 
-### `fabric names`
+### `falcon names`
 
 List private node/service names from the signed netmap
 
 ```
-fabric names [flags]
+falcon names [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | JSON output |
 
-### `fabric ping`
+### `falcon ping`
 
 Ping a peer over the overlay and show the path (direct/relay)
 
 ```
-fabric ping [name] [flags]
+falcon ping [name] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--network` | `—` | network the peer is on (name or id; default: current) |
 
-### `fabric resolve`
+### `falcon resolve`
 
 Resolve a private service through the gateway using a capability
 
-Exchange a capability token (from `fabric grant`) for the live coordinates of a
+Exchange a capability token (from `falcon grant`) for the live coordinates of a
 private service — the node it runs on and the address to reach it over the mesh.
 The gateway enforces the capability, so a resolve without a valid token is refused.
 
 ```
-fabric resolve [service] [flags]
+falcon resolve [service] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric resolve local-files --action read --cap <token>
+falcon resolve local-files --action read --cap <token>
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--action` | `read` | requested action |
-| `--cap` | `—` | capability token from `fabric grant` |
+| `--cap` | `—` | capability token from `falcon grant` |
 | `--json` | `false` | JSON output |
 
-### `fabric serve`
+### `falcon serve`
 
 Publish a local service to your private network
 
@@ -216,14 +216,14 @@ into your private mesh as an addressable service. The control plane brokers
 reachability and capabilities; your traffic stays peer-to-peer (it never sees
 prompts or outputs).
 
-Friendly framing of `fabric service add`. Kinds: llm, mcp, a2a, router,
+Friendly framing of `falcon service add`. Kinds: llm, mcp, a2a, router,
 endpoint, tcp.
 
 Example:
-  fabric serve http://127.0.0.1:11434 --name mac-ollama --kind llm
+  falcon serve http://127.0.0.1:11434 --name mac-ollama --kind llm
 
 ```
-fabric serve <local-addr> [flags]
+falcon serve <local-addr> [flags]
 ```
 
 | flag | default | description |
@@ -232,63 +232,63 @@ fabric serve <local-addr> [flags]
 | `--name` | `—` | service name (required), e.g. mac-ollama |
 | `--scope` | `—` | capability scope required to reach it |
 
-### `fabric service`
+### `falcon service`
 
 Manage private services on the mesh
 
 ```
-fabric service
+falcon service
 ```
 
-### `fabric service add`
+### `falcon service add`
 
 Register a private service (mcp://… or a2a://…)
 
 ```
-fabric service add [uri]
+falcon service add [uri]
 ```
 
-### `fabric service inspect`
+### `falcon service inspect`
 
 Show details for a private service (by name or private name)
 
 ```
-fabric service inspect [name]
+falcon service inspect [name]
 ```
 
-### `fabric service list`
+### `falcon service list`
 
 List private services on the current network
 
 ```
-fabric service list [flags]
+falcon service list [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | JSON output |
 
-### `fabric service remove`
+### `falcon service remove`
 
 Remove a service published from this node
 
 ```
-fabric service remove [name]
+falcon service remove [name]
 ```
 
-### `fabric service test`
+### `falcon service test`
 
 Test reachability of a private service
 
 ```
-fabric service test [name] [flags]
+falcon service test [name] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--timeout` | `3s` | dial timeout |
 
-### `fabric try`
+### `falcon try`
 
 Prove a published service works — mint access, call it, show the gate
 
@@ -298,14 +298,14 @@ same request is refused without a token, and — for a model — makes one real 
 you see it answer. It's the fastest way to see (and show) what your private AI now does.
 
 ```
-fabric try <service> [flags]
+falcon try <service> [flags]
 ```
 
 Examples:
 
 ```bash
-fabric try local-model
-fabric try local-files --action read
+falcon try local-model
+falcon try local-files --action read
 ```
 
 | flag | default | description |
@@ -313,7 +313,7 @@ fabric try local-files --action read
 | `--action` | `—` | capability action to request (default: the kind's action) |
 | `--prompt` | `Reply in one short sentence: are you reachable over the private mesh?` | prompt to send a model service |
 
-### `fabric wait`
+### `falcon wait`
 
 Wait until this node is ready (ip, netmap, control)
 
@@ -322,7 +322,7 @@ Signals: ip (overlay IP assigned), netmap (signed map accepted), control
 (control plane reachable). Default: ip,netmap.
 
 ```
-fabric wait [flags]
+falcon wait [flags]
 ```
 
 | flag | default | description |
@@ -330,12 +330,12 @@ fabric wait [flags]
 | `--for` | `[ip,netmap]` | signals to wait for: ip,netmap,control |
 | `--timeout` | `30s` | maximum time to wait |
 
-### `fabric whois`
+### `falcon whois`
 
 Resolve an overlay IP or private name to its node/service (defaults to this node)
 
 ```
-fabric whois [ip|private-name] [flags]
+falcon whois [ip|private-name] [flags]
 ```
 
 | flag | default | description |
@@ -344,23 +344,23 @@ fabric whois [ip|private-name] [flags]
 
 ## AI agents
 
-### `fabric agent`
+### `falcon agent`
 
 Agent runtime recipes and local supervisor
 
 ```
-fabric agent
+falcon agent
 ```
 
-### `fabric agent add`
+### `falcon agent add`
 
 Register an agent runtime recipe
 
 ```
-fabric agent add [name]
+falcon agent add [name]
 ```
 
-### `fabric agent attach`
+### `falcon agent attach`
 
 Attach an existing localhost OpenAI-compatible endpoint
 
@@ -372,24 +372,24 @@ endpoint and records enough metadata for smoke tests, loop sessions, Local Conso
 optional mesh service registration.
 
 ```
-fabric agent attach [name] [flags]
+falcon agent attach [name] [flags]
 ```
 
 Examples:
 
 ```bash
 # Attach native Ollama running on the default localhost port.
-fabric agent attach mac-ollama \
+falcon agent attach mac-ollama \
   --url http://127.0.0.1:11434/v1 \
   --model llama3.2:latest
 
 # Attach an OpenAI-compatible vLLM endpoint.
-fabric agent attach existing-vllm \
+falcon agent attach existing-vllm \
   --url http://127.0.0.1:18000/v1 \
   --model qwen2.5-0.5b
 
 # Attach and register the LLM service on the current joined mesh node.
-fabric agent attach gpu-vllm \
+falcon agent attach gpu-vllm \
   --url http://127.0.0.1:18000/v1 \
   --model qwen2.5-0.5b \
   --register
@@ -402,7 +402,7 @@ fabric agent attach gpu-vllm \
 | `--register` | `false` | register the attached llm service on the current mesh node |
 | `--url` | `—` | OpenAI-compatible localhost base URL, e.g. http://127.0.0.1:18000/v1 |
 
-### `fabric agent discover`
+### `falcon agent discover`
 
 Discover reachable localhost OpenAI-compatible model endpoints
 
@@ -413,20 +413,20 @@ is reachable, Falcon prints the default model and an attach command you can copy
 targets are hidden by default; use --all while debugging a local setup.
 
 ```
-fabric agent discover [flags]
+falcon agent discover [flags]
 ```
 
 Examples:
 
 ```bash
 # Show reachable model servers and suggested attach commands.
-fabric agent discover
+falcon agent discover
 
 # Include failed probe targets to debug ports or server startup.
-fabric agent discover --all
+falcon agent discover --all
 
 # Emit machine-readable discovery results.
-fabric agent discover --json
+falcon agent discover --json
 ```
 
 | flag | default | description |
@@ -435,7 +435,7 @@ fabric agent discover --json
 | `--json` | `false` | print JSON |
 | `--timeout` | `5s` | discovery timeout |
 
-### `fabric agent doctor`
+### `falcon agent doctor`
 
 Run local runtime preflight checks
 
@@ -446,20 +446,20 @@ profiles. macOS Apple Silicon and Windows are attach-first in the MVP, so doctor
 toward native local servers instead of reporting missing NVIDIA tooling as a hard failure.
 
 ```
-fabric agent doctor
+falcon agent doctor
 ```
 
 Examples:
 
 ```bash
 # Check the current host before starting managed profiles.
-fabric agent doctor
+falcon agent doctor
 
 # macOS/Windows next step after doctor:
-fabric agent discover
+falcon agent discover
 ```
 
-### `fabric agent introspect`
+### `falcon agent introspect`
 
 Run an A2A agent that answers this node's mesh status/doctor/connectivity to peers
 
@@ -468,18 +468,18 @@ agent sends a message ("status" | "doctor" | "connectivity") and receives the sa
 JSON digest the CLI renders — no shell access to this node required.
 
 Publish it on the mesh — in another terminal:
-  fabric serve <addr> --kind a2a --name mesh-introspect
+  falcon serve <addr> --kind a2a --name mesh-introspect
 then a peer reaches it (capability-scoped) through the gateway.
 
 ```
-fabric agent introspect [flags]
+falcon agent introspect [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--addr` | `127.0.0.1:7777` | loopback address to bind the A2A introspection agent |
 
-### `fabric agent logs`
+### `falcon agent logs`
 
 Show logs for a Falcon-managed Docker runtime
 
@@ -489,24 +489,24 @@ Logs are available for managed Docker profiles. For attached native endpoints, u
 runtime's own logging mechanism, such as the Ollama app, systemd, Docker, or your terminal.
 
 ```
-fabric agent logs [name] [flags]
+falcon agent logs [name] [flags]
 ```
 
 Examples:
 
 ```bash
 # Show the last 120 log lines.
-fabric agent logs dev-vllm
+falcon agent logs dev-vllm
 
 # Show more lines while debugging model load or readiness.
-fabric agent logs dev-vllm --tail 500
+falcon agent logs dev-vllm --tail 500
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--tail` | `120` | number of log lines |
 
-### `fabric agent loop`
+### `falcon agent loop`
 
 Run or resume a local long-running agent loop
 
@@ -515,10 +515,10 @@ Run a session-backed local loop against an attached or managed runtime.
 The loop is coordinated by aflocal, so start aflocal before running this command. Falcon
 records each step as a local event and checkpoint, polls for cancellation, retries transient
 step failures with backoff, and can compact/redact older local context. Prompts and outputs
-stay in the local session store under ~/.fabric; they are not sent to the Falcon cloud.
+stay in the local session store under ~/.falcon; they are not sent to the Falcon cloud.
 
 ```
-fabric agent loop [runtime] [flags]
+falcon agent loop [runtime] [flags]
 ```
 
 Examples:
@@ -528,16 +528,16 @@ Examples:
 aflocal
 
 # Terminal 2: run three local loop steps.
-fabric agent loop mac-ollama \
+falcon agent loop mac-ollama \
   --steps 3 \
   --prompt "Continue the local maintenance task and report concise progress." \
   --redact
 
 # Resume the same session from its last loop-step checkpoint.
-fabric agent loop mac-ollama --session sess_abc123 --steps 3
+falcon agent loop mac-ollama --session sess_abc123 --steps 3
 
 # Use a non-default aflocal URL, useful in tests or multiple local instances.
-fabric agent loop mac-ollama --local-url http://127.0.0.1:13210 --steps 1 --json
+falcon agent loop mac-ollama --local-url http://127.0.0.1:13210 --steps 1 --json
 ```
 
 | flag | default | description |
@@ -555,33 +555,33 @@ fabric agent loop mac-ollama --local-url http://127.0.0.1:13210 --steps 1 --json
 | `--timeout` | `10m0s` | overall loop timeout |
 | `--title` | `—` | new session title |
 
-### `fabric agent reach`
+### `falcon agent reach`
 
 Measure the round-trip to an agent service over the mesh (MCP/A2A)
 
 Time a real agent-protocol call to a private service — MCP tools/list or the A2A
 agent card — through the authorizing gateway. Reports whether it answered, the
 round-trip latency, what it exposes, and the live tunnel path (direct/relay).
-Needs a capability (`fabric grant`) and a running local gateway (`fabric gateway proxy`).
+Needs a capability (`falcon grant`) and a running local gateway (`falcon gateway proxy`).
 
 ```
-fabric agent reach [service] [flags]
+falcon agent reach [service] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric agent reach mesh-introspect --cap <token>
+falcon agent reach mesh-introspect --cap <token>
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--action` | `tools/list` | action to authorize (JSON-RPC method for MCP) |
-| `--cap` | `—` | capability token from `fabric grant` |
+| `--cap` | `—` | capability token from `falcon grant` |
 | `--gateway` | `http://127.0.0.1:7777` | local gateway proxy URL |
 | `--json` | `false` | JSON output |
 
-### `fabric agent run`
+### `falcon agent run`
 
 Run a composed agent on a task (uses its model, instructions and tools)
 
@@ -591,13 +591,13 @@ tool calls are executed for it and fed back. Needs aflocal running. The agent is
 or referenced by id.
 
 ```
-fabric agent run [agent] [flags]
+falcon agent run [agent] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric agent run researcher --prompt "summarize today's local notes"
+falcon agent run researcher --prompt "summarize today's local notes"
 ```
 
 | flag | default | description |
@@ -607,7 +607,7 @@ fabric agent run researcher --prompt "summarize today's local notes"
 | `--max-rounds` | `0` | max tool rounds (default: server default) |
 | `--prompt` | `—` | the task for the agent |
 
-### `fabric agent session`
+### `falcon agent session`
 
 Inspect and control local agent sessions
 
@@ -618,20 +618,20 @@ agent/tool workflows. Use these commands to observe progress, follow live update
 running loop, compact old context, or collect JSON for a local UI or script.
 
 ```
-fabric agent session
+falcon agent session
 ```
 
 Examples:
 
 ```bash
-fabric agent session list
-fabric agent session show sess_abc123
-fabric agent session follow sess_abc123
-fabric agent session cancel sess_abc123
-fabric agent session compact sess_abc123 --redact-events --redact-checkpoints
+falcon agent session list
+falcon agent session show sess_abc123
+falcon agent session follow sess_abc123
+falcon agent session cancel sess_abc123
+falcon agent session compact sess_abc123 --redact-events --redact-checkpoints
 ```
 
-### `fabric agent session cancel`
+### `falcon agent session cancel`
 
 Cancel a local agent session
 
@@ -642,17 +642,17 @@ observed without killing aflocal. A cancelled session is intentionally not reuse
 new session or resume one that is not cancelled.
 
 ```
-fabric agent session cancel [session-id] [flags]
+falcon agent session cancel [session-id] [flags]
 ```
 
 Examples:
 
 ```bash
 # Cancel an in-progress local loop.
-fabric agent session cancel sess_abc123
+falcon agent session cancel sess_abc123
 
 # JSON output for automation.
-fabric agent session cancel sess_abc123 --json
+falcon agent session cancel sess_abc123 --json
 ```
 
 | flag | default | description |
@@ -660,7 +660,7 @@ fabric agent session cancel sess_abc123 --json
 | `--json` | `false` | print JSON |
 | `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
 
-### `fabric agent session compact`
+### `falcon agent session compact`
 
 Compact local session context
 
@@ -671,18 +671,18 @@ flags, older event contents and checkpoint states are replaced locally. This hel
 agent sessions stay inspectable without leaving all prompts and outputs in the visible tail.
 
 ```
-fabric agent session compact [session-id] [flags]
+falcon agent session compact [session-id] [flags]
 ```
 
 Examples:
 
 ```bash
 # Add a summary checkpoint but keep payloads visible.
-fabric agent session compact sess_abc123 \
+falcon agent session compact sess_abc123 \
   --summary "Completed environment setup; next step is validation"
 
 # Keep the latest 20 events and redact older event/checkpoint payloads.
-fabric agent session compact sess_abc123 \
+falcon agent session compact sess_abc123 \
   --summary "Compacted completed setup work" \
   --keep-last-events 20 \
   --redact-events \
@@ -699,55 +699,55 @@ fabric agent session compact sess_abc123 \
 | `--redact-events` | `false` | redact compacted event contents |
 | `--summary` | `Manual local compaction` | summary stored in the compaction checkpoint |
 
-### `fabric agent session follow`
+### `falcon agent session follow`
 
 Follow live local session updates
 
 Open the local session SSE stream and print live updates.
 
 Follow first replays stored session, event, and checkpoint frames, then keeps the connection
-open for new updates. It is useful while another terminal runs fabric agent loop. Stop it
+open for new updates. It is useful while another terminal runs falcon agent loop. Stop it
 with Ctrl-C.
 
 ```
-fabric agent session follow [session-id] [flags]
+falcon agent session follow [session-id] [flags]
 ```
 
 Examples:
 
 ```bash
 # Terminal 1: watch a session.
-fabric agent session follow sess_abc123
+falcon agent session follow sess_abc123
 
 # Terminal 2: resume work and watch updates appear in terminal 1.
-fabric agent loop mac-ollama --session sess_abc123 --steps 5
+falcon agent loop mac-ollama --session sess_abc123 --steps 5
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
 
-### `fabric agent session list`
+### `falcon agent session list`
 
 List local agent sessions
 
-List sessions stored by aflocal under ~/.fabric/sessions.
+List sessions stored by aflocal under ~/.falcon/sessions.
 
 The table shows status, runtime, model, event count, checkpoint count, update time, and
 title. Use the session id with show, follow, cancel, compact, or agent loop --session.
 
 ```
-fabric agent session list [flags]
+falcon agent session list [flags]
 ```
 
 Examples:
 
 ```bash
 # Human-readable table.
-fabric agent session list
+falcon agent session list
 
 # JSON for scripts or a local UI.
-fabric agent session list --json
+falcon agent session list --json
 ```
 
 | flag | default | description |
@@ -755,7 +755,7 @@ fabric agent session list --json
 | `--json` | `false` | print JSON |
 | `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
 
-### `fabric agent session show`
+### `falcon agent session show`
 
 Show a local agent session
 
@@ -765,20 +765,20 @@ Use --tail to control how many recent events and checkpoints are printed. Use --
 you need full event metadata, checkpoint state, or exact timestamps for debugging.
 
 ```
-fabric agent session show [session-id] [flags]
+falcon agent session show [session-id] [flags]
 ```
 
 Examples:
 
 ```bash
 # Show the default recent event/checkpoint tail.
-fabric agent session show sess_abc123
+falcon agent session show sess_abc123
 
 # Show more local history.
-fabric agent session show sess_abc123 --tail 50
+falcon agent session show sess_abc123 --tail 50
 
 # Dump full structured detail.
-fabric agent session show sess_abc123 --json
+falcon agent session show sess_abc123 --json
 ```
 
 | flag | default | description |
@@ -787,7 +787,7 @@ fabric agent session show sess_abc123 --json
 | `--local-url` | `http://127.0.0.1:3210` | Local Console URL |
 | `--tail` | `10` | events/checkpoints to show |
 
-### `fabric agent smoke`
+### `falcon agent smoke`
 
 Run workload smoke and optional model-server capability checks
 
@@ -799,20 +799,20 @@ mode, tool/function calling, embeddings, and /v1/responses without failing the c
 a model server simply does not implement an optional feature.
 
 ```
-fabric agent smoke [name] [flags]
+falcon agent smoke [name] [flags]
 ```
 
 Examples:
 
 ```bash
 # Run the default smoke suite against an attached Ollama runtime.
-fabric agent smoke mac-ollama
+falcon agent smoke mac-ollama
 
 # Run more durable loop iterations.
-fabric agent smoke dev-vllm --loops 5 --timeout 5m
+falcon agent smoke dev-vllm --loops 5 --timeout 5m
 
 # A good operator flow after smoke passes:
-fabric agent loop dev-vllm --steps 3
+falcon agent loop dev-vllm --steps 3
 ```
 
 | flag | default | description |
@@ -820,7 +820,7 @@ fabric agent loop dev-vllm --steps 3
 | `--loops` | `3` | durable loop iterations |
 | `--timeout` | `3m0s` | smoke timeout |
 
-### `fabric agent start`
+### `falcon agent start`
 
 Start a known local AI runtime profile
 
@@ -832,17 +832,17 @@ Use start when Falcon should own the Docker container lifecycle on this host. Us
 a model server is already running or when the platform is not Linux/NVIDIA Docker.
 
 ```
-fabric agent start [flags]
+falcon agent start [flags]
 ```
 
 Examples:
 
 ```bash
 # Start a vLLM Docker profile on a Linux/NVIDIA host.
-fabric agent start --runtime vllm-docker --name dev-vllm
+falcon agent start --runtime vllm-docker --name dev-vllm
 
 # Start vLLM with an explicit Hugging Face model and served OpenAI model name.
-fabric agent start \
+falcon agent start \
   --runtime vllm-docker \
   --name qwen-dev \
   --model Qwen/Qwen2.5-0.5B-Instruct \
@@ -850,7 +850,7 @@ fabric agent start \
   --port 18000
 
 # Start Ollama in Docker and register the resulting LLM service on the mesh.
-fabric agent start --runtime ollama-docker --name dev-ollama --register
+falcon agent start --runtime ollama-docker --name dev-ollama --register
 ```
 
 | flag | default | description |
@@ -864,35 +864,35 @@ fabric agent start --runtime ollama-docker --name dev-ollama --register
 | `--served-model` | `—` | OpenAI-compatible served model name (vLLM) |
 | `--wait` | `4m0s` | readiness timeout |
 
-### `fabric agent status`
+### `falcon agent status`
 
 Show local Falcon-managed or attached runtimes
 
-List runtime records stored under ~/.fabric/runtimes.
+List runtime records stored under ~/.falcon/runtimes.
 
 The table includes both Falcon-managed Docker profiles and externally managed endpoints
-attached with fabric agent attach. This is the fastest way to confirm the runtime name to
+attached with falcon agent attach. This is the fastest way to confirm the runtime name to
 use with smoke, loop, logs, stop, or Local Console API calls.
 
 ```
-fabric agent status [flags]
+falcon agent status [flags]
 ```
 
 Examples:
 
 ```bash
-fabric agent status
+falcon agent status
 
 # Typical next steps:
-fabric agent smoke mac-ollama --loops 3
-fabric agent loop mac-ollama --steps 3
+falcon agent smoke mac-ollama --loops 3
+falcon agent loop mac-ollama --steps 3
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | print JSON |
 
-### `fabric agent stop`
+### `falcon agent stop`
 
 Stop a Falcon-managed runtime or detach an external endpoint
 
@@ -902,28 +902,28 @@ For attached native runtimes, Falcon does not stop the real server process; it o
 the runtime record. Stop Ollama, vLLM, or other native servers with their own tools.
 
 ```
-fabric agent stop [name]
+falcon agent stop [name]
 ```
 
 Examples:
 
 ```bash
 # Stop a Falcon-managed Docker profile.
-fabric agent stop dev-vllm
+falcon agent stop dev-vllm
 
 # Detach a native/external endpoint from Falcon local state.
-fabric agent stop mac-ollama
+falcon agent stop mac-ollama
 ```
 
-### `fabric console`
+### `falcon console`
 
 Open a remote node's Local Console; manage console access (ACL)
 
 ```
-fabric console
+falcon console
 ```
 
-### `fabric console grant`
+### `falcon console grant`
 
 Grant a subject access to a node's Local Console (zero-trust ACL)
 
@@ -932,50 +932,50 @@ console. Use the node name or id, or "*" for every node in the network.
 Without a grant, remote console access is denied (default-deny).
 
 ```
-fabric console grant [subject] [node] [flags]
+falcon console grant [subject] [node] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--ttl` | `0s` | grant expiry (e.g. 24h; 0 = no expiry) |
 
-### `fabric console grants`
+### `falcon console grants`
 
 List console access grants (the ACL) for the current network
 
 ```
-fabric console grants
+falcon console grants
 ```
 
-### `fabric console open`
+### `falcon console open`
 
 Open a remote node's Local Console over the private network
 
 ```
-fabric console open [node] [flags]
+falcon console open [node] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--no-open` | `false` | print the URL without opening a browser |
 
-### `fabric console revoke`
+### `falcon console revoke`
 
 Revoke a subject's console access to a node
 
 ```
-fabric console revoke [subject] [node]
+falcon console revoke [subject] [node]
 ```
 
-### `fabric models`
+### `falcon models`
 
 Find and size local-runnable models (Hugging Face catalog)
 
 ```
-fabric models
+falcon models
 ```
 
-### `fabric models pull`
+### `falcon models pull`
 
 Pull the right quant for your GPU via Ollama, then publish it privately
 
@@ -985,14 +985,14 @@ Ollama's Hugging Face passthrough, then attach + publish it on your mesh. Needs 
 running Ollama (`ollama serve`) and aflocal for the publish step.
 
 ```
-fabric models pull [model-id] [flags]
+falcon models pull [model-id] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric models pull Qwen/Qwen2.5-7B-Instruct-GGUF
-fabric models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
+falcon models pull Qwen/Qwen2.5-7B-Instruct-GGUF
+falcon models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
 ```
 
 | flag | default | description |
@@ -1005,19 +1005,19 @@ fabric models pull unsloth/gemma-2-9b-it-GGUF --quant Q4_K_M
 | `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
 | `--yes` | `false` | pull even a low-trust model (skip the supply-chain gate) |
 
-### `fabric models search`
+### `falcon models search`
 
 Search trending models that run locally, sized to your GPU
 
 ```
-fabric models search [query] [flags]
+falcon models search [query] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric models search qwen2.5
-fabric models search llama --sort recent --json
+falcon models search qwen2.5
+falcon models search llama --sort recent --json
 ```
 
 | flag | default | description |
@@ -1028,18 +1028,18 @@ fabric models search llama --sort recent --json
 | `--sort` | `trending` | trending | likes | recent |
 | `--vram` | `0` | GPU VRAM in GB to size against (default: auto-detect via aflocal) |
 
-### `fabric models show`
+### `falcon models show`
 
 Show a model's quantizations and which one we'd run on your GPU
 
 ```
-fabric models show [model-id] [flags]
+falcon models show [model-id] [flags]
 ```
 
 Examples:
 
 ```bash
-fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF
+falcon models show bartowski/Qwen2.5-7B-Instruct-GGUF
 ```
 
 | flag | default | description |
@@ -1047,7 +1047,7 @@ fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF
 | `--json` | `false` | JSON output |
 | `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
 
-### `fabric web`
+### `falcon web`
 
 Open the Local Console for this machine
 
@@ -1058,7 +1058,7 @@ loopback-only and manages this node's AI runtimes, sessions, hardware,
 diagnostics, and private names.
 
 ```
-fabric web [flags]
+falcon web [flags]
 ```
 
 | flag | default | description |
@@ -1069,7 +1069,7 @@ fabric web [flags]
 
 ## Account
 
-### `fabric login`
+### `falcon login`
 
 Authenticate to FalconEyes (org/human identity)
 
@@ -1082,14 +1082,14 @@ with no local browser.
 --token <jwt>       store a real Cognito ID token (AWS mode), no device flow.
 
 ```
-fabric login [flags]
+falcon login [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--token` | `—` | raw Cognito ID token (AWS mode) |
 
-### `fabric logout`
+### `falcon logout`
 
 Clear the local FalconEyes session
 
@@ -1100,30 +1100,30 @@ this machine (e.g. before handing it off); revoking the device in the console
 is still the way to invalidate it server-side.
 
 ```
-fabric logout [flags]
+falcon logout [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--purge` | `false` | also erase the local device identity (WireGuard key + machine seed) |
 
-### `fabric network`
+### `falcon network`
 
 Manage private overlay networks
 
 ```
-fabric network
+falcon network
 ```
 
-### `fabric network create`
+### `falcon network create`
 
 Create a new private network
 
 ```
-fabric network create [name]
+falcon network create [name]
 ```
 
-### `fabric network delete`
+### `falcon network delete`
 
 Delete an empty network (by name or id)
 
@@ -1131,26 +1131,26 @@ Delete a network you own. The network must be empty — remove its nodes
 first. This cannot be undone.
 
 ```
-fabric network delete [network] [flags]
+falcon network delete [network] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--yes` | `false` | skip the confirmation prompt |
 
-### `fabric network list`
+### `falcon network list`
 
 List your networks
 
 ```
-fabric network list [flags]
+falcon network list [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | JSON output |
 
-### `fabric network prune`
+### `falcon network prune`
 
 Delete empty networks (no machines) — explicit cleanup, with confirmation
 
@@ -1158,38 +1158,38 @@ Find networks that have no machines and delete them, so stale networks
 left over from testing don't pile up. Networks that still have machines are
 never touched, and nothing is deleted without your confirmation (or --yes).
 This never runs automatically — it's the manual counterpart to the 'idle'
-state shown by `fabric network list`.
+state shown by `falcon network list`.
 
 ```
-fabric network prune [flags]
+falcon network prune [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--yes` | `false` | skip the confirmation prompt |
 
-### `fabric network rename`
+### `falcon network rename`
 
 Rename a network (by name or id)
 
 ```
-fabric network rename [network] [new-name]
+falcon network rename [network] [new-name]
 ```
 
-### `fabric node`
+### `falcon node`
 
 Manage nodes on the current network
 
 ```
-fabric node
+falcon node
 ```
 
-### `fabric node list`
+### `falcon node list`
 
 List nodes on a network (default: current; --network for any you own)
 
 ```
-fabric node list [flags]
+falcon node list [flags]
 ```
 
 | flag | default | description |
@@ -1197,17 +1197,17 @@ fabric node list [flags]
 | `--json` | `false` | JSON output |
 | `--network` | `—` | network name or id (default: the joined one) |
 
-### `fabric node remove`
+### `falcon node remove`
 
 Remove a node from a network (revokes its access)
 
 Revoke a node's membership. It loses access immediately; reconnect it later
-with `fabric up`. Removing this machine's own node disconnects it. Use
+with `falcon up`. Removing this machine's own node disconnects it. Use
 --network to remove a node from a network you own without being joined to it
 (e.g. clearing a stale registration after a local reset).
 
 ```
-fabric node remove [name] [flags]
+falcon node remove [name] [flags]
 ```
 
 | flag | default | description |
@@ -1215,19 +1215,19 @@ fabric node remove [name] [flags]
 | `--network` | `—` | network name or id (default: the joined one) |
 | `--yes` | `false` | skip the confirmation prompt |
 
-### `fabric node rename`
+### `falcon node rename`
 
 Rename a node (keeps its overlay IP)
 
 ```
-fabric node rename [current-name] [new-name] [flags]
+falcon node rename [current-name] [new-name] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--network` | `—` | network the node is on (name or id; default: current) |
 
-### `fabric node revoke`
+### `falcon node revoke`
 
 Permanently revoke a node's device identity (lost/stolen device)
 
@@ -1237,7 +1237,7 @@ re-enroll in this org. Use `node remove` for a normal removal the device can
 undo by reconnecting; revoke is permanent for that device key.
 
 ```
-fabric node revoke [name] [flags]
+falcon node revoke [name] [flags]
 ```
 
 | flag | default | description |
@@ -1245,55 +1245,55 @@ fabric node revoke [name] [flags]
 | `--network` | `—` | network the node is on (name or id; default: current) |
 | `--yes` | `false` | skip confirmation |
 
-### `fabric node show`
+### `falcon node show`
 
 Show details for a node
 
 ```
-fabric node show [name]
+falcon node show [name]
 ```
 
-### `fabric nodes`
+### `falcon nodes`
 
 List nodes on the current network
 
 ```
-fabric nodes
+falcon nodes
 ```
 
-### `fabric usage`
+### `falcon usage`
 
 Show this workspace's metered usage (relay egress, api, node-hours)
 
 ```
-fabric usage [flags]
+falcon usage [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit usage as JSON |
 
-### `fabric whoami`
+### `falcon whoami`
 
 Show the current identity: workspace, plan, control plane, node
 
 ```
-fabric whoami [flags]
+falcon whoami [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | JSON output |
 
-### `fabric workspace`
+### `falcon workspace`
 
 Manage your workspace: name, members, invitations
 
 ```
-fabric workspace
+falcon workspace
 ```
 
-### `fabric workspace invite`
+### `falcon workspace invite`
 
 Invite a teammate by email
 
@@ -1301,52 +1301,52 @@ Invite a teammate to the workspace. They appear as a pending member until
 an accept flow lands. Role is member (default) or admin.
 
 ```
-fabric workspace invite [email] [flags]
+falcon workspace invite [email] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--role` | `member` | member or admin |
 
-### `fabric workspace members`
+### `falcon workspace members`
 
 List workspace members and pending invitations
 
 ```
-fabric workspace members
+falcon workspace members
 ```
 
-### `fabric workspace rename`
+### `falcon workspace rename`
 
 Rename the workspace
 
 ```
-fabric workspace rename [name]
+falcon workspace rename [name]
 ```
 
-### `fabric workspace revoke`
+### `falcon workspace revoke`
 
 Revoke a pending invitation
 
 ```
-fabric workspace revoke [invitation-id] [flags]
+falcon workspace revoke [invitation-id] [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--yes` | `false` | skip the confirmation prompt |
 
-### `fabric workspace show`
+### `falcon workspace show`
 
 Show the current workspace (name, plan, owner)
 
 ```
-fabric workspace show
+falcon workspace show
 ```
 
 ## Diagnostics
 
-### `fabric bugreport`
+### `falcon bugreport`
 
 Generate a privacy-safe support bundle (no prompts, outputs, tokens, or keys)
 
@@ -1357,61 +1357,61 @@ generation/entitlement/peer+service counts, and the observe-engine diagnostics
 model outputs, or session content.
 
 ```
-fabric bugreport [flags]
+falcon bugreport [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--output` | `—` | write the bundle to a file instead of stdout |
 
-### `fabric control-key`
+### `falcon control-key`
 
 Inspect or rotate the pinned control-plane verify key (trust anchor)
 
 ```
-fabric control-key
+falcon control-key
 ```
 
-### `fabric control-key repin`
+### `falcon control-key repin`
 
 Pin the key the control plane currently serves (after a legitimate rotation)
 
 ```
-fabric control-key repin [flags]
+falcon control-key repin [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--yes` | `false` | skip the confirmation prompt (for automation) |
 
-### `fabric control-key show`
+### `falcon control-key show`
 
 Show the pinned control key and whether it matches the server
 
 ```
-fabric control-key show
+falcon control-key show
 ```
 
-### `fabric doctor`
+### `falcon doctor`
 
 Diagnose local setup: config, identity, keystore, control plane, node (--json for agents)
 
 ```
-fabric doctor [flags]
+falcon doctor [flags]
 ```
 
 Examples:
 
 ```bash
-fabric doctor
-fabric doctor --json
+falcon doctor
+falcon doctor --json
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit the report as a structured JSON digest (for agents/automation) |
 
-### `fabric host`
+### `falcon host`
 
 Deterministic host snapshot: os, cpu/load, memory, disk, network (--json for agents)
 
@@ -1420,26 +1420,26 @@ filesystem, and up network interfaces — gathered from machine-readable sources
 An agent reads it in one call instead of running uname/df/ip/free across turns.
 
 ```
-fabric host [flags]
+falcon host [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--json` | `false` | emit the snapshot as a structured JSON digest (for agents/automation) |
 
-### `fabric netcheck`
+### `falcon netcheck`
 
 Diagnose mesh connectivity: control, netmap, relay, NAT, and per-peer path (--json for agents)
 
 ```
-fabric netcheck [flags]
+falcon netcheck [flags]
 ```
 
 Examples:
 
 ```bash
-fabric netcheck
-fabric netcheck --json
+falcon netcheck
+falcon netcheck --json
 ```
 
 | flag | default | description |
@@ -1448,20 +1448,20 @@ fabric netcheck --json
 
 ## Advanced
 
-### `fabric agent-workspace`
+### `falcon agent-workspace`
 
 Agent workspaces (agent + model + tool services)
 
 ```
-fabric agent-workspace
+falcon agent-workspace
 ```
 
-### `fabric agent-workspace create`
+### `falcon agent-workspace create`
 
 Create an agent workspace
 
 ```
-fabric agent-workspace create [flags]
+falcon agent-workspace create [flags]
 ```
 
 | flag | default | description |
@@ -1470,36 +1470,36 @@ fabric agent-workspace create [flags]
 | `--network` | `—` | network id |
 | `--purpose` | `—` | purpose, e.g. research |
 
-### `fabric agent-workspace list`
+### `falcon agent-workspace list`
 
 List agent workspaces
 
 ```
-fabric agent-workspace list
+falcon agent-workspace list
 ```
 
-### `fabric agent-workspace smoke-test`
+### `falcon agent-workspace smoke-test`
 
 Run the structural smoke test
 
 ```
-fabric agent-workspace smoke-test <workspace-id>
+falcon agent-workspace smoke-test <workspace-id>
 ```
 
-### `fabric customer-env`
+### `falcon customer-env`
 
 Customer environments (VPC/on-prem)
 
 ```
-fabric customer-env
+falcon customer-env
 ```
 
-### `fabric customer-env create`
+### `falcon customer-env create`
 
 Represent a customer environment
 
 ```
-fabric customer-env create [flags]
+falcon customer-env create [flags]
 ```
 
 | flag | default | description |
@@ -1509,44 +1509,44 @@ fabric customer-env create [flags]
 | `--region` | `—` | region |
 | `--type` | `aws_vpc` | environment type |
 
-### `fabric customer-env list`
+### `falcon customer-env list`
 
 List customer environments
 
 ```
-fabric customer-env list
+falcon customer-env list
 ```
 
-### `fabric customer-env preflight`
+### `falcon customer-env preflight`
 
 Run the trust-boundary + readiness check
 
 ```
-fabric customer-env preflight <env-id>
+falcon customer-env preflight <env-id>
 ```
 
-### `fabric delivery`
+### `falcon delivery`
 
 Delivery projects (AI-SI customer deliveries)
 
 ```
-fabric delivery
+falcon delivery
 ```
 
-### `fabric delivery handoff`
+### `falcon delivery handoff`
 
 Export the handoff document (markdown)
 
 ```
-fabric delivery handoff <project-id>
+falcon delivery handoff <project-id>
 ```
 
-### `fabric delivery init`
+### `falcon delivery init`
 
 Initialize a delivery project
 
 ```
-fabric delivery init [flags]
+falcon delivery init [flags]
 ```
 
 | flag | default | description |
@@ -1555,64 +1555,64 @@ fabric delivery init [flags]
 | `--name` | `—` | project name |
 | `--stage` | `pilot` | stage: pilot|poc|production|closed |
 
-### `fabric delivery list`
+### `falcon delivery list`
 
 List delivery projects
 
 ```
-fabric delivery list
+falcon delivery list
 ```
 
-### `fabric endpoint`
+### `falcon endpoint`
 
 OpenAI-compatible endpoint recipes
 
 ```
-fabric endpoint
+falcon endpoint
 ```
 
-### `fabric endpoint add`
+### `falcon endpoint add`
 
 OpenAI-compatible endpoint recipes
 
 ```
-fabric endpoint add [name]
+falcon endpoint add [name]
 ```
 
-### `fabric gateway`
+### `falcon gateway`
 
 Run the local agent-protocol gateway
 
 ```
-fabric gateway
+falcon gateway
 ```
 
-### `fabric gateway proxy`
+### `falcon gateway proxy`
 
 Run the local gateway: forward authorized MCP/A2A calls over the mesh
 
 ```
-fabric gateway proxy [flags]
+falcon gateway proxy [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--listen` | `127.0.0.1:7777` | local listen address (loopback by default) |
 
-### `fabric gpu-workspace`
+### `falcon gpu-workspace`
 
 Private GPU workspaces (team model endpoints)
 
 ```
-fabric gpu-workspace
+falcon gpu-workspace
 ```
 
-### `fabric gpu-workspace create`
+### `falcon gpu-workspace create`
 
 Register a GPU node as a team model endpoint
 
 ```
-fabric gpu-workspace create [flags]
+falcon gpu-workspace create [flags]
 ```
 
 | flag | default | description |
@@ -1620,28 +1620,28 @@ fabric gpu-workspace create [flags]
 | `--name` | `—` | workspace name |
 | `--node` | `—` | GPU node id |
 
-### `fabric gpu-workspace detect`
+### `falcon gpu-workspace detect`
 
 Detect the node's GPU/runtime capabilities
 
 ```
-fabric gpu-workspace detect <workspace-id>
+falcon gpu-workspace detect <workspace-id>
 ```
 
-### `fabric gpu-workspace list`
+### `falcon gpu-workspace list`
 
 List GPU workspaces
 
 ```
-fabric gpu-workspace list
+falcon gpu-workspace list
 ```
 
-### `fabric gpu-workspace publish`
+### `falcon gpu-workspace publish`
 
 Remotely publish a loopback model service on the GPU node (APPLY_RECIPE)
 
 ```
-fabric gpu-workspace publish <workspace-id> [flags]
+falcon gpu-workspace publish <workspace-id> [flags]
 ```
 
 | flag | default | description |
@@ -1650,27 +1650,27 @@ fabric gpu-workspace publish <workspace-id> [flags]
 | `--kind` | `llm` | model kind: llm|router|endpoint |
 | `--name` | `—` | service name (dns-safe) |
 
-### `fabric llm`
+### `falcon llm`
 
 Local LLM runtime recipes
 
 ```
-fabric llm
+falcon llm
 ```
 
-### `fabric llm init`
+### `falcon llm init`
 
 Local LLM runtime recipes
 
 ```
-fabric llm init [name]
+falcon llm init [name]
 ```
 
-### `fabric mcp`
+### `falcon mcp`
 
 Run a local MCP server exposing the mesh digests (status, connectivity, doctor, host) as tools
 
-Expose fabric's deterministic mesh diagnostics to an LLM agent over MCP (stdio).
+Expose falcon's deterministic mesh diagnostics to an LLM agent over MCP (stdio).
 
 Tools:
   mesh_status        host+mesh health snapshot (node, control, entitlement, tunnel, relay, peers)
@@ -1678,39 +1678,39 @@ Tools:
   mesh_doctor        local setup + security posture (config, keystore, control key drift, MTU/CIDR)
   host_snapshot      deterministic host snapshot (OS, CPU/load, memory, disk, interfaces)
 
-Add to an MCP client (e.g. Claude Code): {"command":"fabric","args":["mcp"]}
+Add to an MCP client (e.g. Claude Code): {"command":"falcon","args":["mcp"]}
 
 ```
-fabric mcp
+falcon mcp
 ```
 
-### `fabric router`
+### `falcon router`
 
 Model router recipes
 
 ```
-fabric router
+falcon router
 ```
 
-### `fabric router init`
+### `falcon router init`
 
 Model router recipes
 
 ```
-fabric router init [name]
+falcon router init [name]
 ```
 
 ## Maintenance
 
-### `fabric update`
+### `falcon update`
 
-Update fabric (and the node agents) to the latest release
+Update falcon (and the node agents) to the latest release
 
-Download, verify (sha256) and replace the fabric CLI and its background
+Download, verify (sha256) and replace the falcon CLI and its background
 agents in place. Use --check to see what's available without installing.
 
 ```
-fabric update [flags]
+falcon update [flags]
 ```
 
 | flag | default | description |
@@ -1720,11 +1720,11 @@ fabric update [flags]
 | `--force` | `false` | reinstall even if already up to date |
 | `--version` | `—` | install a specific version (e.g. v0.2.0) instead of the channel latest |
 
-### `fabric version`
+### `falcon version`
 
-Print the fabric CLI version
+Print the falcon CLI version
 
 ```
-fabric version
+falcon version
 ```
 

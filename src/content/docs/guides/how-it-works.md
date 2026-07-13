@@ -62,8 +62,8 @@ your traffic.
 | Concept | What it is |
 |---|---|
 | **Network** | A private group of your machines, isolated from every other org's. |
-| **Device / machine** | Anything you connect with `fabric up` — a laptop, a server, a GPU box. |
-| **Service** | Something running on a machine that you make addressable to the mesh (`fabric serve`) — a model endpoint, an MCP tool, an internal API. |
+| **Device / machine** | Anything you connect with `falcon up` — a laptop, a server, a GPU box. |
+| **Service** | Something running on a machine that you make addressable to the mesh (`falcon serve`) — a model endpoint, an MCP tool, an internal API. |
 | **Capability** | A scoped, expiring token that grants one caller one action on one service — the access-control primitive everything else is built on. |
 | **Demo Room** | Time-boxed, revocable access to one service for someone outside your org — for showing a customer a live demo without opening a public port. |
 

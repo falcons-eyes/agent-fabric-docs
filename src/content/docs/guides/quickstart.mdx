@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Install fabric, sign in, connect a machine, and publish a local service — in under five minutes.
+description: Install falcon, sign in, connect a machine, and publish a local service — in under five minutes.
 sidebar:
   order: 1
 ---
@@ -11,8 +11,8 @@ sidebar:
 
 ```sh
 curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.sh | sh
-fabric up
-fabric serve http://127.0.0.1:11434 --name my-model --kind llm
+falcon up
+falcon serve http://127.0.0.1:11434 --name my-model --kind llm
 ```
 
 That's it — a machine joined to your private mesh, with a local model server
@@ -43,18 +43,18 @@ curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main
 irm https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.ps1 | iex
 ```
 
-This installs three binaries: `fabric` (the CLI you'll use), `afd` (the background
+This installs three binaries: `falcon` (the CLI you'll use), `afd` (the background
 tunnel agent), and `aflocal` (a local dashboard — see [Local Agent
 Stack](/guides/local-agent-stack/)). Verify it worked:
 
 ```sh
-fabric version
+falcon version
 ```
 
 ## 2. Sign in and connect
 
 ```sh
-fabric up
+falcon up
 ```
 
 One command does three things: signs you in (opens your browser, or prints a
@@ -63,7 +63,7 @@ device code if there's no local browser), joins this machine to your network
 network map), and brings the encrypted tunnel up. Check it worked:
 
 ```sh
-fabric status
+falcon status
 ```
 
 ## 3. Publish a service
@@ -72,7 +72,7 @@ Make anything running locally — a model server, an MCP tool, an internal API �
 reachable by your team over the private mesh:
 
 ```sh
-fabric serve http://127.0.0.1:11434 --name my-model --kind llm
+falcon serve http://127.0.0.1:11434 --name my-model --kind llm
 ```
 
 It becomes `my-model.<this-machine>.private`, visible under **Services** in the
@@ -81,13 +81,13 @@ machine through a scoped, expiring capability — never a public port. Grant and
 resolve it from another machine:
 
 ```sh
-fabric grant llm://my-model
-fabric resolve my-model --cap <token>
+falcon grant llm://my-model
+falcon resolve my-model --cap <token>
 ```
 
 ## Where to go next
 
 - **[Connect a device](/guides/connect-a-device/)** — the console side of onboarding: seeing your machines, networks, and services.
 - **[Local Agent Stack](/guides/local-agent-stack/)** — running and verifying local model servers before you publish them.
-- **[CLI reference](/reference/cli/)** — every `fabric` command and flag.
+- **[CLI reference](/reference/cli/)** — every `falcon` command and flag.
 - **[How it works](/guides/how-it-works/)** — the mesh + control-plane model, for anyone evaluating whether to trust it with their infrastructure.

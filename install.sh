@@ -10,7 +10,7 @@
 set -eu
 
 REPO="falcons-eyes/agent-fabric-docs" # public distribution repo (binaries via its GitHub Releases)
-BINARIES="fabric afd aflocal"
+BINARIES="falcon afd aflocal"
 VERSION="${AGENT_FABRIC_VERSION:-latest}"
 INSTALL_DIR="${AGENT_FABRIC_INSTALL_DIR:-$HOME/.local/bin}"
 
@@ -38,7 +38,7 @@ main() {
 	say "  platform: ${TARGET}"
 	say "  version:  ${VERSION}"
 
-	ASSET="fabric-${TARGET}.tar.gz"
+	ASSET="falcon-${TARGET}.tar.gz"
 	if [ "$VERSION" = "latest" ]; then
 		BASE="https://github.com/${REPO}/releases/latest/download"
 	else
@@ -72,7 +72,7 @@ main() {
 	ensure_path "${INSTALL_DIR}"
 
 	say ""
-	say "Done. Try:  fabric --help"
+	say "Done. Try:  falcon --help"
 }
 
 detect_os() {
