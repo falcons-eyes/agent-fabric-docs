@@ -76,7 +76,18 @@ const { demos } = Astro.props;
     }
 
     tabs.forEach((t, i) => t.addEventListener('click', () => play(i)));
-    play(0);
+    // Mount the first recording only once the terminal is laid out AND on screen.
+    // Creating the asciinema player before the container has a real size makes it
+    // render 0-height (the first/Onboarding tab appeared blank on load); an
+    // IntersectionObserver guarantees a measured, visible container.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(0); }
+      }, { rootMargin: '200px' });
+      io.observe(screen);
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(() => play(0)));
+    }
   }
 
   document.addEventListener('DOMContentLoaded', initDemos);
