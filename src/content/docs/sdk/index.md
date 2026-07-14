@@ -35,13 +35,13 @@ Each example does the same thing: authenticate and list your networks.
 ### Python
 
 ```python
-import falconeyes
+import agentfabric
 
-cfg = falconeyes.Configuration(host="https://api.falconoon.com")
+cfg = agentfabric.Configuration(host="https://api.falconoon.com")
 cfg.access_token = "dev:acme"          # dev; or your Cognito OIDC bearer in prod
 
-with falconeyes.ApiClient(cfg) as client:
-    for nw in falconeyes.NetworksApi(client).get_api_networks():
+with agentfabric.ApiClient(cfg) as client:
+    for nw in agentfabric.NetworksApi(client).get_api_networks():
         print(nw.id, nw.name, nw.cidr)  # Pythonic attributes (aliased to the wire format)
 ```
 
@@ -52,7 +52,7 @@ pip install ./sdk/python        # from a checkout
 ### TypeScript
 
 ```ts
-import { Configuration, NetworksApi } from "@falconeyes/sdk";
+import { Configuration, NetworksApi } from "@agentfabric/sdk";
 
 const config = new Configuration({
   basePath: "https://api.falconoon.com",
@@ -64,7 +64,7 @@ for (const nw of networks) console.log(nw.ID, nw.Name, nw.CIDR);
 ```
 
 ```sh
-npm install ./sdk/typescript    # from a checkout (or @falconeyes/sdk once published)
+npm install ./sdk/typescript    # from a checkout (or @agentfabric/sdk once published)
 ```
 
 ### Go
@@ -74,13 +74,13 @@ import (
     "context"
     "fmt"
 
-    falconeyes "github.com/falcons-eyes/falconeyes-go/falconeyes"
+    agentfabric "github.com/falcons-eyes/agentfabric-go/agentfabric"
 )
 
-cfg := falconeyes.NewConfiguration()   // Servers[0] is https://api.falconoon.com
-client := falconeyes.NewAPIClient(cfg)
+cfg := agentfabric.NewConfiguration()   // Servers[0] is https://api.falconoon.com
+client := agentfabric.NewAPIClient(cfg)
 
-ctx := context.WithValue(context.Background(), falconeyes.ContextAccessToken, "dev:acme")
+ctx := context.WithValue(context.Background(), agentfabric.ContextAccessToken, "dev:acme")
 nets, _, err := client.NetworksAPI.GetApiNetworks(ctx).Execute()
 if err != nil {
     panic(err)
@@ -91,7 +91,7 @@ for _, nw := range nets {
 ```
 
 ```go
-import falconeyes "github.com/falcons-eyes/falconeyes-go/falconeyes"  // then: go mod tidy
+import agentfabric "github.com/falcons-eyes/agentfabric-go/agentfabric"  // then: go mod tidy
 ```
 
 ## One gotcha: `Network` field casing
@@ -122,7 +122,7 @@ The complete endpoint + model surface is the [HTTP API reference](/reference/api
 |---|---|---|
 | Python | [`sdk/python`](python) | urllib3, typed Pydantic models |
 | TypeScript | [`sdk/typescript`](typescript) | axios, typed models |
-| Go | [`sdk/go`](go) | net/http, module `github.com/falcons-eyes/falconeyes-go` |
+| Go | [`sdk/go`](go) | net/http, module `github.com/falcons-eyes/agentfabric-go` |
 
 ## Regenerating
 

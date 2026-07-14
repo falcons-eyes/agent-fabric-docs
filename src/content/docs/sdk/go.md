@@ -9,7 +9,7 @@ New here? Start with the [SDKs overview](/sdk/) for the auth model and base URLs
 ## Install
 
 ```go
-import falconeyes "github.com/falcons-eyes/falconeyes-go/falconeyes"  // then: go mod tidy
+import agentfabric "github.com/falcons-eyes/agentfabric-go/agentfabric"  // then: go mod tidy
 ```
 
 ## Authenticate and make a call
@@ -23,12 +23,12 @@ import (
     "context"
     "fmt"
 
-    falconeyes "github.com/falcons-eyes/falconeyes-go/falconeyes"
+    agentfabric "github.com/falcons-eyes/agentfabric-go/agentfabric"
 )
 
-cfg := falconeyes.NewConfiguration()
-client := falconeyes.NewAPIClient(cfg)
-ctx := context.WithValue(context.Background(), falconeyes.ContextAccessToken, "dev:acme")
+cfg := agentfabric.NewConfiguration()
+client := agentfabric.NewAPIClient(cfg)
+ctx := context.WithValue(context.Background(), agentfabric.ContextAccessToken, "dev:acme")
 
 // list your networks
 nets, _, err := client.NetworksAPI.GetApiNetworks(ctx).Execute()
@@ -41,7 +41,7 @@ for _, nw := range nets {
 
 // create one
 nw, _, err := client.NetworksAPI.PostApiNetworks(ctx).
-    CreateNetworkRequest(falconeyes.CreateNetworkRequest{Name: "prod"}).Execute()
+    CreateNetworkRequest(agentfabric.CreateNetworkRequest{Name: "prod"}).Execute()
 if err != nil {
     panic(err)
 }

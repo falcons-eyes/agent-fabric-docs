@@ -9,7 +9,7 @@ New here? Start with the [SDKs overview](/sdk/) for the auth model and base URLs
 ## Install
 
 ```sh
-npm install ./sdk/typescript    # from a checkout (or @falconeyes/sdk once published)
+npm install ./sdk/typescript    # from a checkout (or @agentfabric/sdk once published)
 ```
 
 ## Authenticate and make a call
@@ -19,7 +19,7 @@ access token · dev: `dev:<workspace>`), then call an API. Each resource has its
 `*Api` class; every method returns an axios response (`{ data, status, … }`).
 
 ```ts
-import { Configuration, NetworksApi } from "@falconeyes/sdk";
+import { Configuration, NetworksApi } from "@agentfabric/sdk";
 
 const config = new Configuration({
   basePath: "https://api.falconoon.com",
