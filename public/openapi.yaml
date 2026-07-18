@@ -237,6 +237,19 @@ paths:
                     description: OK
                 "401":
                     description: unauthorized (missing or invalid bearer token)
+    /api/billing/history:
+        get:
+            summary: completed subscription charges, newest-first, with Toss receipt links
+            operationId: get_api_billing_history
+            tags:
+                - billing
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
     /api/billing/pricing:
         get:
             summary: effective plan prices (store override or env seed) + currency
@@ -271,6 +284,19 @@ paths:
         post:
             summary: subscribe a network via Toss recurring billing (issue billing key + charge → active)
             operationId: post_api_billing_toss_subscribe
+            tags:
+                - billing
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
+    /api/billing/toss/update-card:
+        post:
+            summary: replace the subscription's card (issues a new billing key; nothing is charged)
+            operationId: post_api_billing_toss_update_card
             tags:
                 - billing
             security:
