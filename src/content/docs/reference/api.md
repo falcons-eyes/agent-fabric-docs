@@ -177,6 +177,7 @@ Metered usage and subscription checkout.
 - `GET /api/usage` — metering readout (totals + events)
 - `POST /api/checkout` — start a Stripe Checkout to subscribe a network → hosted checkout URL
 - `POST /api/billing/toss/subscribe` — subscribe a network via Toss recurring billing (issue billing key + charge → active)
+- `POST /api/billing/toss/cancel` — stop auto-renew (billing key deleted; paid access runs to period end, then suspends)
 - `GET /api/billing/pricing` — effective plan prices (store override or env seed) + currency
 
 ## Other

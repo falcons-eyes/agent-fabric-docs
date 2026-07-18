@@ -254,6 +254,19 @@ paths:
                                 $ref: '#/components/schemas/Pricing'
                 "401":
                     description: unauthorized (missing or invalid bearer token)
+    /api/billing/toss/cancel:
+        post:
+            summary: stop auto-renew (billing key deleted; paid access runs to period end, then suspends)
+            operationId: post_api_billing_toss_cancel
+            tags:
+                - billing
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
     /api/billing/toss/subscribe:
         post:
             summary: subscribe a network via Toss recurring billing (issue billing key + charge → active)
