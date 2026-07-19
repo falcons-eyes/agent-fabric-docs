@@ -1684,6 +1684,32 @@ paths:
                     description: OK
                 "401":
                     description: unauthorized (missing or invalid bearer token)
+    /api/notifications:
+        get:
+            summary: in-app notifications (console bell), newest-first with unread count
+            operationId: get_api_notifications
+            tags:
+                - notifications
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
+    /api/notifications/read:
+        post:
+            summary: mark the listed notifications read (everything shown when the bell was opened)
+            operationId: post_api_notifications_read
+            tags:
+                - notifications
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: unauthorized (missing or invalid bearer token)
     /api/overview:
         get:
             summary: 'one-shot Home aggregate for the caller org: networks + all nodes + usage totals/events + demo rooms (avoids the dashboard N+1)'
