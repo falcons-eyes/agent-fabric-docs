@@ -2,10 +2,8 @@
 title: Local Agent Stack
 description: Run customer-owned local model servers, verify them, and use Agent-Fabric's local session runner without sending prompts or outputs to the cloud.
 sidebar:
-  order: 4
+  order: 7
 ---
-
-# Local Agent Stack
 
 Agent-Fabric's Agent Stack is a local management plane for customer-owned AI runtimes.
 It discovers or starts model servers, records local agent sessions, and exposes

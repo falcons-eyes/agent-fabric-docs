@@ -2,10 +2,8 @@
 title: How it works
 description: The mesh + control-plane model at a glance — what runs where, and what the control plane does and doesn't see.
 sidebar:
-  order: 2
+  order: 6
 ---
-
-# How it works
 
 A short, honest overview of the trust model — enough to evaluate whether
 agent-fabric fits your infrastructure, without the implementation detail.
