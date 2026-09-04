@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Agent-Fabric',
-      description: 'Managed trust and connectivity for customer-owned AI.',
+      description: 'Publish the AI already running on your own hardware as private services your team can call.',
       customCss: ['./src/styles/brand.css'],
       // Brand falcon-eye mark: dark on light theme, white on dark theme. Keeps the
       // "agent-fabric" wordmark alongside it. favicon.svg is the palette mark.
@@ -20,6 +20,7 @@ export default defineConfig({
       favicon: '/favicon.svg',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/falcons-eyes/agent-fabric-docs' },
+        { icon: 'external', label: 'Console', href: 'https://app.falconoon.com' },
       ],
       // The reference/guides/sdk sections are generated/synced from the private
       // repo into src/content/docs/{reference,guides,sdk} — autogenerate keeps
@@ -29,8 +30,14 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Start here',
-          items: [{ label: 'Overview', slug: '' }],
+          items: [
+            { label: 'Documentation home', slug: '' },
+            { label: 'Quickstart', slug: 'guides/quickstart' },
+          ],
         },
+        // Ordering inside Guides comes from each page's own `sidebar.order`
+        // frontmatter, set in the source repo, so the section reads as the
+        // journey: get running → share access → understand → fix → evidence.
         {
           label: 'Guides',
           items: [{ autogenerate: { directory: 'guides' } }],

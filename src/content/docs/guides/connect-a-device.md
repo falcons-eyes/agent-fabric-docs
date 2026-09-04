@@ -2,10 +2,8 @@
 title: Connect a device
 description: Sign in and join a machine to your private network in one command with fabric up, then see it in the cloud console — without sending traffic, prompts, or outputs to the cloud.
 sidebar:
-  order: 3
+  order: 2
 ---
-
-# Connect a device
 
 The **cloud console** at [app.falconoon.com](https://app.falconoon.com) manages your
 *fabric and account* — networks, devices, services, usage, and billing. The
