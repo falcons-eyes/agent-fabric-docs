@@ -28,7 +28,8 @@ fabric doctor
 identity, is the keystore readable, can the control plane be reached. The first
 failing line is the cause — the ones after it are consequences.
 
-- **No config / no identity** — the machine was never signed in. Run `fabric up`.
+- **No config / no identity** — the machine was never signed in. Run
+  `sudo -E fabric up`.
 - **Keystore unreadable** — usually a permissions change or a copied home
   directory. Sign in again on this machine rather than copying credentials.
 - **Control plane unreachable** — network or proxy, not Agent-Fabric. Confirm
@@ -44,6 +45,11 @@ This is the mesh layer. It reports control-plane reachability, whether the
 netmap arrived, whether the relay is available, what NAT this machine is behind,
 and the path to each peer.
 
+- **The tunnel never came up** — the commonest cause on a first run, and the
+  easiest to miss. `fabric up` without `sudo` signs you in and joins the machine,
+  then stops short of creating the WireGuard interface, because that needs
+  administrator rights. `fabric status` shows `tunnel not running`. Bring it up
+  with `sudo -E fabric up`.
 - **Netmap missing** — the machine is authenticated but has not been given the
   network's map yet. `fabric wait` blocks until readiness holds, and fails at
   its timeout rather than hanging forever.

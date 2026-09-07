@@ -35,8 +35,9 @@ The machine has to be on the network already:
 fabric status
 ```
 
-If it reports that this machine is not joined, run [`fabric up`](/guides/connect-a-device/)
-first.
+If it reports that this machine is not joined, run
+[`sudo -E fabric up`](/guides/connect-a-device/) first — the tunnel needs
+administrator rights.
 
 ## Choose the kind
 

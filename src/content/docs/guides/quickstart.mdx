@@ -9,7 +9,7 @@ sidebar:
 
 ```sh
 curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.sh | sh
-fabric up
+sudo -E fabric up
 fabric serve http://127.0.0.1:11434/v1 --name my-model --kind llm
 ```
 
@@ -52,8 +52,14 @@ fabric version
 ## 2. Sign in and connect
 
 ```sh
-fabric up
+sudo -E fabric up
 ```
+
+`sudo` is not optional here: bringing up the tunnel creates a WireGuard
+interface and installs the service that restores it after a reboot, which needs
+administrator rights on every OS. `-E` keeps your environment so the CLI uses
+your own `~/.fabric`, and it hands ownership of what it writes back to you —
+every later command runs without `sudo`.
 
 One command does three things: signs you in (opens your browser, or prints a
 device code if there's no local browser), joins this machine to your network

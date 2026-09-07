@@ -16,8 +16,22 @@ and network maps but never sees your data.
 On the machine you want to connect:
 
 ```sh
-fabric up --network <network-id> --name my-device
+sudo -E fabric up --network <network-id> --name my-device
 ```
+
+### Why it needs `sudo`
+
+Joining the mesh creates a WireGuard interface, writes its configuration under
+`/etc/wireguard`, and installs the service that brings it back after a reboot.
+Those are privileged operations on macOS, Linux and Windows alike — the same
+reason any mesh VPN asks for administrator rights.
+
+`-E` keeps your environment, so the CLI reads **your** `~/.fabric` rather than
+root's. Anything it writes is handed back to your ownership, so later commands
+work without `sudo`.
+
+Only the tunnel needs it. Plain `fabric up` still signs you in and joins the
+machine — it just cannot bring the tunnel up, and tells you so.
 
 `fabric up` does three things:
 
@@ -28,8 +42,9 @@ fabric up --network <network-id> --name my-device
 2. **Joins** this machine to the network: it generates a WireGuard key, proves the
    device's identity, enrolls, and fetches the signed network map. The private key
    never leaves the machine.
-3. Reports the **overlay IP** and guides bringing up the tunnel (the `afd` node
-   agent).
+3. Brings up the **encrypted tunnel** (the `afd` node agent) and reports the
+   overlay IP. This is the part that needs `sudo`; without it the machine is
+   enrolled but not yet reachable.
 
 Copy the exact command (with your network id pre-filled) from the console:
 **Networks → open a network → Connect a device**.
