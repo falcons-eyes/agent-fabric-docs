@@ -851,6 +851,10 @@ fabric agent start \
 
 # Start Ollama in Docker and register the resulting LLM service on the mesh.
 fabric agent start --runtime ollama-docker --name dev-ollama --register
+
+# Pass runtime arguments through after --. Anything the runtime accepts works;
+# these are vLLM's, and they replace the built-in first-run defaults.
+fabric agent start --runtime vllm-docker -- --tensor-parallel-size 2 --max-model-len 32768
 ```
 
 | flag | default | description |
