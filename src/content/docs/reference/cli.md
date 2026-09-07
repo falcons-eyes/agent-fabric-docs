@@ -125,7 +125,7 @@ fabric grant mcp://local-files --action read --ttl 30m
 
 | flag | default | description |
 |---|---|---|
-| `--action` | `read` | granted action |
+| `--action` | `—` | granted action (default: the kind's action — llm/router/endpoint invoke, mcp read, a2a delegate, tcp connect) |
 | `--json` | `false` | JSON output |
 | `--ttl` | `10m0s` | token lifetime |
 
@@ -203,7 +203,7 @@ fabric resolve local-files --action read --cap <token>
 
 | flag | default | description |
 |---|---|---|
-| `--action` | `read` | requested action |
+| `--action` | `—` | requested action (default: the kind's action) |
 | `--cap` | `—` | capability token from `fabric grant` |
 | `--json` | `false` | JSON output |
 
