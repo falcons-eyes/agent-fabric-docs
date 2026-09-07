@@ -14,11 +14,11 @@ BINARIES="fabric afd aflocal"
 VERSION="${AGENT_FABRIC_VERSION:-latest}"
 INSTALL_DIR="${AGENT_FABRIC_INSTALL_DIR:-$HOME/.local/bin}"
 
-# minisign public key that signs official releases (key ID C363AC965984399A). Baked in
+# minisign public key that signs official releases (key ID D9206C7573E66401). Baked in
 # so a compromised release channel cannot also swap the key that would verify its
 # tampered binary. When the `minisign` tool is present the signature is checked fail-
 # closed; otherwise the SHA-256 checksum below remains the floor.
-PUBKEY="RWSaOYRZlqxjw1w2cOBah+T54hogN/eO/+1Pn1ptReOLjPHp4NTdS9Lt"
+PUBKEY="RWQBZOZzdWwg2cT+504oxn/JRbQpFFN9XZYcjxULD5Z28PQYc/DKACFX"
 
 main() {
 	say "Agent Fabric installer"

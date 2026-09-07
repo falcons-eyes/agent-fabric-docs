@@ -12,10 +12,10 @@ $Repo = "falcons-eyes/agent-fabric-docs" # public distribution repo (binaries vi
 $Version = if ($env:AGENT_FABRIC_VERSION) { $env:AGENT_FABRIC_VERSION } else { "latest" }
 $InstallDir = if ($env:AGENT_FABRIC_INSTALL_DIR) { $env:AGENT_FABRIC_INSTALL_DIR } else { Join-Path $env:USERPROFILE ".fabric\bin" }
 
-# minisign public key that signs official releases (key ID C363AC965984399A). Baked in
+# minisign public key that signs official releases (key ID D9206C7573E66401). Baked in
 # so a compromised release channel cannot swap the verifying key. Checked fail-closed
 # when the `minisign` tool is present; otherwise the SHA-256 checksum stays the floor.
-$PubKey = "RWSaOYRZlqxjw1w2cOBah+T54hogN/eO/+1Pn1ptReOLjPHp4NTdS9Lt"
+$PubKey = "RWQBZOZzdWwg2cT+504oxn/JRbQpFFN9XZYcjxULD5Z28PQYc/DKACFX"
 
 function Say($m) { Write-Host $m }
 
