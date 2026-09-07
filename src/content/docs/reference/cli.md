@@ -1044,6 +1044,7 @@ fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF
 
 | flag | default | description |
 |---|---|---|
+| `--context` | `8192` | context window (tokens) to size the KV cache against |
 | `--json` | `false` | JSON output |
 | `--vram` | `0` | GPU VRAM in GB (default: auto-detect via aflocal) |
 
