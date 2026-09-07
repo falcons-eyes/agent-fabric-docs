@@ -10,7 +10,7 @@ sidebar:
 ```sh
 curl -LsSf https://raw.githubusercontent.com/falcons-eyes/agent-fabric-docs/main/install.sh | sh
 fabric up
-fabric serve http://127.0.0.1:11434 --name my-model --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name my-model --kind llm
 ```
 
 That's it — a machine joined to your private mesh, with a local model server
@@ -70,7 +70,7 @@ Make anything running locally — a model server, an MCP tool, an internal API �
 reachable by your team over the private mesh:
 
 ```sh
-fabric serve http://127.0.0.1:11434 --name my-model --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name my-model --kind llm
 ```
 
 It becomes `my-model.<this-machine>.private`, visible under **Services** in the

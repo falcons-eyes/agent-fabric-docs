@@ -11,11 +11,21 @@ public port is opened — the service becomes reachable only to machines on your
 network that hold a valid capability.
 
 ```sh
-fabric serve http://127.0.0.1:11434 --name my-model --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name my-model --kind llm
 ```
 
 That is the whole operation. The rest of this page is what the parts mean and
 what to do when the defaults do not fit.
+
+:::caution[Include the `/v1`]
+For an OpenAI-compatible server — Ollama, vLLM, llama.cpp, LM Studio — publish the
+address **the API is actually mounted at**, which for all of them is `/v1`. The
+bare port answers, but not with the API, so callers get a 404 that looks like the
+model is missing rather than the address being short.
+
+`fabric serve` checks this for you: publish the wrong one and it prints the address
+that does answer.
+:::
 
 ## Before you start
 
@@ -52,10 +62,10 @@ The name is what teammates type, so name the capability rather than the host:
 
 ```sh
 # reads well at the call site
-fabric serve http://127.0.0.1:11434 --name codegen-llm --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name codegen-llm --kind llm
 
 # does not
-fabric serve http://127.0.0.1:11434 --name ollama-2 --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name ollama-2 --kind llm
 ```
 
 Names are per-network. Publishing a second service with an existing name on the

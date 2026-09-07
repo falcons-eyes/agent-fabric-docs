@@ -53,7 +53,7 @@ Make a locally-running model server or tool reachable across the mesh as a
 private, addressable service:
 
 ```sh
-fabric serve http://127.0.0.1:11434 --name mac-ollama --kind llm
+fabric serve http://127.0.0.1:11434/v1 --name mac-ollama --kind llm
 ```
 
 It becomes `mac-ollama.<device>.private`, visible under **Services** in the

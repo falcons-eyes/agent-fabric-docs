@@ -220,7 +220,7 @@ Friendly framing of `fabric service add`. Kinds: llm, mcp, a2a, router,
 endpoint, tcp.
 
 Example:
-  fabric serve http://127.0.0.1:11434 --name mac-ollama --kind llm
+  fabric serve http://127.0.0.1:11434/v1 --name mac-ollama --kind llm
 
 ```
 fabric serve <local-addr> [flags]
