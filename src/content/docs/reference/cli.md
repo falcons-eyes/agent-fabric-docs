@@ -887,12 +887,54 @@ fabric agent loop dev-vllm --steps 3
 
 Start a known local AI runtime profile
 
-Start a known, audited local runtime profile. MVP managed start is Linux/NVIDIA Docker-first:
-vllm-docker and ollama-docker. On macOS Apple Silicon or Windows, run a native local server
-(Ollama, MLX/vLLM-Metal, WSL2, etc.) and attach it. Fabric does not vendor model servers or weights.
+Start a known, audited runtime profile. Managed start is Linux/NVIDIA Docker-first:
+vllm-docker and ollama-docker. On macOS Apple Silicon or Windows, run a native
+local server (Ollama, MLX/vLLM-Metal, WSL2) and attach it instead — Fabric does
+not vendor model servers or weights.
 
-Use start when Fabric should own the Docker container lifecycle on this host. Use attach when
-a model server is already running or when the platform is not Linux/NVIDIA Docker.
+Use start when Fabric should own the container lifecycle. Use attach when a model
+server is already running, or when the platform is not Linux/NVIDIA Docker.
+
+CHOOSING THE MACHINE
+
+  --node NAME   run it on another machine on the mesh instead of this one. Same
+                profile, same flags, same -- passthrough; that node executes it
+                and reports back.
+  --follow      with --node, wait for the machine to report the result instead of
+                returning as soon as the request is queued.
+
+A remote start is a desired-state job, not a remote shell. The node picks the
+image, every docker-level flag and the loopback port binding from its own
+compiled-in profile; the request chooses WHICH profile and what to pass the model
+server. There is no field that could ask for a different image, a bind mount, a
+privileged container, or a port on a public interface.
+
+A job for a machine that is offline is not lost — it runs when that node next
+polls. And --follow running out of time is NOT a failure: a cold host pulls a
+multi-gigabyte image before the container starts, so "still pending" means still
+working.
+
+RUNTIME ARGUMENTS (after --)
+
+Everything after a bare -- is handed to the model server untouched, the way
+docker and kubectl pass a command through:
+
+  fabric agent start --runtime vllm-docker -- --tensor-parallel-size 2
+
+The runtime's own surface is far larger than the flags mirrored here — tensor and
+pipeline parallelism, KV transfer for prefill/decode separation, quantization —
+and mirroring it one flag at a time would always lag the runtime. Anything the
+server accepts works, locally or with --node.
+
+These replace the built-in first-run defaults where they collide. Fabric opens a
+vLLM container with a deliberately small window (--max-model-len 1024, 20% of the
+GPU) so a first run succeeds on a modest card; passing your own value for one of
+those means yours, not a value you never asked for.
+
+Arguments are passed as argv, never through a shell, so quoting and metacharacters
+are inert. They cannot reach docker's own flags: they are appended after the
+image, so there is no position from which a bind mount or a privileged flag could
+be introduced.
 
 ```
 fabric agent start [flags]
@@ -918,12 +960,19 @@ fabric agent start --runtime ollama-docker --name dev-ollama --register
 # Pass runtime arguments through after --. Anything the runtime accepts works;
 # these are vLLM's, and they replace the built-in first-run defaults.
 fabric agent start --runtime vllm-docker -- --tensor-parallel-size 2 --max-model-len 32768
+
+# Start it on ANOTHER machine on the mesh instead of this one. Same profile,
+# same flags, same passthrough — the node runs it and reports back.
+fabric agent start --node spark-2 --runtime vllm-docker --register --follow \
+  -- --tensor-parallel-size 2
 ```
 
 | flag | default | description |
 |---|---|---|
+| `--follow` | `false` | with --node: wait for the machine to report the result |
 | `--model` | `—` | model to load or pull (default depends on runtime) |
 | `--name` | `—` | local runtime name |
+| `--node` | `—` | start it on this mesh machine (name or node id) instead of here |
 | `--port` | `0` | localhost port (default depends on runtime) |
 | `--pull` | `true` | pull the model when the runtime supports it |
 | `--register` | `false` | register the resulting llm service on the current mesh node |

@@ -73,6 +73,56 @@ Managed runtime starts are intentionally limited to known Docker profiles in the
 MVP. Arbitrary recipe shell execution is disabled until signed recipe provenance
 and desired-state deployment jobs land.
 
+## Start A Runtime On Another Machine
+
+The commands above run on the machine you are sitting at. To bring a runtime up
+on a different node — the second box in a tensor-parallel pair, a GPU host you do
+not have a terminal on — name it:
+
+```bash
+fabric agent start --node spark-2 --runtime vllm-docker --register --follow \
+  -- --tensor-parallel-size 2
+```
+
+Same profile, same flags, same `--` passthrough. The node runs it and reports
+back:
+
+```
+✔ queued on spark-2 — job_53cb4baf4eba3ff7
+  status: applied
+✔ started spark-worker (vllm-docker) at http://127.0.0.1:18000/v1, published as spark-worker
+```
+
+Without `--follow` the command returns as soon as the request is queued. A job
+for a machine that is currently offline is not lost — it runs when that node next
+polls.
+
+`--follow` running out of time is **not** a failure. A cold host pulls a
+multi-gigabyte image before the container starts, so "still pending" means still
+working; check again with `fabric status`.
+
+### What a remote start can and cannot ask for
+
+This is a desired-state job, not a remote shell. The receiving node picks the
+image, every Docker-level flag and the loopback port binding from **its own**
+compiled-in profile. The request chooses which profile, and what to pass the
+model server:
+
+| Chosen by the node | Chosen by the request |
+|---|---|
+| the container image | which runtime profile |
+| every `docker run` flag | model, served model name, port |
+| the loopback port binding | the model server's own arguments |
+
+There is no field that could ask for a different image, a bind mount, a
+privileged container, or a port on a public interface. Both ends validate: the
+control plane refuses a malformed request before it is stored, and the node
+re-checks before executing.
+
+A node whose build has no runtime manager reports the request **rejected** rather
+than failed — "this machine cannot do that" is a different answer from "it tried
+and broke".
+
 ## Verify Runtime Behavior
 
 Run smoke checks before registering a model server for real use:
