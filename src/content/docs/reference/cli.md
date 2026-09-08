@@ -187,9 +187,31 @@ fabric ping [name] [flags]
 
 Resolve a private service through the gateway using a capability
 
-Exchange a capability token (from `fabric grant`) for the live coordinates of a
-private service — the node it runs on and the address to reach it over the mesh.
-The gateway enforces the capability, so a resolve without a valid token is refused.
+Exchange a capability token (from fabric grant) for the live coordinates of a
+private service — the node it runs on and the URL to call it at.
+
+WHICH ADDRESS TO USE
+
+  gateway url   http://127.0.0.1:7777/gw/<network>/<service>
+                Call THIS one. It goes through the local gateway, which enforces
+                the capability and forwards over the mesh to whichever node runs
+                the service. It works whether the service is on this machine or
+                another.
+
+  addr          the service's address ON ITS OWN NODE — 127.0.0.1:<port>. It is
+                loopback by design, so calling it from any other machine reaches
+                your own localhost, not the service.
+
+For an llm service the gateway url is an OpenAI-compatible base URL. The
+service's own address already ends in /v1, so the SDK's usual suffixes
+(/chat/completions, /models) go straight after the gateway url — do not add
+/v1 again, or the path doubles and the call 404s:
+
+  OPENAI_BASE_URL=http://127.0.0.1:7777/gw/<network>/<service>
+  OPENAI_API_KEY=<capability token>
+
+--json carries gateway_url too, so an agent reading the output has the same
+answer a person does.
 
 ```
 fabric resolve [service] [flags]
@@ -199,12 +221,19 @@ Examples:
 
 ```bash
 fabric resolve local-files --action read --cap <token>
+
+# The coordinates as an agent reads them.
+fabric resolve tp2-code --action invoke --cap <token> --json
+
+# A gateway on another port.
+fabric resolve tp2-code --cap <token> --gateway http://127.0.0.1:8888
 ```
 
 | flag | default | description |
 |---|---|---|
 | `--action` | `—` | requested action (default: the kind's action) |
 | `--cap` | `—` | capability token from `fabric grant` |
+| `--gateway` | `http://127.0.0.1:7777` | local gateway proxy URL (where `fabric gateway proxy` listens) |
 | `--json` | `false` | JSON output |
 
 ### `fabric serve`
