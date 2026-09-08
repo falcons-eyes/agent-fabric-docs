@@ -1350,6 +1350,41 @@ Manage nodes on the current network
 fabric node
 ```
 
+### `fabric node check`
+
+Ask nodes for a health report and show what differs between them
+
+Ask each online node (or one node) to run a health check and answer with a
+report: its afd version, OS, accelerators with driver versions, and its runtime
+stack's own doctor lines (docker, nvidia-smi, the nvidia container runtime).
+The reports are shown side by side, then what matters is called out:
+
+  - afd versions that differ between machines
+  - NVIDIA driver versions that differ — tensor-parallel across them will fail
+  - a machine's own warnings (docker missing, nvidia runtime not listed, …)
+  - machines that are offline, or did not answer in time
+
+A node on an older afd answers with a one-line "responsive" and no report; it
+is shown as such, not as a failure. Nothing is changed on any node: a check is
+read-only, and the node does the reading on its own poll.
+
+```
+fabric node check [name] [flags]
+```
+
+Examples:
+
+```bash
+fabric node check              # every online node on the current network
+fabric node check spark-2      # one node
+fabric node check --json
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON output |
+| `--wait` | `1m30s` | how long to wait for nodes to answer |
+
 ### `fabric node list`
 
 List nodes on a network (default: current; --network for any you own)
