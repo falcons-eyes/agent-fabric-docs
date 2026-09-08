@@ -1366,9 +1366,29 @@ fabric node revoke [name] [flags]
 
 Show details for a node
 
+Show a node's identity, address, status and published services.
+
+Use --network to look at a node on a network you own without being joined
+to it — the same situation `node remove --network` handles, and the natural
+thing to do BEFORE removing: check what is there. It used to be possible to
+delete a stale registration from outside the network but not to inspect it.
+
 ```
-fabric node show [name]
+fabric node show [name] [flags]
 ```
+
+Examples:
+
+```bash
+fabric node show spark-worker
+
+# A node on a network this machine is not joined to.
+fabric node show spark-head --network nw_b34217b281234362
+```
+
+| flag | default | description |
+|---|---|---|
+| `--network` | `—` | network name or id (default: the joined one) |
 
 ### `fabric nodes`
 
