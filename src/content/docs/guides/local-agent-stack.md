@@ -69,9 +69,106 @@ fabric agent start --runtime ollama-docker --name dev-ollama
 fabric agent status
 ```
 
-Managed runtime starts are intentionally limited to known Docker profiles in the
-MVP. Arbitrary recipe shell execution is disabled until signed recipe provenance
-and desired-state deployment jobs land.
+Managed runtime starts are intentionally limited to known Docker profiles. Fabric
+never executes a recipe's shell on your behalf; a recipe prints its steps and you
+run them.
+
+### Pass arguments to the model server
+
+Anything after a bare `--` goes to the runtime untouched:
+
+```bash
+fabric agent start --runtime vllm-docker --name tp2 -- --tensor-parallel-size 2
+```
+
+A model server's own surface — tensor and pipeline parallelism, KV transfer for
+prefill/decode separation, quantization — is far larger than the handful of flags
+the CLI mirrors, and mirroring it one flag at a time would always lag the runtime.
+Anything the server accepts works.
+
+These replace Fabric's built-in first-run defaults where they collide. A vLLM
+container is opened with a deliberately small window (`--max-model-len 1024`, 20%
+of the GPU) so a first run succeeds on a modest card; passing your own value for
+one of those means yours, not a value you never asked for.
+
+Arguments are passed as argv, never through a shell, and are appended after the
+image — so they reach the model server and cannot reach Docker's own flags.
+
+## Check What This Machine Can Run
+
+Before pulling tens of gigabytes, ask:
+
+```bash
+fabric models search "qwen2.5"
+fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF
+```
+
+The table gives each quantization's memory need and a verdict:
+
+| Verdict | Meaning |
+|---|---|
+| `fits` | needs at most 80% of VRAM — the headroom is for a KV cache that grows |
+| `tight` | fits, with no room to grow |
+| `runs, partly in RAM` | over the VRAM line, but layers can live in system memory. Slower, **not** impossible |
+| `won't fit` | too big for the GPU and the memory behind it |
+
+Two flags change the answer:
+
+- `--context N` sizes the KV cache against an N-token window (default 8192). This
+  is the term that scales with the *conversation* rather than the model, so a 7B
+  that fits comfortably at 8K can be too big for the same card at 128K. Size
+  against the context you intend to serve.
+- `--vram N` sizes against N GB instead of auto-detecting, so you can ask about a
+  machine you are not sitting at.
+
+On unified-memory hardware (Apple Silicon, NVIDIA Grace/GB10) the pool is shared
+with the CPU. Fabric reports it as unified and does not treat it as spare capacity
+to offload into, because there is no second tier to offload to.
+
+A model whose repo name carries no parameter count cannot be sized at all, and
+says so rather than reporting `0.0 GB` — which would make every quantization look
+like it fits.
+
+`fabric host` reports the same machine's accelerators, including when a pool could
+not be measured. A driver that will not report its size is a different fact from a
+card with no memory, and the two are never collapsed.
+
+## Add Your Own Recipe
+
+The built-in recipes are a starting set, not the boundary. A manifest in
+`~/.fabric/recipes/*.yaml` is loaded on top of them, and one whose `category` and
+`name` match a built-in **replaces** it — which is how you change an image, or the
+arguments a runtime starts with, without waiting for a release.
+
+```yaml
+# ~/.fabric/recipes/my-runtime.yaml
+name: my-runtime           # what you pass to: fabric llm init my-runtime
+category: llm              # llm | router | agent | endpoint | service
+summary: One line shown when the recipe is applied.
+requires: [docker]         # printed as a prerequisite, not checked
+steps:
+  - name: start
+    run: "docker run -d --name my-runtime -p 127.0.0.1:18100:8000 my/image"
+    check: "curl -sf http://127.0.0.1:18100/health"
+service_kind: llm
+service:
+  name: my-runtime
+  kind: llm
+  addr: "127.0.0.1:18100"  # must be loopback
+  scope: "llm:invoke"
+```
+
+```bash
+fabric llm init my-runtime
+```
+
+The published address must be loopback (`127.0.0.1` or `localhost`). A recipe may
+only publish services on the machine applying it; peers reach them through the
+mesh forwarder, which re-checks the capability. A manifest pointing anywhere else
+is rejected with the reason.
+
+A manifest Fabric cannot read is named rather than skipped in silence — one typo
+never hides the others. `fabric agent doctor` lists what loaded and what did not.
 
 ## Start A Runtime On Another Machine
 

@@ -1148,6 +1148,48 @@ fabric models search llama --sort recent --json
 
 Show a model's quantizations and which one we'd run on your GPU
 
+Size a model against this machine: what each quantization needs, what happens if
+you run it, and which one we would pick.
+
+ARGUMENT
+
+  [model-id]   a Hugging Face repo, e.g. bartowski/Qwen2.5-7B-Instruct-GGUF.
+               The parameter count is read from the NAME ("...-7B"). A repo whose
+               name carries no size cannot be sized at all, and says so rather
+               than showing 0.0 GB — which would make every quant look like it fits.
+
+WHAT THE VERDICTS MEAN
+
+  fits                 needs at most 80% of your VRAM. The headroom is for a KV
+                       cache that grows with the conversation.
+  tight                fits, with no room to grow.
+  runs, partly in RAM  over the VRAM line, but the runtime can keep some layers
+                       in system memory. Slower, not impossible — this is NOT a
+                       refusal, and treating it as one talks you out of something
+                       that works.
+  won't fit            too big for the GPU AND the memory behind it.
+
+The estimate is weights + KV cache at the chosen context + a fixed runtime
+overhead. It is approximate: the exact KV figure needs a model's layer and head
+counts, which a repo name does not carry.
+
+FLAGS THAT CHANGE THE ANSWER
+
+  --vram N     size against N GB instead of auto-detecting. Auto-detection asks
+               the local agent (aflocal); pass this when it is not running, or to
+               ask "what would this need on a different machine?".
+
+               On unified-memory hardware (Apple Silicon, NVIDIA Grace/GB10) the
+               pool is shared with the CPU. Fabric reports it as unified and does
+               not treat it as spare capacity to offload into, because there is
+               no second tier to offload to.
+
+  --context N  size the KV cache against an N-token window (default 8192). This
+               is the term that scales with the CONVERSATION rather than the
+               model, so it changes the answer a lot: a 7B that fits comfortably
+               at 8K can be too big for the same card at 128K. Size against the
+               context you actually intend to serve.
+
 ```
 fabric models show [model-id] [flags]
 ```
@@ -1155,7 +1197,14 @@ fabric models show [model-id] [flags]
 Examples:
 
 ```bash
+# What would we run on this machine?
 fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF
+
+# Size it for a 128K context — the KV cache, not the weights, is what grows.
+fabric models show bartowski/Qwen2.5-7B-Instruct-GGUF --context 131072
+
+# Ask about a machine you are not sitting at.
+fabric models show meta-llama/Llama-3.3-70B-Instruct --vram 80
 ```
 
 | flag | default | description |
@@ -1712,8 +1761,59 @@ fabric endpoint
 
 OpenAI-compatible endpoint recipes
 
+Apply a endpoint recipe: print the local setup plan and register the resulting
+private service on this machine's mesh entry.
+
+The steps are PRINTED, not run. Fabric shows you the commands (a docker run, a
+health check) and you run them on the host; it does not execute a recipe's shell
+on your behalf. What it does for real is publish the service, so peers can reach
+it through the capability-gated forwarder.
+
+ARGUMENT
+
+  [name]    which recipe to apply. Built in: openai-chat-compatible, openai-responses
+            Plus any manifest in ~/.fabric/recipes.
+
+WRITING YOUR OWN
+
+Drop a YAML file in ~/.fabric/recipes. A manifest whose category and name match a built-in
+REPLACES it, which is how you change an image or the arguments a runtime starts
+with without waiting for a release:
+
+  # ~/.fabric/recipes/my-runtime.yaml
+  name: my-runtime           # what you pass to: fabric endpoint add my-runtime
+  category: endpoint
+  summary: One line shown when the recipe is applied.
+  requires: [docker]         # printed as a prerequisite, not checked
+  steps:
+    - name: start
+      run: "docker run -d --name my-runtime -p 127.0.0.1:18100:8000 my/image"
+      check: "curl -sf http://127.0.0.1:18100/health"
+  service_kind: endpoint
+  service:
+    name: my-runtime
+    kind: endpoint
+    addr: "127.0.0.1:18100"  # MUST be loopback — see below
+    scope: "endpoint:invoke"
+
+The published address must be loopback (127.0.0.1 or localhost). A recipe may
+only publish services on the machine applying it; peers reach them through the
+mesh forwarder, which re-checks the capability. A manifest pointing anywhere
+else is rejected with the reason, and a manifest fabric cannot read is named
+rather than skipped in silence.
+
 ```
 fabric endpoint add [name]
+```
+
+Examples:
+
+```bash
+# Apply a built-in recipe.
+fabric endpoint add openai-chat-compatible
+
+# Apply one you wrote yourself (~/.fabric/recipes/my-runtime.yaml).
+fabric endpoint add my-runtime
 ```
 
 ### `fabric gateway`
@@ -1825,8 +1925,59 @@ fabric llm
 
 Local LLM runtime recipes
 
+Apply a llm recipe: print the local setup plan and register the resulting
+private service on this machine's mesh entry.
+
+The steps are PRINTED, not run. Fabric shows you the commands (a docker run, a
+health check) and you run them on the host; it does not execute a recipe's shell
+on your behalf. What it does for real is publish the service, so peers can reach
+it through the capability-gated forwarder.
+
+ARGUMENT
+
+  [name]    which recipe to apply. Built in: ollama, ollama-docker, vllm, vllm-docker
+            Plus any manifest in ~/.fabric/recipes.
+
+WRITING YOUR OWN
+
+Drop a YAML file in ~/.fabric/recipes. A manifest whose category and name match a built-in
+REPLACES it, which is how you change an image or the arguments a runtime starts
+with without waiting for a release:
+
+  # ~/.fabric/recipes/my-runtime.yaml
+  name: my-runtime           # what you pass to: fabric llm init my-runtime
+  category: llm
+  summary: One line shown when the recipe is applied.
+  requires: [docker]         # printed as a prerequisite, not checked
+  steps:
+    - name: start
+      run: "docker run -d --name my-runtime -p 127.0.0.1:18100:8000 my/image"
+      check: "curl -sf http://127.0.0.1:18100/health"
+  service_kind: llm
+  service:
+    name: my-runtime
+    kind: llm
+    addr: "127.0.0.1:18100"  # MUST be loopback — see below
+    scope: "llm:invoke"
+
+The published address must be loopback (127.0.0.1 or localhost). A recipe may
+only publish services on the machine applying it; peers reach them through the
+mesh forwarder, which re-checks the capability. A manifest pointing anywhere
+else is rejected with the reason, and a manifest fabric cannot read is named
+rather than skipped in silence.
+
 ```
 fabric llm init [name]
+```
+
+Examples:
+
+```bash
+# Apply a built-in recipe.
+fabric llm init ollama
+
+# Apply one you wrote yourself (~/.fabric/recipes/my-runtime.yaml).
+fabric llm init my-runtime
 ```
 
 ### `fabric mcp`
@@ -1859,8 +2010,59 @@ fabric router
 
 Model router recipes
 
+Apply a router recipe: print the local setup plan and register the resulting
+private service on this machine's mesh entry.
+
+The steps are PRINTED, not run. Fabric shows you the commands (a docker run, a
+health check) and you run them on the host; it does not execute a recipe's shell
+on your behalf. What it does for real is publish the service, so peers can reach
+it through the capability-gated forwarder.
+
+ARGUMENT
+
+  [name]    which recipe to apply. Built in: litellm, openai-compatible
+            Plus any manifest in ~/.fabric/recipes.
+
+WRITING YOUR OWN
+
+Drop a YAML file in ~/.fabric/recipes. A manifest whose category and name match a built-in
+REPLACES it, which is how you change an image or the arguments a runtime starts
+with without waiting for a release:
+
+  # ~/.fabric/recipes/my-runtime.yaml
+  name: my-runtime           # what you pass to: fabric router init my-runtime
+  category: router
+  summary: One line shown when the recipe is applied.
+  requires: [docker]         # printed as a prerequisite, not checked
+  steps:
+    - name: start
+      run: "docker run -d --name my-runtime -p 127.0.0.1:18100:8000 my/image"
+      check: "curl -sf http://127.0.0.1:18100/health"
+  service_kind: router
+  service:
+    name: my-runtime
+    kind: router
+    addr: "127.0.0.1:18100"  # MUST be loopback — see below
+    scope: "router:invoke"
+
+The published address must be loopback (127.0.0.1 or localhost). A recipe may
+only publish services on the machine applying it; peers reach them through the
+mesh forwarder, which re-checks the capability. A manifest pointing anywhere
+else is rejected with the reason, and a manifest fabric cannot read is named
+rather than skipped in silence.
+
 ```
 fabric router init [name]
+```
+
+Examples:
+
+```bash
+# Apply a built-in recipe.
+fabric router init litellm
+
+# Apply one you wrote yourself (~/.fabric/recipes/my-runtime.yaml).
+fabric router init my-runtime
 ```
 
 ## Maintenance
