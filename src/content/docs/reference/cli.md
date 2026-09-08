@@ -1728,12 +1728,38 @@ fabric gateway
 
 Run the local gateway: forward authorized MCP/A2A calls over the mesh
 
+Run the local gateway. An MCP/A2A client or an OpenAI SDK points at it; each call
+is authorized against the control plane (capability + service resolution) and
+reverse-proxied over the mesh to whichever node runs the service. The control
+plane sees the resolve, never the payload.
+
+URL SHAPE
+
+  http://127.0.0.1:7777/gw/<network>/<service>[/subpath]
+
+<network> is the network id, or its name. <service> is the private service
+name. For an llm service this is an OpenAI-compatible base URL: the service's
+own address already ends in /v1, so /chat/completions goes straight after it.
+`fabric resolve <service> --cap <cap>` prints the exact url.
+
+AUTHORIZATION CACHE (--auth-cache, on by default)
+
+Without it every request waits for a control-plane round trip before being
+forwarded — measured at ~750 ms per call from Korea to a US control plane, for
+a service on the same machine. With it, the first call for a capability still
+resolves synchronously; later calls are answered from memory and the resolve is
+made in the background instead. Every request still produces exactly one
+resolve, so usage is counted exactly, and a refusal (revoked, expired) evicts
+the entry so the NEXT call is refused. Demo-room tokens never use the cache:
+their per-call caps must gate the call before it happens.
+
 ```
 fabric gateway proxy [flags]
 ```
 
 | flag | default | description |
 |---|---|---|
+| `--auth-cache` | `true` | answer repeat calls from memory and resolve in the background (see --help) |
 | `--listen` | `127.0.0.1:7777` | local listen address (loopback by default) |
 
 ### `fabric gpu-workspace`
