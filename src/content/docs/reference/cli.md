@@ -2048,6 +2048,55 @@ Add to an MCP client (e.g. Claude Code): {"command":"fabric","args":["mcp"]}
 fabric mcp
 ```
 
+### `fabric plan`
+
+Measure and recommend before you commit hardware
+
+```
+fabric plan
+```
+
+### `fabric plan distributed`
+
+Measure the link to your GPU peers and recommend how (or whether) to split a model
+
+Measure the overlay link from this machine to each GPU node — path (direct or
+relay), round-trip time, and throughput — then say how a model can be served
+on these machines, in order of preference:
+
+  1. on one node, unquantized, if it fits
+  2. on one node at a smaller quantization, if that fits
+  3. tensor-parallel across nodes — only over a link of at least 25 Gbps,
+     which no overlay provides; a direct QSFP / 25GbE link between the
+     machines does, and TP should run over THAT, outside fabric
+  4. pipeline-parallel across nodes — workable over a LAN-grade overlay
+     (≥ 500 Mbps, ≤ 5 ms), at the cost of latency
+
+The throughput probe pulls zeros from the peer's afd over the overlay. A peer
+on an older afd cannot serve it; pass --link-mbps from an iperf3 run instead.
+Nothing is started or changed on any node.
+
+```
+fabric plan distributed [flags]
+```
+
+Examples:
+
+```bash
+fabric plan distributed                             # every GPU peer, link only
+fabric plan distributed --model Qwen/Qwen2.5-72B-Instruct
+fabric plan distributed --peer spark-2 --model meta-llama/Llama-3.1-70B --context 32768
+fabric plan distributed --link-mbps 850 --model Qwen/Qwen2.5-72B-Instruct   # link measured elsewhere
+```
+
+| flag | default | description |
+|---|---|---|
+| `--context` | `8192` | context window to size the KV cache for |
+| `--json` | `false` | JSON output |
+| `--link-mbps` | `0` | use this link throughput instead of probing (from iperf3, or a peer on an older afd) |
+| `--model` | `—` | model id to plan for (e.g. Qwen/Qwen2.5-72B-Instruct); size is read from the id |
+| `--peer` | `—` | plan for this one peer only (default: every GPU node) |
+
 ### `fabric router`
 
 Model router recipes
