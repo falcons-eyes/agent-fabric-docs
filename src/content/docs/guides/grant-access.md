@@ -28,6 +28,31 @@ token is refused, so the token — not network position — is what grants reach
 From there the caller talks to the service directly over the mesh; the exchange
 is the last time the control plane is involved.
 
+## Your own machine: skip the token
+
+When the caller is **you**, on the machine that runs the gateway, minting and
+pasting a token every ten minutes guards nothing. Run the gateway in self-serve
+mode instead and point the SDK at it with any placeholder key:
+
+```sh
+fabric gateway proxy --self-serve
+```
+
+```sh
+export OPENAI_BASE_URL=http://127.0.0.1:7777/gw/<network>/codegen-llm
+export OPENAI_API_KEY=local
+```
+
+Each request that carries no capability gets one minted on your session and
+renewed before it expires, for as long as the gateway runs. The base URL keeps
+working; nothing to re-grant. A request that carries a real capability is still
+authorized by that capability, so a teammate's token works through the same
+gateway.
+
+Self-serve only binds to loopback. Anything that can reach the port can reach
+every service your session can, so the gateway refuses to self-serve on an
+address other machines could reach.
+
 ## Choosing the action
 
 The action must match what the caller will actually do. Granting more than they

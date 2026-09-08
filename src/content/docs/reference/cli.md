@@ -1853,6 +1853,20 @@ resolve, so usage is counted exactly, and a refusal (revoked, expired) evicts
 the entry so the NEXT call is refused. Demo-room tokens never use the cache:
 their per-call caps must gate the call before it happens.
 
+SELF-SERVE (--self-serve, off by default)
+
+For your OWN machine. A request that carries no capability — or an API key that
+is not one, which is what an OpenAI SDK sends with a placeholder key — gets a
+capability minted on your session and renewed before it expires, for as long as
+the gateway runs. One base URL, one placeholder key, no ten-minute re-grant:
+
+  OPENAI_BASE_URL=http://127.0.0.1:7777/gw/<network>/<service>
+  OPENAI_API_KEY=local
+
+It only binds to loopback: anything that can reach the port can reach every
+service your session can, so it must not be a port other machines can reach.
+A request that carries a real capability is authorized by that capability.
+
 ```
 fabric gateway proxy [flags]
 ```
@@ -1861,6 +1875,7 @@ fabric gateway proxy [flags]
 |---|---|---|
 | `--auth-cache` | `true` | answer repeat calls from memory and resolve in the background (see --help) |
 | `--listen` | `127.0.0.1:7777` | local listen address (loopback by default) |
+| `--self-serve` | `false` | mint and renew capabilities on your session for requests that carry none — loopback only (see --help) |
 
 ### `fabric gpu-workspace`
 
