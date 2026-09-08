@@ -163,12 +163,46 @@ fabric join [flags]
 
 List private node/service names from the signed netmap
 
+List the private names on this network — each node and each service, with the
+overlay address it resolves to.
+
+THE NAMES DO NOT RESOLVE ON THIS MACHINE BY THEMSELVES
+
+fabric knows them (they come from the signed netmap) and prints them here, but
+the operating system's resolver has never heard of them. So this works:
+
+  ssh user@fd16:1bcf:dafd::2
+
+and this does not, until you install the names:
+
+  ssh user@spark-worker.private
+
+--hosts prints the names as an /etc/hosts block, and the commands to install
+or remove it. The block is fenced by marker comments so re-installing replaces
+it rather than appending a second copy. It is a snapshot: when a node joins or
+its address changes, regenerate it.
+
+Nothing is written for you. Installing needs root, and what root changes on
+your resolver should be a command you can read first.
+
 ```
 fabric names [flags]
 ```
 
+Examples:
+
+```bash
+fabric names
+
+# Make the names resolve on this machine.
+fabric names --hosts
+fabric names --hosts | sudo tee /tmp/fabric-hosts >/dev/null && \
+  sudo sh -c 'sed -i.bak "/# >>> agent-fabric names/,/# <<< agent-fabric names/d" /etc/hosts && cat /tmp/fabric-hosts >> /etc/hosts'
+```
+
 | flag | default | description |
 |---|---|---|
+| `--hosts` | `false` | print the names as an /etc/hosts block (stdout), with install/remove commands (stderr) |
 | `--json` | `false` | JSON output |
 
 ### `fabric ping`
