@@ -2309,6 +2309,46 @@ Plan how large artifacts reach every node
 fabric stage
 ```
 
+### `fabric stage image`
+
+Pull a container image with resumable, verified downloads
+
+Pull a container image the way a large download has to work: each blob fetched
+with a range request that continues where the last attempt stopped, each one
+checked against its digest before it is trusted, and the result written as an
+OCI layout that `docker load` accepts.
+
+This exists because docker pull restarts a layer it fails to finish. On a slow
+or unreliable link a multi-gigabyte layer then never completes, however long
+you leave it — and the bandwidth is spent either way.
+
+Re-running continues: blobs already on disk are checked, not fetched again.
+The tar it produces is also the thing to copy to your other nodes, which is
+far cheaper than every node pulling the same image.
+
+Private images are not supported: no docker credentials are read.
+
+```
+fabric stage image [reference] [flags]
+```
+
+Examples:
+
+```bash
+fabric stage image ghcr.io/org/vllm:sm121-v11
+fabric stage image ghcr.io/org/vllm:sm121-v11 --load
+fabric stage image alpine:3.20 --platform linux/amd64 --out /tmp/alpine.tar
+fabric stage image ghcr.io/org/vllm:sm121-v11 --plan
+```
+
+| flag | default | description |
+|---|---|---|
+| `--dir` | `—` | working directory for the OCI layout (default: under the fabric config dir, so a re-run resumes) |
+| `--load` | `false` | run `docker load` on the result |
+| `--out` | `—` | where to write the tar (default: beside the working directory) |
+| `--plan` | `false` | report the size and layers, download nothing |
+| `--platform` | `—` | os/arch to pull (default: this machine's) |
+
 ### `fabric stage model`
 
 Work out whether to download a model on every node or copy it between them
