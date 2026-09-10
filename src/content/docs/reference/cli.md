@@ -874,12 +874,17 @@ fabric agent smoke mac-ollama
 # Run more durable loop iterations.
 fabric agent smoke dev-vllm --loops 5 --timeout 5m
 
+# Check the model's Korean survives this checkpoint — some conversions
+# corrupt multi-byte characters and report nothing.
+fabric agent smoke dev-vllm --locale ko
+
 # A good operator flow after smoke passes:
 fabric agent loop dev-vllm --steps 3
 ```
 
 | flag | default | description |
 |---|---|---|
+| `--locale` | `[]` | also check text survives a round trip in these languages (ko, ja, zh) — a quantized checkpoint can corrupt multi-byte characters with no error |
 | `--loops` | `3` | durable loop iterations |
 | `--timeout` | `3m0s` | smoke timeout |
 
