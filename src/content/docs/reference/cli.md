@@ -351,6 +351,41 @@ fabric service test [name] [flags]
 |---|---|---|
 | `--timeout` | `3s` | dial timeout |
 
+### `fabric service watch`
+
+Sample a model server's own metrics and say what they mean
+
+Sample a published model server's /metrics and report what it is doing: how
+many requests are running, how many are WAITING, how full the KV cache is, how
+often the prefix cache hits, and the token rate.
+
+The queue is the number worth the command. A server whose KV cache only fits a
+couple of long-context requests will make a third one wait, and from the
+client's side that looks exactly like a slow model — so the instinct is to
+reach for a bigger machine rather than fewer parallel requests.
+
+Only servers that publish Prometheus metrics can be read this way (vLLM does;
+Ollama does not). A server publishing none of these is reported as such, not
+rendered as a dashboard of zeros.
+
+```
+fabric service watch [service] [flags]
+```
+
+Examples:
+
+```bash
+fabric service watch glm53-code
+fabric service watch glm53-code --for 2m --interval 5s
+fabric service watch glm53-code --json
+```
+
+| flag | default | description |
+|---|---|---|
+| `--for` | `30s` | how long to sample |
+| `--interval` | `3s` | time between samples |
+| `--json` | `false` | JSON output |
+
 ### `fabric try`
 
 Prove a published service works — mint access, call it, show the gate
