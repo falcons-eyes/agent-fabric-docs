@@ -2097,6 +2097,66 @@ fabric plan distributed --link-mbps 850 --model Qwen/Qwen2.5-72B-Instruct   # li
 | `--model` | `—` | model id to plan for (e.g. Qwen/Qwen2.5-72B-Instruct); size is read from the id |
 | `--peer` | `—` | plan for this one peer only (default: every GPU node) |
 
+### `fabric plan launch`
+
+Work out the memory a model server can actually have on these nodes
+
+Do the arithmetic a model server does at startup, before the download rather
+than after the fourth failed launch.
+
+A vLLM-class server takes gpu-memory-utilization × total as its budget and
+refuses to start when that exceeds the memory actually free. "Free" is smaller
+than the MemAvailable a person reads — the kernel reserve, plus whatever is
+already resident — and on a unified-memory part nvidia-smi cannot even report
+the total. This command measures each node, sizes the model from the hub,
+divides by the tensor-parallel width, and reports the highest utilisation each
+node will accept and what is left for the KV cache at it.
+
+EXACT NUMBERS
+
+A failed launch prints the two figures the runtime itself used:
+
+  Free memory on device cuda:0 (103.02/121.69 GiB) on startup is less than
+  desired GPU memory utilization (0.88, 107.09 GiB)
+
+Pass them with --free-gib 103.02 --total-gib 121.69 and the plan is exact
+rather than estimated from the host's own view.
+
+WHAT IT WILL NOT GUESS
+
+Per-request KV cache needs the model's attention geometry, not its parameter
+count: a generic estimate is off by two orders of magnitude on a large MoE.
+Measure it once and pass --kv-per-request-gib to turn headroom into a
+concurrency number.
+
+```
+fabric plan launch [model] [flags]
+```
+
+Examples:
+
+```bash
+fabric plan launch RedHatAI/GLM-5.3-Flash-NVFP4 --tp 2
+
+# Exact, using the numbers a failed launch printed.
+fabric plan launch RedHatAI/GLM-5.3-Flash-NVFP4 --tp 2 --free-gib 103.02 --total-gib 121.69
+
+# A model the hub cannot size, and a measured per-request KV.
+fabric plan launch local/my-model --size-gib 88.6 --kv-per-request-gib 2.05
+```
+
+| flag | default | description |
+|---|---|---|
+| `--free-gib` | `0` | free memory the runtime reports, from a failed launch's message |
+| `--json` | `false` | JSON output |
+| `--kv-per-request-gib` | `0` | measured KV cache for one request at your context length |
+| `--nodes` | `—` | comma-separated node names (default: every GPU node on the network) |
+| `--overhead-gib` | `0` | per-rank runtime overhead beyond weights and KV (default 10) |
+| `--size-gib` | `0` | model size on disk, when the hub cannot be asked |
+| `--total-gib` | `0` | total memory the runtime reports, from a failed launch's message |
+| `--tp` | `0` | tensor-parallel width the weights are split across (default: the number of nodes) |
+| `--wait` | `1m30s` | how long to wait for nodes to report their memory |
+
 ### `fabric router`
 
 Model router recipes
