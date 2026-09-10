@@ -2030,6 +2030,43 @@ fabric llm init ollama
 fabric llm init my-runtime
 ```
 
+### `fabric lock`
+
+Write down every version this deployment is running (`fabric lock > DEPLOYMENT_LOCK.md`)
+
+Record what this network is actually running, so a deployment that works can be
+told apart from one that used to.
+
+It collects, for every node: the afd and client versions, OS and architecture,
+CPU and memory, each accelerator with its driver version and backend, the
+runtime stack's own report (Docker, nvidia-smi, the container runtime), the
+watched kernel tunables, and every interface's MTU. Then the network id and
+generation, every published service with the node it lives on, and every
+runtime fabric itself started, with the model and revision it was given.
+
+Markdown on stdout, so the usual thing works:
+
+  fabric lock > DEPLOYMENT_LOCK.md
+
+Nothing is changed on any node: each one is asked for a health report, which is
+the same read-only check `fabric node check` runs.
+
+```
+fabric lock [flags]
+```
+
+Examples:
+
+```bash
+fabric lock > DEPLOYMENT_LOCK.md
+fabric lock --json | jq .nodes[].gpus
+```
+
+| flag | default | description |
+|---|---|---|
+| `--json` | `false` | JSON instead of Markdown |
+| `--wait` | `1m30s` | how long to wait for nodes to report |
+
 ### `fabric mcp`
 
 Run a local MCP server exposing the mesh digests (status, connectivity, doctor, host) as tools
