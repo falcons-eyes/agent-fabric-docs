@@ -2261,6 +2261,54 @@ fabric router init litellm
 fabric router init my-runtime
 ```
 
+### `fabric stage`
+
+Plan how large artifacts reach every node
+
+```
+fabric stage
+```
+
+### `fabric stage model`
+
+Work out whether to download a model on every node or copy it between them
+
+Size a model, measure the link between your nodes, and say which way of getting
+it onto all of them is faster — usually by two orders of magnitude.
+
+Downloading a large repository separately on every machine means downloading it
+separately on every machine. The link between two machines in the same rack is
+routinely a hundred times faster than either one's route to the internet, and a
+long download that stalls and restarts is worse than its average rate suggests.
+
+It also checks that the destination has room. Running out of disk is the one
+staging failure that arrives hours in, rather than immediately.
+
+This prints a plan and the exact commands. It does not move the bytes: rsync
+over ssh is better at resumable bulk transfer than anything here would be, and
+it is already on both machines. What was missing was the decision, not the copy
+tool.
+
+```
+fabric stage model [model-id] [flags]
+```
+
+Examples:
+
+```bash
+fabric stage model RedHatAI/GLM-5.3-Flash-NVFP4
+fabric stage model RedHatAI/GLM-5.3-Flash-NVFP4 --from spark-worker --to spark-head
+fabric stage model local/private-model --size-gib 184.3
+```
+
+| flag | default | description |
+|---|---|---|
+| `--from` | `—` | node that already has it, or will download it (default: the one with the most free disk) |
+| `--json` | `false` | JSON output |
+| `--size-gib` | `0` | model size on disk, when the hub cannot be asked |
+| `--to` | `—` | node to copy it to (default: every other node) |
+| `--wait` | `1m30s` | how long to wait for nodes to report disk |
+
 ## Maintenance
 
 ### `fabric update`
