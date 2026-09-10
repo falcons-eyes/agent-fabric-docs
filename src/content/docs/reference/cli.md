@@ -2082,7 +2082,7 @@ CPU and memory, each accelerator with its driver version and backend, the
 runtime stack's own report (Docker, nvidia-smi, the container runtime), the
 watched kernel tunables, and every interface's MTU. Then the network id and
 generation, every published service with the node it lives on, and every
-runtime fabric itself started, with the model and revision it was given.
+runtime fabric itself started, with the model it was given.
 
 Markdown on stdout, so the usual thing works:
 
@@ -2385,6 +2385,7 @@ fabric stage model local/private-model --size-gib 184.3
 |---|---|---|
 | `--from` | `—` | node that already has it, or will download it (default: the one with the most free disk) |
 | `--json` | `false` | JSON output |
+| `--revision` | `—` | pin this commit instead of whatever the tag points at today |
 | `--size-gib` | `0` | model size on disk, when the hub cannot be asked |
 | `--to` | `—` | node to copy it to (default: every other node) |
 | `--wait` | `1m30s` | how long to wait for nodes to report disk |
